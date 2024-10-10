@@ -1,22 +1,20 @@
 package graph
 
-import "fmt"
-
 type Graph struct {
-	Vertices map[string][]Vertex
+	Vertices map[Vertex][]Vertex
 }
 
 type Vertex struct {
-	cible     string
-	commmande string
+	cible       string
+	dependances string
+	commmande   string
 }
 
 func (g Graph) AddVertex(cible string, commmande string, cap int) {
 	v := Vertex{
-		cible:     cible,
-		commmande: commmande,
+		cible:       cible,
+		commmande:   commmande,
+		dependances: "lol",
 	}
-	g.Vertices[cible] = make([]Vertex, 0, cap)
-	fmt.Println(v)
-
+	g.Vertices[v] = make([]Vertex, 0, cap)
 }

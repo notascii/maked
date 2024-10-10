@@ -1,10 +1,10 @@
 package main
 
 import (
-	"example.com/parsing"
+	"fmt"
 )
 
 func main() {
 	// Get a greeting message and print it.
-	parsing.Hello("hi")
+	fmt.Printf("Hello world")
 }
