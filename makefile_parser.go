@@ -2,18 +2,40 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
+	"regexp"
 )
 
-func emptyLine(s string) bool {
-	for c := range s {
-		if c != '\t' && c != ' ' && c != '\n' {
-			return false
-		}
+const (
+	VARIABLE = iota
+	TARGET
+	COMMAND
+	IGNORED
+	UNKNOW
+)
+
+func lineType(s string) int {
+	var varDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z_&]+\s*=.*$`)
+	var targetDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z_&\.]+\s*:.*$`)
+	var commandDefinition = regexp.MustCompile(`^\t.*$`)
+	var emptyLine = regexp.MustCompile(`^(#.*)$|^(\s*)$`)
+	if varDefinition.MatchString(s) {
+		println("Définition de variable")
+		return VARIABLE
+	} else if targetDefinition.MatchString(s) {
+		println("Définition de target")
+		return TARGET
+	} else if commandDefinition.MatchString(s) {
+		println("Définition d'une commande")
+		return COMMAND
+	} else if emptyLine.MatchString(s) {
+		println("Ligne ignorée")
+		return IGNORED
+	} else {
+		println("ligne inconnu")
+		return UNKNOW
 	}
-	return true
 }
 
 /** Le parser est vu comme un automate à plusieurs états (à ajouter en fonction du type de makefile traité):
@@ -23,35 +45,35 @@ func emptyLine(s string) bool {
 **/
 
 func lineTreatment(s string, g *Graph, currentState int, currentCible string) int {
-	// Comment
-	if s[0] == '#' {
-		return currentState
-	}
+	println("Ligne traitrée : " + s)
 	// Empty line
-	if emptyLine(s) {
-		return currentState
-	}
+	buffer := lineType(s)
 
 	switch currentState {
 	case 0:
 		// si s est une définition de variable on reste dans le cas 0
-		if true {
+		if buffer == VARIABLE {
 			// todo
 			return 0
-		} else { // Sinon on va dans le cas 1
+		} else if buffer == TARGET { // Sinon on va dans le cas 1
 			// todo
 			return 1
+		} else {
+			return -1
 		}
 	case 1:
-		// todo
-		return 2
-	case 2:
-		//todo
-		if /* le string est une commande*/ true {
+		if buffer == COMMAND {
 			return 2
-		} else // nouvelle cible
-		{
+		} else {
+			return -1
+		}
+	case 2:
+		if buffer == COMMAND {
+			return 2
+		} else if buffer == TARGET {
 			return 1
+		} else {
+			return -1
 		}
 	}
 
@@ -74,7 +96,7 @@ func GraphParser(fileName string) *Graph {
 	Scanner.Split(bufio.ScanLines)
 
 	for Scanner.Scan() {
-		fmt.Println(Scanner.Text())
+		lineTreatment(Scanner.Text(), g, 0, "")
 	}
 	if err := Scanner.Err(); err != nil {
 		log.Fatal(err)
