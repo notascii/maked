@@ -1,12 +1,15 @@
-               lol
 # Ceci est un makefile test afin de concevoir efficacement le parsing
 
-&foo= "lol"                                      """"       lalala
+&foo= lol
 
-    lol: lmao
+lol: lmao rofl
 	echo $(&foo)
-	s
+
+
+rofl:
+	echo rofl echo lala
+
 foo2 = "lmao"
 
-lmao   :
+lmao  :
 	echo $(foo2)

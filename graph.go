@@ -7,11 +7,11 @@ type Graph struct {
 
 type Vertex struct {
 	cible       string
-	dependances string
+	dependances []string
 	commmande   []string
 }
 
-func (g *Graph) AddVertex(cible string, commmande []string, dependances string, cap int) {
+func (g *Graph) AddVertex(cible string, commmande []string, dependances []string, cap int) {
 	v := Vertex{
 		cible:       cible,
 		commmande:   commmande,
