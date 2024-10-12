@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -16,6 +15,8 @@ const (
 	IGNORED
 	UNKNOW
 )
+
+var firstFound = false
 
 /**
 * 	Add a target line inside the graph
@@ -31,7 +32,7 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
 	// Treatment of the string to separate the target name and dependencies
 	res := strings.Split(s, ":")
 	targetName := strings.Replace(res[0], " ", "", -1)
-	targetDependencies := strings.Split(res[1], " ")
+	targetDependencies := strings.Fields(res[1])
 	// Initialization of a new vertex
 	var newV = Vertex{
 		cible:       targetName,
@@ -42,6 +43,10 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
 	g.Vertices[targetName] = newV
 	// We init the values of its adjency list
 	*currentTarget = targetName
+	if !firstFound {
+		g.firstTarget = targetName
+		firstFound = true
+	}
 }
 
 /*
@@ -50,7 +55,6 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
 *
  */
 func commandLoad(s string, g *Graph, currentTarget *string) {
-	fmt.Println("Voici la commande que je charge : " + s)
 	v := g.Vertices[*currentTarget]
 	v.commmande = append(v.commmande, s)
 	g.Vertices[*currentTarget] = v
@@ -67,19 +71,19 @@ func lineType(s string) int {
 	var commandDefinition = regexp.MustCompile(`^\t.*$`)
 	var emptyLine = regexp.MustCompile(`^(#.*)$|^(\s*)$`)
 	if varDefinition.MatchString(s) {
-		println("Définition de variable")
+		// println("Définition de variable")
 		return VARIABLE
 	} else if targetDefinition.MatchString(s) {
-		println("Définition de target")
+		// println("Définition de target")
 		return TARGET
 	} else if commandDefinition.MatchString(s) {
-		println("Définition d'une commande")
+		// println("Définition d'une commande")
 		return COMMAND
 	} else if emptyLine.MatchString(s) {
-		println("Ligne ignorée")
+		// println("Ligne ignorée")
 		return IGNORED
 	} else {
-		println("ligne inconnu")
+		// println("ligne inconnu")
 		panic("Makefile incorrect")
 	}
 }
@@ -91,7 +95,7 @@ func lineType(s string) int {
 **/
 
 func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) int {
-	println("Ligne traitrée : " + s)
+	// println("Ligne traitrée : " + s)
 	// Empty line
 	buffer := lineType(s)
 	if buffer == IGNORED {

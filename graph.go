@@ -1,7 +1,8 @@
 package main
 
 type Graph struct {
-	Vertices map[string]Vertex
+	Vertices    map[string]Vertex
+	firstTarget string
 }
 
 type Vertex struct {
