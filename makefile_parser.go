@@ -41,7 +41,6 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
 	// We add it to the vertex list
 	g.Vertices[targetName] = newV
 	// We init the values of its adjency list
-	g.AdjencyList[targetName] = make([]Vertex, 0)
 	*currentTarget = targetName
 }
 
@@ -136,8 +135,7 @@ func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) 
 func GraphParser(fileName string) *Graph {
 	// First we init a graph
 	g := &Graph{
-		AdjencyList: make(map[string][]Vertex),
-		Vertices:    make(map[string]Vertex),
+		Vertices: make(map[string]Vertex),
 	}
 
 	// We read fileName line per line

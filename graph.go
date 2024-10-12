@@ -1,8 +1,7 @@
 package main
 
 type Graph struct {
-	AdjencyList map[string][]Vertex
-	Vertices    map[string]Vertex
+	Vertices map[string]Vertex
 }
 
 type Vertex struct {
