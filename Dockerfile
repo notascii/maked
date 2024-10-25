@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the Go source file to the working directory
-COPY ./pingpong1.go .
+COPY . .
 
 # Build the Go file
 RUN go build -o pingpong1 pingpong1.go
