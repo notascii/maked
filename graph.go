@@ -10,12 +10,3 @@ type Vertex struct {
 	dependances []string
 	commmande   []string
 }
-
-func (g *Graph) AddVertex(cible string, commmande []string, dependances []string, cap int) {
-	v := Vertex{
-		cible:       cible,
-		commmande:   commmande,
-		dependances: dependances,
-	}
-	g.Vertices[cible] = v
-}

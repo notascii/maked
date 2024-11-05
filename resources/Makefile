@@ -1,11 +1,13 @@
 # Ceci est un makefile test afin de concevoir efficacement le parsing
 
+var1 = lmao
 
-lol:    lmao rofl
+
+lol:    lmao
 	echo lol
 
 
-rofl:
+rofl: lol
 	echo rofl
 
 
