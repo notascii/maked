@@ -10,14 +10,14 @@ func launchCommand(command string) {
 	fmt.Println(command)
 	cmd := exec.Command("/bin/sh", "-c", command)
 
-	// Diriger la sortie standard et les erreurs vers le terminal
+	// stdout and stderr directed to our terminal
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Exécuter la commande
+	// Execute the command
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println("Erreur:", err)
+		fmt.Println("Error:", err)
 	}
 }
 
@@ -26,14 +26,16 @@ func launchMakefile(g *Graph, firstTarget string) {
 		firstTarget = g.firstTarget
 	}
 
-	for _, value := range g.Vertices[firstTarget].dependances {
-		// Cas où la dépendance est un fichier
+	for _, value := range g.Vertices[firstTarget].dependencies {
+		// Case where dependencies is a file
 		// TODO
-		// Cas où la dépendance est une autre cible
+		// Case where dependencies is a a target / nothing
 		launchMakefile(g, value)
 	}
 
-	for _, command := range g.Vertices[firstTarget].commmande {
+	// We create a bash
+
+	for _, command := range g.Vertices[firstTarget].command {
 		launchCommand(command)
 	}
 

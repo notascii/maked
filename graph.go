@@ -6,7 +6,7 @@ type Graph struct {
 }
 
 type Vertex struct {
-	cible       string
-	dependances []string
-	commmande   []string
+	target       string
+	dependencies []string
+	command      []string
 }

@@ -3,12 +3,12 @@ package main
 import "fmt"
 
 func printVertex(v Vertex) {
-	fmt.Printf("%s : ", v.cible)
-	for _, value := range v.dependances {
+	fmt.Printf("%s : ", v.target)
+	for _, value := range v.dependencies {
 		fmt.Printf("%s ", value)
 	}
 	fmt.Printf("\n\t")
-	for _, value := range v.commmande {
+	for _, value := range v.command {
 		fmt.Printf("%s ", value)
 	}
 	fmt.Printf("\n")

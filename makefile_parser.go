@@ -13,7 +13,7 @@ const (
 	TARGET
 	COMMAND
 	IGNORED
-	UNKNOW
+	UNKNOWN
 )
 
 var firstFound = false
@@ -22,7 +22,7 @@ var firstFound = false
 * 	Add a target line inside the graph
 *	example :
 *	target : test1 test2
-*	add target as a vertex and link the dependances with test1 and test2
+*	add target as a vertex and link the dependencies with test1 and test2
 *
 *
 *	s : the line
@@ -35,13 +35,13 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
 	targetDependencies := strings.Fields(res[1])
 	// Initialization of a new vertex
 	var newV = Vertex{
-		cible:       targetName,
-		commmande:   make([]string, 0, 256),
-		dependances: targetDependencies,
+		target:       targetName,
+		command:      make([]string, 0, 256),
+		dependencies: targetDependencies,
 	}
 	// We add it to the vertex list
 	g.Vertices[targetName] = newV
-	// We init the values of its adjency list
+	// We init the values of its adjacency list
 	*currentTarget = targetName
 	if !firstFound {
 		g.firstTarget = targetName
@@ -56,7 +56,7 @@ func targetLoad(s string, g *Graph, currentTarget *string) {
  */
 func commandLoad(s string, g *Graph, currentTarget *string) {
 	v := g.Vertices[*currentTarget]
-	v.commmande = append(v.commmande, s)
+	v.command = append(v.command, s)
 	g.Vertices[*currentTarget] = v
 }
 
@@ -71,31 +71,25 @@ func lineType(s string) int {
 	var commandDefinition = regexp.MustCompile(`^\t.*$`)
 	var emptyLine = regexp.MustCompile(`^(#.*)$|^(\s*)$`)
 	if varDefinition.MatchString(s) {
-		// println("Définition de variable")
 		return VARIABLE
 	} else if targetDefinition.MatchString(s) {
-		// println("Définition de target")
 		return TARGET
 	} else if commandDefinition.MatchString(s) {
-		// println("Définition d'une commande")
 		return COMMAND
 	} else if emptyLine.MatchString(s) {
-		// println("Ligne ignorée")
 		return IGNORED
 	} else {
-		// println("ligne inconnu")
 		panic("Makefile incorrect")
 	}
 }
 
-/** Le parser est vu comme un automate à plusieurs états (à ajouter en fonction du type de makefile traité):
-*	état 0 : en attente d'une nouvelle cible + dépendances OU d'une définition de variable
-*	état 1 : en attente d'une commande (cible chargée)
-*   état 2 : en attente d'une commande où d'une nouvelle cible ou d'une definition de variable
+/** We have an automaton with three states:
+*	state 0 : waiting for a new target (0 -> 1) OR a variable definition (0 -> 0)
+*	state 1 : waiting for a command (target already load) (1 -> 2)
+*   state 2 : waiting for a command (2 -> 2) OR a target (2 -> 1) OR a variable definition (2 -> 0)
 **/
 
 func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) int {
-	// println("Ligne traitrée : " + s)
 	// Empty line
 	buffer := lineType(s)
 	if buffer == IGNORED {
@@ -103,10 +97,9 @@ func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) 
 	}
 	switch currentState {
 	case 0:
-		// si s est une définition de variable on reste dans le cas 0
 		if buffer == VARIABLE {
 			return 0
-		} else if buffer == TARGET { // Sinon on va dans le cas 1
+		} else if buffer == TARGET {
 			targetLoad(s, g, currentTarget)
 			return 1
 		} else {
