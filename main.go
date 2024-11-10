@@ -7,7 +7,7 @@ import (
 
 func main() {
 	debut := time.Now()
-	var g *Graph = GraphParser("./resources/Makefile")
+	var g *Graph = GraphParser("./makefiles/premier/Makefile")
 	duree := time.Since(debut)
 	fmt.Println("Temps du parsing : ", duree.Seconds())
 	// printVertices(*g)
