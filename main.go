@@ -1,19 +1,12 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
 func main() {
-	debut := time.Now()
-	var g *Graph = GraphParser("./makefiles/premier/Makefile")
-	duree := time.Since(debut)
-	fmt.Println("Temps du parsing : ", duree.Seconds())
-	// printVertices(*g)
-	debut = time.Now()
-	launchMakefile(g, "")
-	duree = time.Since(debut)
-	fmt.Println("Temps d'execution du graphe : ", duree.Seconds())
+	////////////// TEST PREMIER
+	makefilePath := "./makefiles/premier/Makefile"
+	makefileDirectory := "./makefiles/premier"
+	// First we parse the makefile
+	var g *Graph = GraphParser(makefilePath)
+	// Now we execute all commands in the directory asked
+	launchMakefile(g, "", makefileDirectory)
 
 }

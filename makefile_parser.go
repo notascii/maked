@@ -18,7 +18,7 @@ const (
 
 var firstFound = false
 
-/**
+/*
 * 	Add a target line inside the graph
 *	example :
 *	target : test1 test2
@@ -26,8 +26,8 @@ var firstFound = false
 *
 *
 *	s : the line
-*   *g : the graph
-**/
+*   g : the graph
+ */
 func targetLoad(s string, g *Graph, currentTarget *string) {
 	// Treatment of the string to separate the target name and dependencies
 	res := strings.Split(s, ":")
@@ -128,7 +128,10 @@ func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) 
 
 }
 
-// GraphParser return a graph representing
+/*
+*	GraphParser return a graph representing the dependencies graph of the makefile in fileName
+*
+ */
 func GraphParser(fileName string) *Graph {
 	// First we init a graph
 	g := &Graph{

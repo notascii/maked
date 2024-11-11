@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -21,21 +22,30 @@ func launchCommand(command string) {
 	}
 }
 
-func launchMakefile(g *Graph, firstTarget string) {
-	if firstTarget == "" {
-		firstTarget = g.firstTarget
+func launchMakefile(g *Graph, firstTarget string, directory string) {
+
+	targetDir := directory
+	err := os.Chdir(targetDir)
+	if err != nil {
+		log.Fatalf("Error while changing repo : %v", err)
 	}
 
-	for _, value := range g.Vertices[firstTarget].dependencies {
+	exploreGraph(g, firstTarget)
+}
+
+func exploreGraph(g *Graph, target string) {
+	if target == "" {
+		target = g.firstTarget
+	}
+
+	for _, dependency := range g.Vertices[target].dependencies {
 		// Case where dependencies is a file
 		// TODO
 		// Case where dependencies is a a target / nothing
-		launchMakefile(g, value)
+		exploreGraph(g, dependency)
 	}
 
-	// We create a bash
-
-	for _, command := range g.Vertices[firstTarget].command {
+	for _, command := range g.Vertices[target].command {
 		launchCommand(command)
 	}
 
