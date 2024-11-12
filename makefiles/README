@@ -1,0 +1,25 @@
+Exemples de makefile
+--------------------
+
+Trois exemples de makefile. Chaque makefile devra être adapté
+(l'échelle des calculs) en fonction des performances de votre
+plateforme.
+
+1. premier: arbre à plat sur un seul niveau: 1 racine attendant la fin
+du calcul de ses feuilles
+2. matrix: arbre sur deux niveaux
+3. blender: arbre à un niveau, mais temps d'exécution des feuilles de durée variable
+
+Divers
+------
+
+# Premier et autres exécutables
+
+Les exécutables doivent être dans le PATH si vous
+voulez utilisez les makefile directement.
+
+## Exemple
+
+'''sh
+	PATH=${PATH}:./ make
+'''
