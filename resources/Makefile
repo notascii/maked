@@ -2,14 +2,11 @@
 
 var1 = lmao
 
+coucou1.txt:
+	echo coucou >> coucou1.txt
 
-lol:    lmao
-	echo lol
+coucou2.txt:
+	echo coucou >> coucou2.txt
 
-
-rofl: lol
-	echo rofl
-
-
-lmao  :
-	echo lmao
+list: coucou1.txt coucou2.txt
+	ls *.txt > tmp.txt
