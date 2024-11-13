@@ -39,9 +39,8 @@ func exploreGraph(g *Graph, target string) {
 	}
 
 	for _, dependency := range g.Vertices[target].dependencies {
-		// Case where dependencies is a file
+		// We check if the dependency already exists
 		// TODO
-		// Case where dependencies is a a target / nothing
 		exploreGraph(g, dependency)
 	}
 
