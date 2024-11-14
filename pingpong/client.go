@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"net/rpc"
-	"time"
 	"os"
+	"time"
 )
 
 // PingArgs holds the data sent from client to server.
@@ -17,68 +17,77 @@ type PingResponse struct {
 	Ack byte
 }
 
+// Establishes and returns an RPC connection to the server.
+func establishConn() (*rpc.Client, error) {
+	client, err := rpc.Dial("tcp", "localhost:1234")
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
 
-func measure_perf(N int)  (int,float64){
-	// Connect to the server
-	client, err := rpc.Dial("tcp", "172.18.20.22:1234")
+// Measures throughput by sending a message of size N and calculating bytes per second.
+func measurePerfThroughput(client *rpc.Client, N int) (int, float64,float64,error) {
+
+	// Send message of size N to calculate throughput
+	message := make([]byte, N)
+	start := time.Now()
+	err := client.Call("PingPongService.Ping", &PingArgs{Data: message}, &PingResponse{})
+	if err != nil {
+		return 0, 0,0, err
+	}
+	elapsed := time.Since(start).Seconds()
+
+	// Calculate throughput in MB/s
+	throughput := (float64(N) / elapsed)
+	throughputMB := throughput / (1024 * 1024)
+
+	return N, throughputMB,elapsed/2, nil
+}
+
+func main() {
+	// Establish a connection to the server
+	client, err := establishConn()
 	if err != nil {
 		panic(err)
 	}
 	defer client.Close()
 
-	// Warm-up ping to establish the connection
-	warmupArgs := &PingArgs{Data: []byte{1}} // Small 1-byte message
-	var warmupReply PingResponse
-	_ = client.Call("PingPongService.Ping", warmupArgs, &warmupReply) // Ignoring error for warm-up
-
-	// Build the message of size N
-	message := make([]byte, N)
-
-	// First ping with size 1 to calculate RTT
-	start := time.Now()
-	args := &PingArgs{Data: []byte{1}} // 1-byte message for RTT
-	var reply PingResponse
-	err = client.Call("PingPongService.Ping", args, &reply)
+	// Open log files for throughput and latency
+	fileThroughput, err := os.OpenFile("./perf/logs/throughput.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	rtt := time.Since(start).Seconds()
+	defer fileThroughput.Close()
 
-	// Second ping with size N to calculate throughput
-	start = time.Now()
-	args = &PingArgs{Data: message} // N-byte message
-	err = client.Call("PingPongService.Ping", args, &reply)
+	fileLatency, err := os.OpenFile("./perf/logs/latency.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	end := time.Since(start).Seconds()
+	defer fileLatency.Close()
 
-	// Calculate throughput in bytes per second
-	throughput := float64(N) / end - rtt
-	throughputMB := throughput / (1024 * 1024)
-	
-	fmt.Printf("Message size: %d bytes\n", N)
-	fmt.Printf("Throughput: %f MB/second\n", throughputMB)
-
-	return N,throughputMB
-
-}
-
-
-func main() {
-	file, err := os.OpenFile("./perf/logs/throughput.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	val:=1024
-	for i:=0;i<=10;i++{
-		messageSize,throughput:=measure_perf(val)
-		// Write message size and throughput to the log file
-		_, err = fmt.Fprintf(file, "%d: %.2f\n", messageSize, throughput)
+	// Run measurements for increasing message sizes
+	messageSize := 1024
+	for i := 0; i <= 10; i++ {
+		// Measure throughput and latency
+		size, throughput,latency, err := measurePerfThroughput(client, messageSize)
 		if err != nil {
-			panic(err)
+			fmt.Printf("Error measuring throughput for size %d: %v\n", messageSize, err)
+			continue
 		}
-		val=val*2
+
+		// Log results to files
+		_, err = fmt.Fprintf(fileThroughput, "%d: %.2f\n", size, throughput)
+		if err != nil {
+			fmt.Printf("Error writing to throughput log: %v\n", err)
+		}
+			println(latency)
+		_, err = fmt.Fprintf(fileLatency, "%d: %.10f\n", size, latency*1000)
+		if err != nil {
+			fmt.Printf("Error writing to latency log: %v\n", err)
+		}
+
+		// Double the message size for the next iteration
+		messageSize *= 2
 	}
 }

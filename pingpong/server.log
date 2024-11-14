@@ -1,0 +1,740 @@
+2024/11/14 21:05:09 Server starting...
+2024/11/14 21:05:09 Server listening on port 1234...
+2024/11/14 21:07:47 Accepted new connection
+2024/11/14 21:07:47 Connection closed
+2024/11/14 21:08:18 Server starting...
+2024/11/14 21:08:18 Server listening on port 1234...
+2024/11/14 21:08:25 Accepted new connection
+2024/11/14 21:08:25 Connection closed
+2024/11/14 21:10:15 Accepted new connection
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1024
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1024
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 2048
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 2048
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 4096
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 4096
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 8192
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 8192
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 16384
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 16384
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 32768
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 32768
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 65536
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 65536
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 131072
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 131072
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 262144
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 262144
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 524288
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 524288
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1048576
+2024/11/14 21:10:15 Received a message of size 1
+2024/11/14 21:10:15 Received a message of size 1048576
+2024/11/14 21:10:15 Connection closed
+2024/11/14 21:12:21 Accepted new connection
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1024
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1024
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 2048
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 2048
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 4096
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 4096
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 8192
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 8192
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 16384
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 16384
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 32768
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 32768
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 65536
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 65536
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 131072
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 131072
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 262144
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 262144
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 524288
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 524288
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1048576
+2024/11/14 21:12:21 Received a message of size 1
+2024/11/14 21:12:21 Received a message of size 1048576
+2024/11/14 21:12:21 Connection closed
+2024/11/14 21:12:45 Accepted new connection
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1024
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1024
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 2048
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 2048
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 4096
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 4096
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 8192
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 8192
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 16384
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 16384
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 32768
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 32768
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 65536
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 65536
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 131072
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 131072
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 262144
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 262144
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 524288
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 524288
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1048576
+2024/11/14 21:12:45 Received a message of size 1
+2024/11/14 21:12:45 Received a message of size 1048576
+2024/11/14 21:12:45 Connection closed
+2024/11/14 21:12:49 Accepted new connection
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1024
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1024
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 2048
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 2048
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 4096
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 4096
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 8192
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 8192
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 16384
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 16384
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 32768
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 32768
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 65536
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 65536
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 131072
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 131072
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 262144
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 262144
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 524288
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 524288
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1048576
+2024/11/14 21:12:49 Received a message of size 1
+2024/11/14 21:12:49 Received a message of size 1048576
+2024/11/14 21:12:49 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1024
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 2048
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 4096
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 8192
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 16384
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 32768
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 65536
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 131072
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 262144
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 524288
+2024/11/14 21:14:28 Accepted new connection
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1
+2024/11/14 21:14:28 Received a message of size 1048576
+2024/11/14 21:14:28 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1024
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 2048
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 4096
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 8192
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 16384
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 32768
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 65536
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 131072
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 262144
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 524288
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:14:36 Accepted new connection
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1
+2024/11/14 21:14:36 Received a message of size 1048576
+2024/11/14 21:14:36 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1024
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 2048
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 4096
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 8192
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 16384
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 32768
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 65536
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 131072
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 262144
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 524288
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:24 Accepted new connection
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1
+2024/11/14 21:17:24 Received a message of size 1048576
+2024/11/14 21:17:24 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1024
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 2048
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 4096
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 8192
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 16384
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 32768
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 65536
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 131072
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 262144
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 524288
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:17:27 Accepted new connection
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1
+2024/11/14 21:17:27 Received a message of size 1048576
+2024/11/14 21:17:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 1024
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 2048
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 4096
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 8192
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 16384
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 32768
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 65536
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 131072
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 262144
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 524288
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:20:27 Accepted new connection
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Received a message of size 1048576
+2024/11/14 21:20:27 Received a message of size 1
+2024/11/14 21:20:27 Connection closed
+2024/11/14 21:21:41 Accepted new connection
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1024
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1024
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 2048
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 2048
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 4096
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 4096
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 8192
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 8192
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 16384
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 16384
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 32768
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 32768
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 65536
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 65536
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 131072
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 131072
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 262144
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 262144
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 524288
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 524288
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1048576
+2024/11/14 21:21:41 Received a message of size 1
+2024/11/14 21:21:41 Received a message of size 1048576
+2024/11/14 21:21:41 Connection closed
+2024/11/14 21:28:08 Accepted new connection
+2024/11/14 21:28:08 Received a message of size 1024
+2024/11/14 21:28:08 Received a message of size 1024
+2024/11/14 21:28:08 Received a message of size 2048
+2024/11/14 21:28:08 Received a message of size 2048
+2024/11/14 21:28:08 Received a message of size 4096
+2024/11/14 21:28:08 Received a message of size 4096
+2024/11/14 21:28:08 Received a message of size 8192
+2024/11/14 21:28:08 Received a message of size 8192
+2024/11/14 21:28:08 Received a message of size 16384
+2024/11/14 21:28:08 Received a message of size 16384
+2024/11/14 21:28:08 Received a message of size 32768
+2024/11/14 21:28:08 Received a message of size 32768
+2024/11/14 21:28:08 Received a message of size 65536
+2024/11/14 21:28:08 Received a message of size 65536
+2024/11/14 21:28:08 Received a message of size 131072
+2024/11/14 21:28:08 Received a message of size 131072
+2024/11/14 21:28:08 Received a message of size 262144
+2024/11/14 21:28:08 Received a message of size 262144
+2024/11/14 21:28:08 Received a message of size 524288
+2024/11/14 21:28:08 Received a message of size 524288
+2024/11/14 21:28:08 Received a message of size 1048576
+2024/11/14 21:28:08 Received a message of size 1048576
+2024/11/14 21:28:08 Connection closed
+2024/11/14 21:29:08 Accepted new connection
+2024/11/14 21:29:08 Received a message of size 1024
+2024/11/14 21:29:08 Received a message of size 1024
+2024/11/14 21:29:08 Received a message of size 2048
+2024/11/14 21:29:08 Received a message of size 2048
+2024/11/14 21:29:08 Received a message of size 4096
+2024/11/14 21:29:08 Received a message of size 4096
+2024/11/14 21:29:08 Received a message of size 8192
+2024/11/14 21:29:08 Received a message of size 8192
+2024/11/14 21:29:08 Received a message of size 16384
+2024/11/14 21:29:08 Received a message of size 16384
+2024/11/14 21:29:08 Received a message of size 32768
+2024/11/14 21:29:08 Received a message of size 32768
+2024/11/14 21:29:08 Received a message of size 65536
+2024/11/14 21:29:08 Received a message of size 65536
+2024/11/14 21:29:08 Received a message of size 131072
+2024/11/14 21:29:08 Received a message of size 131072
+2024/11/14 21:29:08 Received a message of size 262144
+2024/11/14 21:29:08 Received a message of size 262144
+2024/11/14 21:29:08 Received a message of size 524288
+2024/11/14 21:29:08 Received a message of size 524288
+2024/11/14 21:29:08 Received a message of size 1048576
+2024/11/14 21:29:08 Received a message of size 1048576
+2024/11/14 21:29:08 Connection closed
+2024/11/14 21:29:32 Accepted new connection
+2024/11/14 21:29:32 Received a message of size 1024
+2024/11/14 21:29:32 Received a message of size 1024
+2024/11/14 21:29:32 Received a message of size 2048
+2024/11/14 21:29:32 Received a message of size 2048
+2024/11/14 21:29:32 Received a message of size 4096
+2024/11/14 21:29:32 Received a message of size 4096
+2024/11/14 21:29:32 Received a message of size 8192
+2024/11/14 21:29:32 Received a message of size 8192
+2024/11/14 21:29:32 Received a message of size 16384
+2024/11/14 21:29:32 Received a message of size 16384
+2024/11/14 21:29:32 Received a message of size 32768
+2024/11/14 21:29:32 Received a message of size 32768
+2024/11/14 21:29:32 Received a message of size 65536
+2024/11/14 21:29:32 Received a message of size 65536
+2024/11/14 21:29:32 Received a message of size 131072
+2024/11/14 21:29:32 Received a message of size 131072
+2024/11/14 21:29:32 Received a message of size 262144
+2024/11/14 21:29:32 Received a message of size 262144
+2024/11/14 21:29:32 Received a message of size 524288
+2024/11/14 21:29:32 Received a message of size 524288
+2024/11/14 21:29:32 Received a message of size 1048576
+2024/11/14 21:29:32 Received a message of size 1048576
+2024/11/14 21:29:32 Connection closed
+2024/11/14 21:30:46 Accepted new connection
+2024/11/14 21:30:46 Received a message of size 1024
+2024/11/14 21:30:46 Received a message of size 1024
+2024/11/14 21:30:46 Received a message of size 2048
+2024/11/14 21:30:46 Received a message of size 2048
+2024/11/14 21:30:46 Received a message of size 4096
+2024/11/14 21:30:46 Received a message of size 4096
+2024/11/14 21:30:46 Received a message of size 8192
+2024/11/14 21:30:46 Received a message of size 8192
+2024/11/14 21:30:46 Received a message of size 16384
+2024/11/14 21:30:46 Received a message of size 16384
+2024/11/14 21:30:46 Received a message of size 32768
+2024/11/14 21:30:46 Received a message of size 32768
+2024/11/14 21:30:46 Received a message of size 65536
+2024/11/14 21:30:46 Received a message of size 65536
+2024/11/14 21:30:46 Received a message of size 131072
+2024/11/14 21:30:46 Received a message of size 131072
+2024/11/14 21:30:46 Received a message of size 262144
+2024/11/14 21:30:46 Received a message of size 262144
+2024/11/14 21:30:46 Received a message of size 524288
+2024/11/14 21:30:46 Received a message of size 524288
+2024/11/14 21:30:46 Received a message of size 1048576
+2024/11/14 21:30:46 Received a message of size 1048576
+2024/11/14 21:30:46 Connection closed
+2024/11/14 21:30:48 Accepted new connection
+2024/11/14 21:30:48 Received a message of size 1024
+2024/11/14 21:30:48 Received a message of size 1024
+2024/11/14 21:30:48 Received a message of size 2048
+2024/11/14 21:30:48 Received a message of size 2048
+2024/11/14 21:30:48 Received a message of size 4096
+2024/11/14 21:30:48 Received a message of size 4096
+2024/11/14 21:30:48 Received a message of size 8192
+2024/11/14 21:30:48 Received a message of size 8192
+2024/11/14 21:30:48 Received a message of size 16384
+2024/11/14 21:30:48 Received a message of size 16384
+2024/11/14 21:30:48 Received a message of size 32768
+2024/11/14 21:30:48 Received a message of size 32768
+2024/11/14 21:30:48 Received a message of size 65536
+2024/11/14 21:30:48 Received a message of size 65536
+2024/11/14 21:30:48 Received a message of size 131072
+2024/11/14 21:30:48 Received a message of size 131072
+2024/11/14 21:30:48 Received a message of size 262144
+2024/11/14 21:30:48 Received a message of size 262144
+2024/11/14 21:30:48 Received a message of size 524288
+2024/11/14 21:30:48 Received a message of size 524288
+2024/11/14 21:30:48 Received a message of size 1048576
+2024/11/14 21:30:48 Received a message of size 1048576
+2024/11/14 21:30:48 Connection closed
+2024/11/14 21:48:18 Accepted new connection
+2024/11/14 21:48:18 Received a message of size 1024
+2024/11/14 21:48:18 Received a message of size 1024
+2024/11/14 21:48:18 Received a message of size 2048
+2024/11/14 21:48:18 Received a message of size 2048
+2024/11/14 21:48:18 Received a message of size 4096
+2024/11/14 21:48:18 Received a message of size 4096
+2024/11/14 21:48:18 Received a message of size 8192
+2024/11/14 21:48:18 Received a message of size 8192
+2024/11/14 21:48:18 Received a message of size 16384
+2024/11/14 21:48:18 Received a message of size 16384
+2024/11/14 21:48:18 Received a message of size 32768
+2024/11/14 21:48:18 Received a message of size 32768
+2024/11/14 21:48:18 Received a message of size 65536
+2024/11/14 21:48:18 Received a message of size 65536
+2024/11/14 21:48:18 Received a message of size 131072
+2024/11/14 21:48:18 Received a message of size 131072
+2024/11/14 21:48:18 Received a message of size 262144
+2024/11/14 21:48:18 Received a message of size 262144
+2024/11/14 21:48:18 Received a message of size 524288
+2024/11/14 21:48:18 Received a message of size 524288
+2024/11/14 21:48:18 Received a message of size 1048576
+2024/11/14 21:48:18 Received a message of size 1048576
+2024/11/14 21:48:18 Connection closed
+2024/11/14 22:13:13 Server starting...
+2024/11/14 22:13:13 Server listening on port 1234...
+2024/11/14 22:13:16 Accepted new connection
+2024/11/14 22:13:16 Received a message of size 1024
+2024/11/14 22:13:16 Received a message of size 2048
+2024/11/14 22:13:16 Received a message of size 4096
+2024/11/14 22:13:16 Received a message of size 8192
+2024/11/14 22:13:16 Received a message of size 16384
+2024/11/14 22:13:16 Received a message of size 32768
+2024/11/14 22:13:16 Received a message of size 65536
+2024/11/14 22:13:16 Received a message of size 131072
+2024/11/14 22:13:16 Received a message of size 262144
+2024/11/14 22:13:16 Received a message of size 524288
+2024/11/14 22:13:16 Received a message of size 1048576
+2024/11/14 22:13:16 Connection closed
+2024/11/14 22:13:59 Accepted new connection
+2024/11/14 22:13:59 Received a message of size 1024
+2024/11/14 22:13:59 Received a message of size 2048
+2024/11/14 22:13:59 Received a message of size 4096
+2024/11/14 22:13:59 Received a message of size 8192
+2024/11/14 22:13:59 Received a message of size 16384
+2024/11/14 22:13:59 Received a message of size 32768
+2024/11/14 22:13:59 Received a message of size 65536
+2024/11/14 22:13:59 Received a message of size 131072
+2024/11/14 22:13:59 Received a message of size 262144
+2024/11/14 22:13:59 Received a message of size 524288
+2024/11/14 22:13:59 Received a message of size 1048576
+2024/11/14 22:13:59 Connection closed
