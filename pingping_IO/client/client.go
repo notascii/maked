@@ -17,8 +17,8 @@ type PingResponse struct {
 	Ack byte
 }
 
-func measure_perf(filename string) {
-	// Connect to the server
+// Establishes and returns an RPC connection to the server.
+func establishConn() (*rpc.Client, error) {
 	client, err := rpc.Dial("tcp", "localhost:1234")
 	if err != nil {
 		panic(err)
@@ -33,37 +33,100 @@ func measure_perf(filename string) {
 	// Read the file content
 	fileData, err := os.ReadFile(filename)
 
-	// First ping with size 1 to calculate RTT
+	// Send file content to server to calculate throughput
 	start := time.Now()
-	args := &PingArgs{Data: []byte{1}} // 1-byte message for RTT
-	var reply PingResponse
-	err = client.Call("PingPongService.Ping", args, &reply)
+	err = client.Call("PingPongService.Ping", &PingArgs{Data: fileData}, &PingResponse{})
+	if err != nil {
+		return 0, 0,0, err
+	}
+	elapsed := time.Since(start).Seconds()
+
+	// Calculate throughput in MB/s
+	throughput := float64(len(fileData)) / elapsed
+	throughputMB := throughput / (1024 * 1024) // Convert to MB/s
+
+	return len(fileData), throughputMB,elapsed/2, nil
+}
+
+
+// Create a file with the specified size in the client_storage directory.
+func createFileWithSize(filename string, size int) error {
+	// Create a file with the specified size
+	data := make([]byte, size)
+	err := os.WriteFile(filename, data, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func measure_perf() {
+	// Establish the connection to the server
+	client, err := establishConn()
 	if err != nil {
 		panic(err)
 	}
-	rtt := time.Since(start).Seconds()
+	defer client.Close()
 
-	// Second ping with size N to calculate throughput
-	start = time.Now()
-	args = &PingArgs{Data: fileData} // N-byte message
-	err = client.Call("PingPongService.Ping", args, &reply)
+	// Open log files for throughput and latency
+	fileThroughput, err := os.OpenFile("./perf/logs/throughput.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	end := time.Since(start).Seconds()
+	defer fileThroughput.Close()
 
-	N, err := os.Stat(filename) // get the size of the file
+	fileLatency, err := os.OpenFile("./perf/logs/latency.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	// Calculate throughput in bytes per second
-	throughput := float64(N.Size())/end - rtt
-	// Convert throughput to megabytes per second
-	throughputMB := throughput / (1024 * 1024)
+	defer fileLatency.Close()
 
-	fmt.Printf("Throughput: %f MB/second\n", throughputMB)
+	// Create files first
+	messageSize := 1024
+	for messageSize <= 1048576 {
+		// Create a file with the current message size
+		filename := fmt.Sprintf("./client_storage/file_%d.bytes", messageSize)
+		err := createFileWithSize(filename, messageSize)
+		if err != nil {
+			fmt.Printf("Error creating file with size %d bytes: %v\n", messageSize, err)
+			continue
+		}
+		// Double the message size for the next iteration
+		messageSize *= 2
+	}
+
+	// Now, measure throughput and latency for each file
+	messageSize = 1024
+	for messageSize <= 1048576 {
+		filename := fmt.Sprintf("./client_storage/file_%d.bytes", messageSize)
+
+		// Measure throughput
+		_, throughput,latency,err := measurePerf(client, filename)
+		if err != nil {
+			fmt.Printf("Error measuring throughput for file %s: %v\n", filename, err)
+			continue
+		}
+
+		// Log results to files
+		_, err = fmt.Fprintf(fileThroughput, "%d: %.2f MB/s\n", messageSize, throughput)
+		if err != nil {
+			fmt.Printf("Error writing to throughput log: %v\n", err)
+		}
+
+		_, err = fmt.Fprintf(fileLatency, "%d: %.10f ms\n", messageSize, latency*1000) // Convert latency to milliseconds
+		if err != nil {
+			fmt.Printf("Error writing to latency log: %v\n", err)
+		}
+
+		// Print results to console
+		fmt.Printf("File: %s, Throughput: %.2f MB/s, Latency: %.10f ms\n", messageSize, throughput, latency*1000)
+
+		// Double the message size for the next iteration
+		messageSize *= 2
+	}
 }
 
 func main() {
-	measure_perf("./client_storage/disk.txt")
+	// Measure performance
+	measure_perf()
 }
