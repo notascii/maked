@@ -45,7 +45,12 @@ func exploreGraph(g *Graph, target string) {
 	}
 
 	for _, command := range g.Vertices[target].command {
+		fmt.Println("Voila la commande que j'execute")
+		for _, dependence := range g.Vertices[target].dependencies {
+			fmt.Println("Voila une dep " + dependence)
+		}
 		launchCommand(command)
+
 	}
 
 }
