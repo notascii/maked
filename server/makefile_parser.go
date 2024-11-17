@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -66,8 +67,8 @@ func commandLoad(s string, g *Graph, currentTarget *string) {
 *
  */
 func lineType(s string) int {
-	var varDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z_&]+\s*=.*$`)
-	var targetDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z_&\.]+\s*:.*$`)
+	var varDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z\-_&]+\s*=.*$`)
+	var targetDefinition = regexp.MustCompile(`^\s*[0-9a-zA-Z\-_&\.]+\s*:.*$`)
 	var commandDefinition = regexp.MustCompile(`^\t.*$`)
 	var emptyLine = regexp.MustCompile(`^(#.*)$|^(\s*)$`)
 	if varDefinition.MatchString(s) {
@@ -79,13 +80,13 @@ func lineType(s string) int {
 	} else if emptyLine.MatchString(s) {
 		return IGNORED
 	} else {
-		panic("Makefile incorrect")
+		panic(fmt.Sprintf("incorrect Makefile : Line -> '%s'", s))
 	}
 }
 
 /** We have an automaton with three states:
 *	state 0 : waiting for a new target (0 -> 1) OR a variable definition (0 -> 0)
-*	state 1 : waiting for a command (target already load) (1 -> 2)
+*	state 1 : waiting for a command (target already load) (1 -> 2) OR a target (1->1)
 *   state 2 : waiting for a command (2 -> 2) OR a target (2 -> 1) OR a variable definition (2 -> 0)
 **/
 
@@ -109,6 +110,9 @@ func lineTreatment(s string, g *Graph, currentState int, currentTarget *string) 
 		if buffer == COMMAND {
 			commandLoad(s, g, currentTarget)
 			return 2
+		} else if buffer == TARGET {
+			targetLoad(s, g, currentTarget)
+			return 1
 		} else {
 			return -1
 		}

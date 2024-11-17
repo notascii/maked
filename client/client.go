@@ -17,6 +17,10 @@ type FileStruct struct {
 	FileName string
 }
 
+type FileList struct {
+	List []FileStruct
+}
+
 type Message struct {
 	Msg string
 }
@@ -30,7 +34,21 @@ type Order struct {
 	Dependencies []FileStruct
 }
 
-func DiffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
+func removeAllFiles(directory string) {
+	files, err := os.ReadDir(directory)
+	if err != nil {
+		fmt.Println("Impossible to read the directory : ", err)
+	}
+	for _, file := range files {
+		fmt.Println("Deleting file ", file.Name())
+		err = os.Remove(directory + file.Name())
+		if err != nil {
+			fmt.Println("Impossible to delete the file ", err)
+		}
+	}
+}
+
+func diffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
 	// Map on files2 name
 	fileMap := make(map[string]bool)
 	for _, file := range filesBefore {
@@ -44,7 +62,7 @@ func DiffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
 			diff = append(diff, file.Name())
 		}
 	}
-	// Todo if the command delete a file (idk if it even supposed to occur)
+	// Todo if the command delete a file (IMPORTANT)
 
 	return diff
 }
@@ -54,19 +72,23 @@ func createFile(fileName string, data []byte) {
 	if err != nil {
 		panic(err)
 	}
+	err = os.Chmod(path+fileName, 0755)
+	if err != nil {
+		fmt.Println("Impossible to add permission")
+	}
 }
 
 func launchCommand(command string) []string {
-
 	fmt.Println(command)
 	cmd := exec.Command("/bin/sh", "-c", command)
+	cmd.Dir = path
 
 	// stdout and stderr directed to our terminal
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	// Check all files before the command
-	filesBefore, err := os.ReadDir(".")
+	filesBefore, err := os.ReadDir(path)
 	if err != nil {
 		fmt.Println("Impossible to read the directory : ", err)
 	}
@@ -79,14 +101,36 @@ func launchCommand(command string) []string {
 	}
 
 	// We check all files after the command
-	filesAfter, err := os.ReadDir(".")
+	filesAfter, err := os.ReadDir(path)
 	if err != nil {
 		log.Println("Impossible to read the directory : ", err)
 	}
 	fmt.Println("Files after : ", filesAfter)
 
-	return DiffFiles(filesBefore, filesAfter)
+	return diffFiles(filesBefore, filesAfter)
 
+}
+
+func ask_init() {
+	fmt.Println("Initialization")
+	// Connect to the server
+	client, err := rpc.Dial("tcp", "localhost:1234")
+	if err != nil {
+		panic(err)
+	}
+	defer client.Close()
+
+	// Prepare the content
+	args := &PingDef{}
+	var reply FileList
+	err = client.Call("MakeService.Initialization", args, &reply)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Downloading files")
+	for _, file := range reply.List {
+		createFile(file.FileName, file.Data)
+	}
 }
 
 func send_ping() Order {
@@ -118,7 +162,7 @@ func send_file(directory string, filename string) {
 	defer client.Close()
 
 	// Read the file content
-	fileData, err := os.ReadFile(filename)
+	fileData, err := os.ReadFile(directory + filename)
 	if err != nil {
 		panic(err)
 	}
@@ -135,11 +179,9 @@ func send_file(directory string, filename string) {
 }
 
 func main() {
-	// change dir
-	err := os.Chdir(path)
-	if err != nil {
-		log.Fatalf("Error while changing repo : %v", err)
-	}
+	// we ask for essential files
+	ask_init()
+
 forLoop:
 	for {
 		// Say to the server "hello I'm available"
@@ -169,7 +211,9 @@ forLoop:
 				send_file(path, fileName)
 			}
 			fmt.Println("File sended")
-
 		}
+		// We clear the repo
 	}
+	removeAllFiles(path)
+
 }

@@ -1,22 +1,12 @@
 package main
 
-import (
-	"log"
-	"os"
-)
-
 type MakeElement struct {
 	Command      string
 	Dependencies []string
 }
 
-func launchMakefile(g *Graph, firstTarget string, directory string, commandList *[]MakeElement) {
+func launchMakefile(g *Graph, firstTarget string, commandList *[]MakeElement) {
 
-	targetDir := directory
-	err := os.Chdir(targetDir)
-	if err != nil {
-		log.Fatalf("Error while changing repo : %v", err)
-	}
 	exploreGraph(g, firstTarget, commandList)
 }
 

@@ -9,16 +9,17 @@ func main() {
 	// Makefile treatment
 	////////////// TEST PREMIER
 	makefilePath := "../makefiles/premier/Makefile"
-	makefileDirectory := "../makefiles/premier"
+	makefileDir := "../makefiles/premier/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
 	commandListe := []MakeElement{}
-	launchMakefile(g, "", makefileDirectory, &commandListe)
+	launchMakefile(g, "", &commandListe)
 
 	// Register the MakeService: This will allow the client to recognize it over the network
 	makeService := &MakeService{
 		Instructions: commandListe,
+		Directory:    makefileDir,
 	}
 	rpc.Register(makeService)
 
