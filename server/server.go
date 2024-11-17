@@ -61,7 +61,7 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 func main() {
 	// Register the MakeService: This will allow the client to recognize it over the network
 	makeService := &MakeService{
-		Items: []string{"ls -A", "ls -A", "ls -A"},
+		Items: []string{"touch success.txt"},
 	}
 	rpc.Register(makeService)
 
@@ -80,6 +80,5 @@ func main() {
 			panic(err)
 		}
 		go rpc.ServeConn(conn)
-
 	}
 }

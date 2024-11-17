@@ -2,10 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
+	"log"
 	"net/rpc"
 	"os"
 	"os/exec"
 )
+
+var path string = "./client_storage/"
 
 // fileSend holds the data sent from client to server.
 type FileStruct struct {
@@ -26,7 +30,37 @@ type Order struct {
 	Dependencies []FileStruct
 }
 
-func launchCommand(command string) {
+func DiffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
+	// Map on files2 name
+	fileMap := make(map[string]bool)
+	for _, file := range filesBefore {
+		fileMap[file.Name()] = true
+	}
+
+	// Now we check the differences
+	var diff []string
+	for _, file := range filesAfter {
+		if !fileMap[file.Name()] {
+			diff = append(diff, file.Name())
+		}
+	}
+	// Todo if the command delete a file (idk if it even supposed to occur)
+
+	return diff
+}
+
+func createFile(fileName string, data []byte) {
+	err := os.WriteFile(path+fileName, data, 0644)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func launchCommand(command string) []string {
+	err := os.Chdir(path)
+	if err != nil {
+		log.Fatalf("Error while changing repo : %v", err)
+	}
 	fmt.Println(command)
 	cmd := exec.Command("/bin/sh", "-c", command)
 
@@ -34,11 +68,25 @@ func launchCommand(command string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
+	// Check all files before the command
+	filesBefore, err := os.ReadDir(".")
+	if err != nil {
+		fmt.Println("Impossible to read the directory : ", err)
+	}
+
 	// Execute the command
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+
+	// We check all files after the command
+	filesAfter, err := os.ReadDir(".")
+	if err != nil {
+		log.Println("Impossible to read the directory : ", err)
+	}
+
+	return DiffFiles(filesAfter, filesBefore)
 
 }
 
@@ -103,12 +151,19 @@ forLoop:
 		case 1:
 			fmt.Println("Server not ready")
 		case 2:
-			fmt.Println("Ah shit here we go again")
+			fmt.Println("Ah shit, here we go again")
 			// download all files
+			for _, dep := range o.Dependencies {
+				createFile(dep.FileName, dep.Data)
+			}
 			// execute the command
-			launchCommand(o.Command)
-			// send the created file
-			send_file("./client_storage/", "test.txt")
+			filesCreated := launchCommand(o.Command)
+
+			// Send the created files
+			for _, fileName := range filesCreated {
+				send_file(path, fileName)
+			}
+
 		}
 	}
 }
