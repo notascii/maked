@@ -57,10 +57,7 @@ func createFile(fileName string, data []byte) {
 }
 
 func launchCommand(command string) []string {
-	err := os.Chdir(path)
-	if err != nil {
-		log.Fatalf("Error while changing repo : %v", err)
-	}
+
 	fmt.Println(command)
 	cmd := exec.Command("/bin/sh", "-c", command)
 
@@ -73,6 +70,7 @@ func launchCommand(command string) []string {
 	if err != nil {
 		fmt.Println("Impossible to read the directory : ", err)
 	}
+	fmt.Println("Files before : ", filesBefore)
 
 	// Execute the command
 	err = cmd.Run()
@@ -85,8 +83,9 @@ func launchCommand(command string) []string {
 	if err != nil {
 		log.Println("Impossible to read the directory : ", err)
 	}
+	fmt.Println("Files after : ", filesAfter)
 
-	return DiffFiles(filesAfter, filesBefore)
+	return DiffFiles(filesBefore, filesAfter)
 
 }
 
@@ -119,7 +118,7 @@ func send_file(directory string, filename string) {
 	defer client.Close()
 
 	// Read the file content
-	fileData, err := os.ReadFile(directory + filename)
+	fileData, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
@@ -136,6 +135,11 @@ func send_file(directory string, filename string) {
 }
 
 func main() {
+	// change dir
+	err := os.Chdir(path)
+	if err != nil {
+		log.Fatalf("Error while changing repo : %v", err)
+	}
 forLoop:
 	for {
 		// Say to the server "hello I'm available"
@@ -158,11 +162,13 @@ forLoop:
 			}
 			// execute the command
 			filesCreated := launchCommand(o.Command)
-
+			fmt.Println("Command done")
 			// Send the created files
+			fmt.Println("Created files : ", filesCreated)
 			for _, fileName := range filesCreated {
 				send_file(path, fileName)
 			}
+			fmt.Println("File sended")
 
 		}
 	}

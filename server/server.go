@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"fmt"
@@ -8,8 +8,8 @@ import (
 )
 
 type MakeService struct {
-	mu    sync.Mutex // Pour protéger l'accès concurrent
-	Items []string
+	mu           sync.Mutex // handle concurrent access
+	Instructions []MakeElement
 }
 
 type FileStruct struct {
@@ -39,10 +39,10 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	if len(p.Items) > 0 {
+	if len(p.Instructions) > 0 {
 		reply.Value = 2
-		reply.Command = p.Items[0]
-		p.Items = p.Items[1:]
+		reply.Command = p.Instructions[0].Command
+		p.Instructions = p.Instructions[1:]
 
 	} else {
 		reply.Value = 0

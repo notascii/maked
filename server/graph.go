@@ -1,4 +1,4 @@
-package server
+package main
 
 type Graph struct {
 	Vertices    map[string]Vertex

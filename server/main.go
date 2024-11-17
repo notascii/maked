@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"net"
@@ -8,8 +8,8 @@ import (
 func main() {
 	// Makefile treatment
 	////////////// TEST PREMIER
-	makefilePath := "./makefiles/premier/Makefile"
-	makefileDirectory := "./makefiles/premier"
+	makefilePath := "../makefiles/premier/Makefile"
+	makefileDirectory := "../makefiles/premier"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
@@ -18,7 +18,7 @@ func main() {
 
 	// Register the MakeService: This will allow the client to recognize it over the network
 	makeService := &MakeService{
-		Items: []string{"touch success.txt"},
+		Instructions: commandListe,
 	}
 	rpc.Register(makeService)
 
