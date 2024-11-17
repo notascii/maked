@@ -1,9 +1,7 @@
-package main
+package server
 
 import (
 	"fmt"
-	"net"
-	"net/rpc"
 	"os"
 	"path/filepath"
 	"sync"
@@ -25,6 +23,11 @@ type Message struct {
 
 type Order struct {
 	Value        byte
+	Command      string
+	Dependencies []FileStruct
+}
+
+type MakeInstruction struct {
 	Command      string
 	Dependencies []FileStruct
 }
@@ -56,29 +59,4 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 	}
 	fmt.Println("File received and stored as " + args.FileName)
 	return nil
-}
-
-func main() {
-	// Register the MakeService: This will allow the client to recognize it over the network
-	makeService := &MakeService{
-		Items: []string{"touch success.txt"},
-	}
-	rpc.Register(makeService)
-
-	// Listen on TCP port 1234
-	listener, err := net.Listen("tcp", ":1234")
-	if err != nil {
-		panic(err)
-	}
-	defer listener.Close()
-	println("Server listening on port 1234...")
-
-	// Accept connections
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			panic(err)
-		}
-		go rpc.ServeConn(conn)
-	}
 }

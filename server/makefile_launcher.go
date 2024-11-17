@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -6,6 +6,11 @@ import (
 	"os"
 	"os/exec"
 )
+
+type MakeElement struct {
+	Command      string
+	Dependencies []string
+}
 
 func launchCommand(command string) {
 	fmt.Println(command)
@@ -22,18 +27,17 @@ func launchCommand(command string) {
 	}
 }
 
-func launchMakefile(g *Graph, firstTarget string, directory string) {
+func launchMakefile(g *Graph, firstTarget string, directory string, commandList *[]MakeElement) {
 
 	targetDir := directory
 	err := os.Chdir(targetDir)
 	if err != nil {
 		log.Fatalf("Error while changing repo : %v", err)
 	}
-
-	exploreGraph(g, firstTarget)
+	exploreGraph(g, firstTarget, commandList)
 }
 
-func exploreGraph(g *Graph, target string) {
+func exploreGraph(g *Graph, target string, commandList *[]MakeElement) {
 	if target == "" {
 		target = g.firstTarget
 	}
@@ -41,15 +45,14 @@ func exploreGraph(g *Graph, target string) {
 	for _, dependency := range g.Vertices[target].dependencies {
 		// We check if the dependency already exists
 		// TODO
-		exploreGraph(g, dependency)
+		exploreGraph(g, dependency, commandList)
 	}
 
 	for _, command := range g.Vertices[target].command {
 		fmt.Println("Voila la commande que j'execute")
-		for _, dependence := range g.Vertices[target].dependencies {
-			fmt.Println("Voila une dep " + dependence)
-		}
 		launchCommand(command)
+		ins := MakeElement{Command: command, Dependencies: g.Vertices[target].dependencies}
+		*commandList = append(*commandList, ins)
 
 	}
 
