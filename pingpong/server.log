@@ -738,3 +738,18 @@
 2024/11/14 22:13:59 Received a message of size 524288
 2024/11/14 22:13:59 Received a message of size 1048576
 2024/11/14 22:13:59 Connection closed
+2024/11/17 11:46:44 Server starting...
+2024/11/17 11:46:44 Server listening on port 1234...
+2024/11/17 11:47:15 Accepted new connection
+2024/11/17 11:47:15 Received a message of size 1024
+2024/11/17 11:47:15 Received a message of size 2048
+2024/11/17 11:47:15 Received a message of size 4096
+2024/11/17 11:47:15 Received a message of size 8192
+2024/11/17 11:47:15 Received a message of size 16384
+2024/11/17 11:47:15 Received a message of size 32768
+2024/11/17 11:47:15 Received a message of size 65536
+2024/11/17 11:47:15 Received a message of size 131072
+2024/11/17 11:47:15 Received a message of size 262144
+2024/11/17 11:47:15 Received a message of size 524288
+2024/11/17 11:47:15 Received a message of size 1048576
+2024/11/17 11:47:15 Connection closed

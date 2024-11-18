@@ -18,8 +18,8 @@ type PingResponse struct {
 }
 
 // Establishes and returns an RPC connection to the server.
-func establishConn() (*rpc.Client, error) {
-	client, err := rpc.Dial("tcp", "localhost:1234")
+func establishConn(hostname string) (*rpc.Client, error) {
+	client, err := rpc.Dial("tcp", hostname+":1234")
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func measurePerfThroughput(client *rpc.Client, N int) (int, float64,float64,erro
 
 func main() {
 	// Establish a connection to the server
-	client, err := establishConn()
+	client, err := establishConn(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
