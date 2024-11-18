@@ -1,3 +1,0 @@
-coucou1.txt
-coucou2.txt
-tmp.txt
