@@ -42,12 +42,36 @@ type PingDef struct {
 func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-
 	if len(p.Instructions) > 0 {
-		reply.Value = 2
-		reply.Command = p.Instructions[0].Command
-		p.Instructions = p.Instructions[1:]
+		for i, ins := range p.Instructions {
+			test := true
+			var list []FileStruct
+			for _, dep := range ins.Dependencies {
+				file, err := os.ReadFile("server_storage/" + dep)
 
+				if err != nil {
+					// We check the repo
+					file, err = os.ReadFile(p.Directory + dep)
+					if err != nil {
+						test = false
+						fmt.Println("dependency missing : ", dep)
+					}
+
+				}
+				tmp := FileStruct{Data: file, FileName: dep}
+				list = append(list, tmp)
+			}
+			if test {
+				reply.Value = 2
+				reply.Command = ins.Command
+				reply.Dependencies = list
+				p.Instructions = append(p.Instructions[:i], p.Instructions[i+1:]...)
+				return nil
+			}
+		}
+		// No dependencies available found...
+		reply.Value = 1
+		return nil
 	} else {
 		reply.Value = 0
 	}

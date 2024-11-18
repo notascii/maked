@@ -7,6 +7,7 @@ import (
 	"net/rpc"
 	"os"
 	"os/exec"
+	"time"
 )
 
 var path string = "./client_storage/"
@@ -196,6 +197,7 @@ forLoop:
 			break forLoop
 		case 1:
 			fmt.Println("Server not ready")
+			time.Sleep(1 * time.Second)
 		case 2:
 			fmt.Println("Ah shit, here we go again")
 			// download all files
@@ -212,7 +214,6 @@ forLoop:
 			}
 			fmt.Println("File sended")
 		}
-		// We clear the repo
 	}
 	removeAllFiles(path)
 

@@ -8,8 +8,8 @@ import (
 func main() {
 	// Makefile treatment
 	////////////// TEST PREMIER
-	makefilePath := "../makefiles/premier/Makefile"
-	makefileDir := "../makefiles/premier/"
+	makefilePath := "../makefiles/matrix/Makefile"
+	makefileDir := "../makefiles/matrix/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
