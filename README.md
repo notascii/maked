@@ -25,3 +25,8 @@ Open a new terminal and access grenoble's site again
 `bash ./measure_perf.sh`
 
 Check result in `../local_perf`
+
+## pingpong normal
+
+![84b5af7c-3794-4de5-9c16-614bdb6b65f0](https://github.com/user-attachments/assets/e2953672-7da9-43eb-a5a0-b738e208a26e)
+
