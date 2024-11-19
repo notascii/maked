@@ -1,17 +1,52 @@
-#!/bin/bash 
+#!/bin/bash
+# oarsub -I -l host=2,walltime=1:45 -t deploy
 
-#OAR -q production 
-#OAR -l host=1/gpu=1
-#OAR -l walltime=3:00:00
-#OAR -p gpu-16GB AND gpu_compute_capability_major>=5
-#OAR -O OAR_%jobid%.out
-#OAR -E OAR_%jobid%.err 
+# kadeploy3 -e ubuntu2204-nfs
 
-# display some information about attributed resources
-hostname 
-nvidia-smi 
- 
-# make use of a python torch environment
-module load conda
-conda activate pytorch_env
-python3 -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0))";
+# Check if the OAR_NODEFILE environment variable is set
+if [ -z "$OAR_NODEFILE" ]; then
+  echo "Error: The OAR_NODEFILE environment variable is not set."
+  exit 1
+fi
+
+# Read the list of unique nodes from OAR_NODEFILE
+NODES=($(sort -u "$OAR_NODEFILE"))
+
+# Local directory to copy
+LOCAL_DIRECTORY="./maked/"
+
+# Remote destination directory
+REMOTE_DIRECTORY="~/maked/"
+
+# Name of the Go installation script
+INSTALL_GO_SCRIPT="install_go.sh"
+
+# Copy the directory and execute commands on each node
+for i in "${!NODES[@]}"; do
+  node="${NODES[$i]}"
+  echo "Processing node: $node"
+
+  # Copy the directory to the node
+  scp -r "$LOCAL_DIRECTORY" "root@$node:$REMOTE_DIRECTORY"
+
+  # Set execute permissions and run the Go installation script
+  ssh root@$node "chmod +x ${REMOTE_DIRECTORY}${INSTALL_GO_SCRIPT} && ${REMOTE_DIRECTORY}${INSTALL_GO_SCRIPT}"
+
+  # Determine the command to run based on node index
+  if [ "$i" -eq 0 ]; then
+    # First node: start the server
+    echo "Starting server on $node"
+    ssh root@$node "cd ${REMOTE_DIRECTORY}server && nohup go run . > server.log 2>&1 &" &
+    echo "Server started on $node"
+  else
+    # Other nodes: start the client
+    echo "Starting client on $node"
+    ssh root@$node "cd ${REMOTE_DIRECTORY}client && nohup go run client.go ${NODES[0]}:8090 > client.log 2>&1 &" &
+    echo "Client started on $node"
+  fi
+
+  echo "Node $node setup complete"
+done
+
+# Wait for all background SSH processes to complete
+wait

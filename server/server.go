@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sync"
 )
+
+var storageAbs string = "/maked/server/server_storage/"
 
 type MakeService struct {
 	mu           sync.Mutex // handle concurrent access
@@ -40,6 +43,11 @@ type PingDef struct {
 }
 
 func (p *MakeService) Ping(args *PingDef, reply *Order) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("Failed to get home directory: %v", err)
+	}
+	storage := homeDir + storageAbs
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	if len(p.Instructions) > 0 {
@@ -47,7 +55,7 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 			test := true
 			var list []FileStruct
 			for _, dep := range ins.Dependencies {
-				file, err := os.ReadFile("server_storage/" + dep)
+				file, err := os.ReadFile(storage + dep)
 
 				if err != nil {
 					// We check the repo
@@ -79,10 +87,15 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 }
 
 func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("Failed to get home directory: %v", err)
+	}
+	storage := homeDir + storageAbs
 	// Reply with an acknowledgment byte
 	fmt.Println("Name of the file received : ", args.FileName)
 
-	err := os.WriteFile("./server_storage/"+args.FileName, args.Data, 0644)
+	err = os.WriteFile(storage+args.FileName, args.Data, 0644)
 	if err != nil {
 		return err
 	}
