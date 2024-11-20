@@ -34,10 +34,10 @@ starting locally
 
 ### Results
 
-To download results from server: ./retrieve_results.sh
+To download results from server: `./retrieve_results.sh`
 
-To view raw data of latency and throughput `./pingpong/perf/logs' or `./pingpong_IO/perf/logs`
+To view raw data of latency and throughput `./pingpong/perf/logs` or `./pingpong_IO/perf/logs`
 
 To view plots : `./pingpong/perf/perf_benchmarks/graphs` or `./pingpong_IO/perf/perf_benchmarks/graphs`
 
-To view tables: './pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
+To view tables: `./pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
