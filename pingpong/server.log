@@ -753,3 +753,361 @@
 2024/11/17 11:47:15 Received a message of size 524288
 2024/11/17 11:47:15 Received a message of size 1048576
 2024/11/17 11:47:15 Connection closed
+2024/11/19 21:47:10 Server starting...
+2024/11/19 21:47:10 Server listening on port 1234...
+2024/11/19 21:48:57 Server starting...
+2024/11/19 21:48:57 Server listening on port 1234...
+2024/11/19 21:48:59 Accepted new connection
+2024/11/19 21:48:59 Received a message of size 1
+2024/11/19 21:48:59 Received a message of size 1024
+2024/11/19 21:48:59 Received a message of size 2048
+2024/11/19 21:48:59 Received a message of size 4096
+2024/11/19 21:48:59 Received a message of size 8192
+2024/11/19 21:48:59 Received a message of size 16384
+2024/11/19 21:48:59 Received a message of size 32768
+2024/11/19 21:48:59 Received a message of size 65536
+2024/11/19 21:48:59 Received a message of size 131072
+2024/11/19 21:48:59 Received a message of size 262144
+2024/11/19 21:48:59 Received a message of size 524288
+2024/11/19 21:48:59 Received a message of size 1048576
+2024/11/19 21:48:59 Received a message of size 2097152
+2024/11/19 21:48:59 Received a message of size 4194304
+2024/11/19 21:48:59 Received a message of size 8388608
+2024/11/19 21:49:00 Received a message of size 16777216
+2024/11/19 21:49:00 Received a message of size 33554432
+2024/11/19 21:49:00 Received a message of size 67108864
+2024/11/19 21:49:00 Received a message of size 134217728
+2024/11/19 21:49:01 Received a message of size 268435456
+2024/11/19 21:49:02 Received a message of size 536870912
+2024/11/19 21:49:16 Received a message of size 1073741824
+2024/11/19 23:43:24 Server starting...
+2024/11/19 23:43:24 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:33:09 Server starting...
+2024/11/20 09:33:09 Server listening on port 1234...
+2024/11/20 09:33:15 Accepted new connection
+2024/11/20 09:33:15 Received a message of size 1
+2024/11/20 09:33:15 Received a message of size 1024
+2024/11/20 09:33:15 Received a message of size 2048
+2024/11/20 09:33:15 Received a message of size 4096
+2024/11/20 09:33:15 Received a message of size 8192
+2024/11/20 09:33:15 Received a message of size 16384
+2024/11/20 09:33:15 Received a message of size 32768
+2024/11/20 09:33:15 Received a message of size 65536
+2024/11/20 09:33:15 Received a message of size 131072
+2024/11/20 09:33:15 Received a message of size 262144
+2024/11/20 09:33:15 Received a message of size 524288
+2024/11/20 09:33:15 Received a message of size 1048576
+2024/11/20 09:33:15 Received a message of size 2097152
+2024/11/20 09:33:16 Received a message of size 4194304
+2024/11/20 09:33:16 Received a message of size 8388608
+2024/11/20 09:33:16 Received a message of size 16777216
+2024/11/20 09:33:16 Received a message of size 33554432
+2024/11/20 09:33:16 Received a message of size 67108864
+2024/11/20 09:33:17 Received a message of size 134217728
+2024/11/20 09:33:18 Received a message of size 268435456
+2024/11/20 09:33:21 Received a message of size 536870912
+2024/11/20 09:33:27 Received a message of size 1073741824
+2024/11/20 09:33:39 Received a message of size 2147483648
+2024/11/20 09:34:03 Received a message of size 4294967296
+2024/11/20 09:34:03 Server starting...
+2024/11/20 09:34:03 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:34:04 Accepted new connection
+2024/11/20 09:34:04 Received a message of size 1
+2024/11/20 09:34:04 Received a message of size 1024
+2024/11/20 09:34:04 Received a message of size 2048
+2024/11/20 09:34:04 Received a message of size 4096
+2024/11/20 09:34:04 Received a message of size 8192
+2024/11/20 09:34:04 Received a message of size 16384
+2024/11/20 09:34:04 Received a message of size 32768
+2024/11/20 09:34:04 Received a message of size 65536
+2024/11/20 09:34:04 Received a message of size 131072
+2024/11/20 09:34:04 Received a message of size 262144
+2024/11/20 09:34:04 Received a message of size 524288
+2024/11/20 09:34:04 Received a message of size 1048576
+2024/11/20 09:34:04 Received a message of size 2097152
+2024/11/20 09:34:04 Received a message of size 4194304
+2024/11/20 09:34:04 Received a message of size 8388608
+2024/11/20 09:34:04 Received a message of size 16777216
+2024/11/20 09:34:04 Connection closed
+2024/11/20 09:34:11 Connection closed
+2024/11/20 09:34:52 Server starting...
+2024/11/20 09:34:52 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:34:53 Accepted new connection
+2024/11/20 09:34:53 Received a message of size 1
+2024/11/20 09:34:53 Received a message of size 1024
+2024/11/20 09:34:53 Received a message of size 2048
+2024/11/20 09:34:53 Received a message of size 4096
+2024/11/20 09:34:53 Received a message of size 8192
+2024/11/20 09:34:53 Received a message of size 16384
+2024/11/20 09:34:53 Received a message of size 32768
+2024/11/20 09:34:53 Received a message of size 65536
+2024/11/20 09:34:53 Received a message of size 131072
+2024/11/20 09:34:53 Received a message of size 262144
+2024/11/20 09:34:53 Received a message of size 524288
+2024/11/20 09:34:53 Received a message of size 1048576
+2024/11/20 09:34:53 Received a message of size 2097152
+2024/11/20 09:34:53 Received a message of size 4194304
+2024/11/20 09:34:53 Received a message of size 8388608
+2024/11/20 09:34:53 Received a message of size 16777216
+2024/11/20 09:34:53 Connection closed
+2024/11/20 09:44:51 Server starting...
+2024/11/20 09:44:51 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:44:52 Accepted new connection
+2024/11/20 09:44:52 Received a message of size 1024
+2024/11/20 09:44:52 Received a message of size 2048
+2024/11/20 09:44:52 Received a message of size 4096
+2024/11/20 09:44:52 Received a message of size 8192
+2024/11/20 09:44:52 Received a message of size 16384
+2024/11/20 09:44:52 Received a message of size 32768
+2024/11/20 09:44:52 Received a message of size 65536
+2024/11/20 09:44:52 Received a message of size 131072
+2024/11/20 09:44:52 Received a message of size 262144
+2024/11/20 09:44:52 Received a message of size 524288
+2024/11/20 09:44:52 Received a message of size 1048576
+2024/11/20 09:44:52 Received a message of size 2097152
+2024/11/20 09:44:52 Received a message of size 4194304
+2024/11/20 09:44:52 Received a message of size 8388608
+2024/11/20 09:44:52 Received a message of size 16777216
+2024/11/20 09:44:52 Received a message of size 33554432
+2024/11/20 09:44:53 Received a message of size 67108864
+2024/11/20 09:44:53 Received a message of size 134217728
+2024/11/20 09:44:55 Received a message of size 268435456
+2024/11/20 09:44:58 Received a message of size 536870912
+2024/11/20 09:44:58 Connection closed
+2024/11/20 09:52:20 Server starting...
+2024/11/20 09:52:20 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:52:21 Accepted new connection
+2024/11/20 09:52:21 Received a message of size 1024
+2024/11/20 09:52:21 Received a message of size 2048
+2024/11/20 09:52:21 Received a message of size 4096
+2024/11/20 09:52:21 Received a message of size 8192
+2024/11/20 09:52:21 Received a message of size 16384
+2024/11/20 09:52:21 Received a message of size 32768
+2024/11/20 09:52:21 Received a message of size 65536
+2024/11/20 09:52:21 Received a message of size 131072
+2024/11/20 09:52:21 Received a message of size 262144
+2024/11/20 09:52:21 Received a message of size 524288
+2024/11/20 09:52:21 Received a message of size 1048576
+2024/11/20 09:52:21 Received a message of size 2097152
+2024/11/20 09:52:21 Received a message of size 4194304
+2024/11/20 09:52:21 Received a message of size 8388608
+2024/11/20 09:52:21 Received a message of size 16777216
+2024/11/20 09:52:22 Received a message of size 33554432
+2024/11/20 09:52:22 Received a message of size 67108864
+2024/11/20 09:52:23 Received a message of size 134217728
+2024/11/20 09:52:24 Received a message of size 268435456
+2024/11/20 09:52:27 Received a message of size 536870912
+2024/11/20 09:52:33 Received a message of size 1073741824
+2024/11/20 09:52:46 Received a message of size 2147483648
+2024/11/20 09:53:09 Received a message of size 4294967296
+2024/11/20 09:55:30 Connection closed
+2024/11/20 09:57:45 Server starting...
+2024/11/20 09:57:45 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:57:52 Server starting...
+2024/11/20 09:57:52 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 09:58:41 Server starting...
+2024/11/20 09:58:41 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:00:47 Server starting...
+2024/11/20 10:00:47 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:01:00 Server starting...
+2024/11/20 10:01:00 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:01:54 Server starting...
+2024/11/20 10:01:54 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:02:32 Server starting...
+2024/11/20 10:02:32 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:03:51 Server starting...
+2024/11/20 10:03:51 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:08:20 Server starting...
+2024/11/20 10:08:20 Server listening on port 1234...
+2024/11/20 10:08:26 Accepted new connection
+2024/11/20 10:08:26 Received a message of size 1024
+2024/11/20 10:08:26 Received a message of size 2048
+2024/11/20 10:08:26 Received a message of size 4096
+2024/11/20 10:08:26 Received a message of size 8192
+2024/11/20 10:08:26 Received a message of size 16384
+2024/11/20 10:08:26 Received a message of size 32768
+2024/11/20 10:08:26 Received a message of size 65536
+2024/11/20 10:08:26 Received a message of size 131072
+2024/11/20 10:08:26 Received a message of size 262144
+2024/11/20 10:08:26 Received a message of size 524288
+2024/11/20 10:08:26 Received a message of size 1048576
+2024/11/20 10:08:27 Received a message of size 2097152
+2024/11/20 10:08:27 Received a message of size 4194304
+2024/11/20 10:08:27 Received a message of size 8388608
+2024/11/20 10:08:27 Received a message of size 16777216
+2024/11/20 10:08:27 Received a message of size 33554432
+2024/11/20 10:08:27 Received a message of size 67108864
+2024/11/20 10:08:28 Received a message of size 134217728
+2024/11/20 10:08:29 Received a message of size 268435456
+2024/11/20 10:08:32 Received a message of size 536870912
+2024/11/20 10:08:38 Received a message of size 1073741824
+2024/11/20 10:08:50 Received a message of size 2147483648
+2024/11/20 10:09:16 Received a message of size 4294967296
+2024/11/20 10:09:20 Connection closed
+2024/11/20 10:10:34 Server starting...
+2024/11/20 10:10:34 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:10:35 Accepted new connection
+2024/11/20 10:10:35 Received a message of size 1024
+2024/11/20 10:10:35 Received a message of size 2048
+2024/11/20 10:10:35 Received a message of size 4096
+2024/11/20 10:10:35 Received a message of size 8192
+2024/11/20 10:10:35 Received a message of size 16384
+2024/11/20 10:10:35 Received a message of size 32768
+2024/11/20 10:10:35 Received a message of size 65536
+2024/11/20 10:10:35 Received a message of size 131072
+2024/11/20 10:10:35 Received a message of size 262144
+2024/11/20 10:10:35 Received a message of size 524288
+2024/11/20 10:10:35 Received a message of size 1048576
+2024/11/20 10:10:35 Received a message of size 2097152
+2024/11/20 10:10:35 Received a message of size 4194304
+2024/11/20 10:10:35 Received a message of size 8388608
+2024/11/20 10:10:35 Received a message of size 16777216
+2024/11/20 10:10:35 Received a message of size 33554432
+2024/11/20 10:10:35 Received a message of size 67108864
+2024/11/20 10:10:36 Received a message of size 134217728
+2024/11/20 10:10:38 Received a message of size 268435456
+2024/11/20 10:10:40 Received a message of size 536870912
+2024/11/20 10:10:47 Received a message of size 1073741824
+2024/11/20 10:11:00 Received a message of size 2147483648
+2024/11/20 10:11:18 Server starting...
+2024/11/20 10:11:18 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:11:19 Accepted new connection
+2024/11/20 10:11:19 Received a message of size 1
+2024/11/20 10:11:19 Received a message of size 1024
+2024/11/20 10:11:19 Received a message of size 2048
+2024/11/20 10:11:19 Received a message of size 4096
+2024/11/20 10:11:19 Received a message of size 8192
+2024/11/20 10:11:19 Received a message of size 16384
+2024/11/20 10:11:19 Received a message of size 32768
+2024/11/20 10:11:19 Received a message of size 65536
+2024/11/20 10:11:19 Received a message of size 131072
+2024/11/20 10:11:19 Received a message of size 262144
+2024/11/20 10:11:19 Received a message of size 524288
+2024/11/20 10:11:19 Received a message of size 1048576
+2024/11/20 10:11:19 Received a message of size 2097152
+2024/11/20 10:11:21 Received a message of size 4194304
+2024/11/20 10:11:21 Received a message of size 8388608
+2024/11/20 10:11:21 Received a message of size 16777216
+2024/11/20 10:11:21 Received a message of size 33554432
+2024/11/20 10:11:21 Received a message of size 67108864
+2024/11/20 10:11:22 Received a message of size 134217728
+2024/11/20 10:11:24 Received a message of size 268435456
+2024/11/20 10:11:24 Received a message of size 4294967296
+2024/11/20 10:11:26 Received a message of size 536870912
+2024/11/20 10:11:28 Connection closed
+2024/11/20 10:11:32 Received a message of size 1073741824
+2024/11/20 10:11:44 Received a message of size 2147483648
+2024/11/20 10:12:11 Received a message of size 4294967296
+2024/11/20 10:14:36 Connection closed
+2024/11/20 10:17:16 Server starting...
+2024/11/20 10:17:16 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:17:17 Accepted new connection
+2024/11/20 10:17:17 Received a message of size 1
+2024/11/20 10:17:17 Received a message of size 1024
+2024/11/20 10:17:17 Connection closed
+2024/11/20 10:20:41 Server starting...
+2024/11/20 10:20:41 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:20:42 Accepted new connection
+2024/11/20 10:20:42 Received a message of size 1
+2024/11/20 10:20:42 Received a message of size 1024
+2024/11/20 10:20:42 Received a message of size 2048
+2024/11/20 10:20:42 Received a message of size 4096
+2024/11/20 10:20:42 Received a message of size 8192
+2024/11/20 10:20:42 Received a message of size 16384
+2024/11/20 10:20:42 Received a message of size 32768
+2024/11/20 10:20:42 Received a message of size 65536
+2024/11/20 10:20:42 Received a message of size 131072
+2024/11/20 10:20:42 Received a message of size 262144
+2024/11/20 10:20:42 Received a message of size 524288
+2024/11/20 10:20:42 Received a message of size 1048576
+2024/11/20 10:20:42 Received a message of size 2097152
+2024/11/20 10:20:42 Received a message of size 4194304
+2024/11/20 10:20:42 Received a message of size 8388608
+2024/11/20 10:20:42 Received a message of size 16777216
+2024/11/20 10:20:42 Received a message of size 33554432
+2024/11/20 10:20:43 Received a message of size 67108864
+2024/11/20 10:20:43 Received a message of size 134217728
+2024/11/20 10:20:45 Received a message of size 268435456
+2024/11/20 10:20:48 Received a message of size 536870912
+2024/11/20 10:20:54 Received a message of size 1073741824
+2024/11/20 10:21:06 Received a message of size 2147483648
+2024/11/20 10:21:31 Received a message of size 4294967296
+2024/11/20 10:21:58 Connection closed
+2024/11/20 10:25:09 Server starting...
+2024/11/20 10:25:09 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:25:10 Accepted new connection
+2024/11/20 10:25:10 Received a message of size 1
+2024/11/20 10:25:10 Received a message of size 1024
+2024/11/20 10:25:10 Received a message of size 2048
+2024/11/20 10:25:10 Received a message of size 4096
+2024/11/20 10:25:10 Received a message of size 8192
+2024/11/20 10:25:10 Received a message of size 16384
+2024/11/20 10:25:10 Received a message of size 32768
+2024/11/20 10:25:10 Received a message of size 65536
+2024/11/20 10:25:10 Received a message of size 131072
+2024/11/20 10:25:10 Received a message of size 262144
+2024/11/20 10:25:10 Received a message of size 524288
+2024/11/20 10:25:10 Received a message of size 1048576
+2024/11/20 10:25:10 Received a message of size 2097152
+2024/11/20 10:25:10 Received a message of size 4194304
+2024/11/20 10:25:10 Received a message of size 8388608
+2024/11/20 10:25:10 Received a message of size 16777216
+2024/11/20 10:25:10 Received a message of size 33554432
+2024/11/20 10:25:10 Received a message of size 67108864
+2024/11/20 10:25:11 Received a message of size 134217728
+2024/11/20 10:25:13 Received a message of size 268435456
+2024/11/20 10:25:16 Received a message of size 536870912
+2024/11/20 10:25:22 Received a message of size 1073741824
+2024/11/20 10:25:34 Received a message of size 2147483648
+2024/11/20 10:26:00 Received a message of size 4294967296
+2024/11/20 10:26:29 Connection closed
+2024/11/20 10:27:24 Server starting...
+2024/11/20 10:27:24 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:27:25 Accepted new connection
+2024/11/20 10:27:25 Received a message of size 1
+2024/11/20 10:27:25 Received a message of size 1024
+2024/11/20 10:27:25 Received a message of size 2048
+2024/11/20 10:27:25 Received a message of size 4096
+2024/11/20 10:27:25 Received a message of size 8192
+2024/11/20 10:27:25 Received a message of size 16384
+2024/11/20 10:27:25 Received a message of size 32768
+2024/11/20 10:27:25 Received a message of size 65536
+2024/11/20 10:27:25 Received a message of size 131072
+2024/11/20 10:27:25 Received a message of size 262144
+2024/11/20 10:27:25 Received a message of size 524288
+2024/11/20 10:27:25 Received a message of size 1048576
+2024/11/20 10:27:25 Received a message of size 2097152
+2024/11/20 10:27:25 Received a message of size 4194304
+2024/11/20 10:27:25 Received a message of size 8388608
+2024/11/20 10:27:25 Received a message of size 16777216
+2024/11/20 10:27:25 Received a message of size 33554432
+2024/11/20 10:27:26 Received a message of size 67108864
+2024/11/20 10:27:26 Received a message of size 134217728
+2024/11/20 10:27:28 Received a message of size 268435456
+2024/11/20 10:27:31 Received a message of size 536870912
+2024/11/20 10:27:37 Received a message of size 1073741824
+2024/11/20 10:27:49 Received a message of size 2147483648
+2024/11/20 10:28:14 Received a message of size 4294967296
+2024/11/20 10:28:14 Connection closed
+2024/11/20 10:35:17 Server starting...
+2024/11/20 10:35:17 Failed to listen on port 1234: listen tcp :1234: bind: address already in use
+2024/11/20 10:35:18 Accepted new connection
+2024/11/20 10:35:18 Received a message of size 1
+2024/11/20 10:35:18 Received a message of size 1024
+2024/11/20 10:35:18 Received a message of size 2048
+2024/11/20 10:35:18 Received a message of size 4096
+2024/11/20 10:35:18 Received a message of size 8192
+2024/11/20 10:35:18 Received a message of size 16384
+2024/11/20 10:35:18 Received a message of size 32768
+2024/11/20 10:35:18 Received a message of size 65536
+2024/11/20 10:35:18 Received a message of size 131072
+2024/11/20 10:35:18 Received a message of size 262144
+2024/11/20 10:35:18 Received a message of size 524288
+2024/11/20 10:35:18 Received a message of size 1048576
+2024/11/20 10:35:18 Received a message of size 2097152
+2024/11/20 10:35:18 Received a message of size 4194304
+2024/11/20 10:35:18 Received a message of size 8388608
+2024/11/20 10:35:18 Received a message of size 16777216
+2024/11/20 10:35:18 Connection closed
+2024/11/20 10:36:29 Server starting...
+2024/11/20 10:36:29 Failed to listen on port 1234: listen tcp :1234: bind: address already in use

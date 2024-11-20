@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/rpc"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -47,6 +48,8 @@ func measurePerfThroughput(client *rpc.Client, N int) (int, float64,float64,erro
 
 func main() {
 	// Establish a connection to the server
+	messageSizeMaxstr := os.Args[2]
+	messageSizeMax,err := strconv.Atoi(messageSizeMaxstr)
 	client, err := establishConn(os.Args[1])
 	if err != nil {
 		panic(err)
@@ -67,8 +70,8 @@ func main() {
 	defer fileLatency.Close()
 
 	// Run measurements for increasing message sizes
-	messageSize := 1024
-	for i := 0; i <= 10; i++ {
+	messageSize := 1
+	for i := 0; i <= messageSizeMax; i++ {
 		// Measure throughput and latency
 		size, throughput,latency, err := measurePerfThroughput(client, messageSize)
 		if err != nil {
@@ -88,6 +91,9 @@ func main() {
 		}
 
 		// Double the message size for the next iteration
+		if messageSize == 1{
+			messageSize=512
+		}
 		messageSize *= 2
 	}
 }
