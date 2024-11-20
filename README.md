@@ -4,7 +4,7 @@
 
 [https://grid5000.fr](https://grid5000.fr)
 
-### To perf measure for pingpong
+## To perf measure for pingpong/pingpong_IO
 
 starting locally
 
@@ -12,31 +12,32 @@ starting locally
 
 `bash grenoble`
 
-`bash cd commands`
+### To measure pingpong
+
+`bash cd pingpong`
+
+### To measure pingpongIO
+
+`bash cd pingpongIO`
+
+### Command to create nodes
 
 `bash ./create_nodes.sh`
 
-Open a new terminal and access grenoble's site again
+### Command to install dependencies
 
-`bash cd commands`
+`bash ./install_dep.sh`
 
-`bash ./installgo.sh`
+### Command to measure performance
 
 `bash ./measure_perf.sh`
 
-Check result in `../local_perf`
+### Results
 
-### Latency % message size in pingpong normal
+To download results from server: ./retrieve_results.sh
 
-![84b5af7c-3794-4de5-9c16-614bdb6b65f0](https://github.com/user-attachments/assets/e2953672-7da9-43eb-a5a0-b738e208a26e)
+To view raw data of latency and throughput `./pingpong/perf/logs' or `./pingpong_IO/perf/logs`
 
-### Latency % message size in pingpong I/O
-![365d2a31-f1e5-4fdc-ae70-aa72b2199679](https://github.com/user-attachments/assets/6af177dc-e294-48e0-87e8-885c960e19a3)
+To view plots : `./pingpong/perf/perf_benchmarks/graphs` or `./pingpong_IO/perf/perf_benchmarks/graphs`
 
-
-### Throughput $ message size in pingpong normal
-![1223d7e0-f969-4be5-8a31-9ce363a4ebf1](https://github.com/user-attachments/assets/a2ab6a84-3846-432b-8f11-6258d19041ec)
-
-
-
-
+To view tables: './pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
