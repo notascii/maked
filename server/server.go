@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -62,7 +61,7 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 					file, err = os.ReadFile(p.Directory + dep)
 					if err != nil {
 						test = false
-						fmt.Println("dependency missing : ", dep)
+						log.Println("dependency missing : ", dep)
 					}
 
 				}
@@ -93,13 +92,13 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 	}
 	storage := homeDir + storageAbs
 	// Reply with an acknowledgment byte
-	fmt.Println("Name of the file received : ", args.FileName)
+	log.Println("Name of the file received : ", args.FileName)
 
 	err = os.WriteFile(storage+args.FileName, args.Data, 0644)
 	if err != nil {
 		return err
 	}
-	fmt.Println("File received and stored as " + args.FileName)
+	log.Println("File received and stored as " + args.FileName)
 	return nil
 }
 
@@ -108,7 +107,7 @@ func (p *MakeService) Initialization(args *FileStruct, reply *FileList) error {
 
 	files, err := os.ReadDir(p.Directory)
 	if err != nil {
-		fmt.Println("Impossible to read the directory : ", err)
+		log.Println("Impossible to read the directory : ", err)
 	}
 	var list []FileStruct
 	var tmp FileStruct

@@ -36,13 +36,13 @@ type Order struct {
 func removeAllFiles(directory string) {
 	files, err := os.ReadDir(directory)
 	if err != nil {
-		fmt.Println("Impossible to read the directory : ", err)
+		log.Println("Impossible to read the directory : ", err)
 	}
 	for _, file := range files {
-		fmt.Println("Deleting file ", file.Name())
+		log.Println("Deleting file ", file.Name())
 		err = os.Remove(directory + file.Name())
 		if err != nil {
-			fmt.Println("Impossible to delete the file ", err)
+			log.Println("Impossible to delete the file ", err)
 		}
 	}
 }
@@ -73,12 +73,12 @@ func createFile(storage string, fileName string, data []byte) {
 	}
 	err = os.Chmod(storage+fileName, 0755)
 	if err != nil {
-		fmt.Println("Impossible to add permission")
+		log.Println("Impossible to add permission")
 	}
 }
 
 func launchCommand(storage string, command string) []string {
-	fmt.Println(command)
+	log.Println(command)
 	cmd := exec.Command("/bin/sh", "-c", command)
 	cmd.Dir = storage
 
@@ -89,14 +89,14 @@ func launchCommand(storage string, command string) []string {
 	// Check all files before the command
 	filesBefore, err := os.ReadDir(storage)
 	if err != nil {
-		fmt.Println("Impossible to read the directory : ", err)
+		log.Println("Impossible to read the directory : ", err)
 	}
-	fmt.Println("Files before : ", filesBefore)
+	log.Println("Files before : ", filesBefore)
 
 	// Execute the command
 	err = cmd.Run()
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Println("Error:", err)
 	}
 
 	// We check all files after the command
@@ -104,14 +104,14 @@ func launchCommand(storage string, command string) []string {
 	if err != nil {
 		log.Println("Impossible to read the directory : ", err)
 	}
-	fmt.Println("Files after : ", filesAfter)
+	log.Println("Files after : ", filesAfter)
 
 	return diffFiles(filesBefore, filesAfter)
 
 }
 
 func ask_init(storage string, address string) {
-	fmt.Println("Initialization")
+	log.Println("Initialization")
 	// Connect to the server
 	client, err := rpc.Dial("tcp", address)
 	if err != nil {
@@ -126,7 +126,7 @@ func ask_init(storage string, address string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Downloading files")
+	log.Println("Downloading files")
 	for _, file := range reply.List {
 		createFile(storage, file.FileName, file.Data)
 	}
@@ -147,8 +147,8 @@ func send_ping(address string) Order {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Ping send")
-	fmt.Println("Order received :", reply.Value)
+	log.Println("Ping send")
+	log.Println("Order received :", reply.Value)
 	return reply
 }
 
@@ -187,7 +187,7 @@ func main() {
 
 	args := os.Args[1:]
 	if len(args) != 1 {
-		fmt.Println(fmt.Println("Excepted 1 argument"))
+		log.Println("Excepted 1 argument")
 	}
 	// we ask for essential files
 	ask_init(storage, args[0])
@@ -202,22 +202,22 @@ forLoop:
 		// 2 -> work available
 		switch o.Value {
 		case 0:
-			fmt.Println("Task done, take some rest soldier")
+			log.Println("Task done, take some rest soldier")
 			break forLoop
 		case 1:
-			fmt.Println("Server not ready")
+			log.Println("Server not ready")
 			time.Sleep(1 * time.Second)
 		case 2:
-			fmt.Println("Ah shit, here we go again")
+			log.Println("Ah shit, here we go again")
 			// download all files
 			for _, dep := range o.Dependencies {
 				createFile(storage, dep.FileName, dep.Data)
 			}
 			// execute the command
 			filesCreated := launchCommand(storage, o.Command)
-			fmt.Println("Command done")
+			log.Println("Command done")
 			// Send the created files
-			fmt.Println("Created files : ", filesCreated)
+			log.Println("Created files : ", filesCreated)
 			for _, fileName := range filesCreated {
 				send_file(storage, fileName, args[0])
 			}
