@@ -8,29 +8,31 @@
 
 starting locally
 
-`bash ssh <login@access.grid5000.fr>`
+` ssh <login@access.grid5000.fr>`
 
-`bash grenoble`
+`ssh grenoble`
 
 ### To measure pingpong
 
-`bash cd pingpong`
+`cd pingpong`
 
 ### To measure pingpongIO
 
-`bash cd pingpongIO`
+`cd pingpongIO`
 
 ### Command to create nodes
 
-`bash ./create_nodes.sh`
+`./create_nodes.sh`
+
+Make sure to change terminal and connect back your account by ssh on grid5000 Grenoble's access machine 
 
 ### Command to install dependencies
 
-`bash ./install_dep.sh`
+`./install_dep.sh`
 
 ### Command to measure performance
 
-`bash ./measure_perf.sh`
+`./measure_perf.sh`
 
 ### Results
 
