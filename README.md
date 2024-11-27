@@ -52,4 +52,4 @@ To view plots : `./pingpong/perf/perf_benchmarks/graphs` or `./pingpong_IO/perf/
 
 To view tables: `./pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
 
-To view rsp vs rsync: `./pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
+To view rsp vs rsync: `./file_transferring/graphs`
