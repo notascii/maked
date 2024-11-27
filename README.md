@@ -38,6 +38,10 @@ Make sure to change terminal and connect back your account by ssh on grid5000 Gr
 
 `./measure_perf.sh`
 
+### Command to measure rcp vs rsync 
+
+`cd file_transferring_perf ./main.sh`
+
 ### Results
 
 To download results from server: `./retrieve_results.sh`
@@ -47,3 +51,5 @@ To view raw data of latency and throughput `./pingpong/perf/logs` or `./pingpong
 To view plots : `./pingpong/perf/perf_benchmarks/graphs` or `./pingpong_IO/perf/perf_benchmarks/graphs`
 
 To view tables: `./pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
+
+To view rsp vs rsync: `./pingpong/perf/perf_benchmarks/tables`or`./pingpong_IO/perf/perf_benchmarks/tables`
