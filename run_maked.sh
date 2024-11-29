@@ -1,5 +1,5 @@
 #!/bin/bash
-# oarsub -I -l host=10,walltime=1:45 -t deploy
+# oarsub -I -l host=3,walltime=1:45 -t deploy
 
 kadeploy3 -e ubuntu2204-nfs
 
