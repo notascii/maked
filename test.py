@@ -1,5 +1,4 @@
 import requests
-from getpass import getpass
 import time
 
 class Grid5000API:
@@ -10,12 +9,12 @@ class Grid5000API:
         self.site = site
         self.base_url = f"https://api.grid5000.fr/stable/sites/{site}"
 
-    def submit_deployment_job(self, nodes, commands):
+    def submit_deployment_job(self, nodes, script_path):
         jobs_url = f"{self.base_url}/jobs/"
         job_data = {
             "resources": f"nodes={nodes}",
-            "types": ["deploy"],     # Specify that this job is for deployment
-            "command": commands,  # Deployment command
+            "types": ["deploy"],
+            "command": f"bash {script_path}",
             "name": "DeployUbuntuNFS"
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
@@ -36,7 +35,7 @@ class Grid5000API:
             if response.status_code == 200:
                 job_info = response.json()
                 state = job_info['state']
-                if (state != old_state):
+                if state != old_state:
                     print(f"Current job state: {state}")
                     old_state = state
                 if state in ['terminated', 'error', 'killed']:
@@ -45,30 +44,20 @@ class Grid5000API:
                 print(f"Failed to retrieve job status: {response.status_code}")
                 print("Error:", response.text)
                 exit(1)
-
-def fuse_command(list_command):
-    return " && ".join(list_command)
+            time.sleep(10)  # Wait for 10 seconds before checking again
 
 if __name__ == "__main__":
     login = "aabdelaz"
     password = ""
-    g5k = Grid5000API(login, password, site="rennes")
-    # First we deploy the nodes
-    command1 = "kadeploy3 -f $OAR_NODEFILE -e ubuntu2204-nfs "
-    # Copy ./maked to each node
-    command2 = "taktuk -s -l root -f <(uniq $OAR_FILE_NODES) broadcast exec [ date ]"
-    command3 = "taktuk -s -l root -f <(uniq $OAR_FILE_NODES) broadcast exec [ \"apt install git\" ]"
+    site = "rennes"
+    nodes = 4
+    script_path = "./run_maked.sh"
 
-    # Copy
-    
-    # We fuse all commands inside one script 
-    commands = fuse_command([command1, command2, command3])
-    
-    # We deploy nodes
-    job_id = g5k.submit_deployment_job(nodes=4, commands=commands)
-    # Check each states of completion
+    g5k = Grid5000API(login, password, site)
+    job_id = g5k.submit_deployment_job(nodes, script_path)
     job_state = g5k.wait_for_job_completion(job_id)
     if job_state == 'terminated':
         print("Deployment completed successfully.")
     else:
         print("Job did not terminate successfully.")
+
