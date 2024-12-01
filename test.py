@@ -48,7 +48,7 @@ class Grid5000API:
 
 if __name__ == "__main__":
     login = "aabdelaz"
-    password = ""
+    password = "SCLK6yDs!m74tQG"
     site = "rennes"
     nodes = 4
     script_path = "./run_maked.sh"
