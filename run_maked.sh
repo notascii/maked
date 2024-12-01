@@ -1,5 +1,5 @@
 #!/bin/bash
-# oarsub -I -l host=6,walltime=1:45 -t deploy
+# oarsub -I -l host=10,walltime=1:45 -t deploy
 
 kadeploy3 -e ubuntu2204-nfs
 
@@ -48,7 +48,7 @@ SERVER_NODE="${NODES[0]}"
 CLIENT_NODES=("${NODES[@]:1}")
 echo "Client starting"
 
-time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]
+{ time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> test.txt
 
 
 # Wait for all background SSH processes to complete
