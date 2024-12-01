@@ -1,22 +1,74 @@
-import os
 import requests
+from getpass import getpass
+import time
 
-user = input(f"Grid'5000 username (default is {os.getlogin()}): ") or os.getlogin()
-password = input("Grid'5000 password (leave blank on frontends): ")
-g5k_auth = (user, password) if password else None
+class Grid5000API:
+    def __init__(self, user, password, site):
+        self.user = user
+        self.password = password
+        self.auth = (self.user, self.password)
+        self.site = site
+        self.base_url = f"https://api.grid5000.fr/stable/sites/{site}"
 
-sites = requests.get("https://api.grid5000.fr/stable/sites", auth=g5k_auth).json()["items"]
+    def submit_deployment_job(self, nodes, commands):
+        jobs_url = f"{self.base_url}/jobs/"
+        job_data = {
+            "resources": f"nodes={nodes}",
+            "types": ["deploy"],     # Specify that this job is for deployment
+            "command": commands,  # Deployment command
+            "name": "DeployUbuntuNFS"
+        }
+        response = requests.post(jobs_url, json=job_data, auth=self.auth)
+        if response.status_code == 201:
+            job = response.json()
+            print(f"Job submitted: ID {job['uid']}")
+            return job['uid']
+        else:
+            print(f"Job submission failed: {response.status_code}")
+            print("Error:", response.text)
+            exit(1)
 
-print("Grid'5000 sites:")
-for site in sites:
+    def wait_for_job_completion(self, job_id):
+        job_url = f"{self.base_url}/jobs/{job_id}"
+        old_state = ""
+        while True:
+            response = requests.get(job_url, auth=self.auth)
+            if response.status_code == 200:
+                job_info = response.json()
+                state = job_info['state']
+                if (state != old_state):
+                    print(f"Current job state: {state}")
+                    old_state = state
+                if state in ['terminated', 'error', 'killed']:
+                    return state
+            else:
+                print(f"Failed to retrieve job status: {response.status_code}")
+                print("Error:", response.text)
+                exit(1)
 
-    site_id = site["uid"]
-    print(site_id + ":")
+def fuse_command(list_command):
+    return " && ".join(list_command)
 
-    site_clusters = requests.get(
-        f"https://api.grid5000.fr/stable/sites/{site_id}/clusters",
-        auth=g5k_auth,
-    ).json()["items"]
+if __name__ == "__main__":
+    login = "aabdelaz"
+    password = ""
+    g5k = Grid5000API(login, password, site="rennes")
+    # First we deploy the nodes
+    command1 = "kadeploy3 -f $OAR_NODEFILE -e ubuntu2204-nfs "
+    # Copy ./maked to each node
+    command2 = "taktuk -s -l root -f <(uniq $OAR_FILE_NODES) broadcast exec [ date ]"
+    command3 = "taktuk -s -l root -f <(uniq $OAR_FILE_NODES) broadcast exec [ \"apt install git\" ]"
 
-    for cluster in site_clusters:
-        print("-", cluster["uid"])
+    # Copy
+    
+    # We fuse all commands inside one script 
+    commands = fuse_command([command1, command2, command3])
+    
+    # We deploy nodes
+    job_id = g5k.submit_deployment_job(nodes=4, commands=commands)
+    # Check each states of completion
+    job_state = g5k.wait_for_job_completion(job_id)
+    if job_state == 'terminated':
+        print("Deployment completed successfully.")
+    else:
+        print("Job did not terminate successfully.")

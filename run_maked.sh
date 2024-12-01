@@ -33,21 +33,18 @@ done
 
 echo "All nodes are set up"
 
-# Start server on the first node and clients on the remaining nodes
-for i in "${!NODES[@]}"; do
-  node="${NODES[$i]}"
-  if [ "$i" -eq 0 ]; then
-    # First node: start the server
-    echo "Starting server on $node"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . > server.log 2>&1 &" &
-    echo "Server started on $node"
-  else
-    # Other nodes: start the client
-    echo "Trying to connect client on $node to server ${NODES[0]}:8090"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && nohup go run client.go ${NODES[0]}:8090 > client.log 2>&1&" &
-    echo "Client started on $node"
-  fi
-done
+
+# Start the server on the first node and clients on the remaining nodes
+SERVER_NODE="${NODES[0]}"
+CLIENT_NODES=("${NODES[@]:1}")
+
+# Start the server on the first node
+taktuk -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . > server.log 2>&1 &" ]
+
+# Start clients on the remaining nodes
+taktuk -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && nohup go run client.go ${SERVER_NODE}:8090 > client.log 2>&1 &" ]
+
+echo "All nodes are set up and services are running."
 
 # Wait for all background SSH processes to complete
 wait
