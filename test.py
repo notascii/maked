@@ -1,3 +1,4 @@
+import os
 import requests
 import time
 
@@ -8,6 +9,18 @@ class Grid5000API:
         self.auth = (self.user, self.password)
         self.site = site
         self.base_url = f"https://api.grid5000.fr/stable/sites/{site}"
+
+    def create_test_directory(self, directory_name="test"):
+        """
+        Creates a directory with the specified name.
+        If the directory already exists, no exception is raised.
+        """
+        try:
+            os.makedirs(directory_name, exist_ok=True)
+            print(f"Directory '{directory_name}' created successfully.")
+        except Exception as e:
+            print(f"An error occurred while creating the directory '{directory_name}': {e}")
+
 
     def submit_deployment_job(self, nodes, script_path):
         jobs_url = f"{self.base_url}/jobs/"
@@ -44,14 +57,13 @@ class Grid5000API:
                 print(f"Failed to retrieve job status: {response.status_code}")
                 print("Error:", response.text)
                 exit(1)
-            time.sleep(10)  # Wait for 10 seconds before checking again
 
 if __name__ == "__main__":
     login = "aabdelaz"
     password = "SCLK6yDs!m74tQG"
     site = "rennes"
     nodes = 4
-    script_path = "./run_maked.sh"
+    script_path = "./maked/run_maked.sh"
 
     g5k = Grid5000API(login, password, site)
     job_id = g5k.submit_deployment_job(nodes, script_path)

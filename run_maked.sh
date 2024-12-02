@@ -18,6 +18,9 @@ LOCAL_DIRECTORY="./maked/"
 # Remote destination directory
 REMOTE_DIRECTORY="~/maked/"
 
+# Makefile directory
+MAKEFILE_DIRECTORY="premier"
+
 # Copy the directory and execute commands on each node
 for node in "${NODES[@]}"; do
   echo "Processing node: $node"
@@ -33,23 +36,27 @@ done
 
 echo "All nodes are set up"
 
-# Start server on the first node and clients on the remaining nodes
-for i in "${!NODES[@]}"; do
-  node="${NODES[$i]}"
-  if [ "$i" -eq 0 ]; then
-    # First node: start the server
-    echo "Starting server on $node"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . > server.log 2>&1 &" &
-    echo "Server started on $node"
-  fi
-done
-
+# Start server on the first node
 SERVER_NODE="${NODES[0]}"
+echo "Starting server on $SERVER_NODE"
+ssh root@$SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
+echo "Server started on $SERVER_NODE"
+
+# Start clients on the remaining nodes
 CLIENT_NODES=("${NODES[@]:1}")
-echo "Client starting"
+echo "Starting clients"
 
-{ time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> test.txt
+# Calculate the number of client nodes
+NUM_CLIENT_NODES=${#CLIENT_NODES[@]}
 
+# Name the output file based on the Makefile directory and the number of nodes
+OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
+
+rm -rf "${OUTPUT_FILE}"
+
+{ time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+
+echo "Ending clients"
 
 # Wait for all background SSH processes to complete
 wait

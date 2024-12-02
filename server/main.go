@@ -10,13 +10,19 @@ import (
 
 func main() {
 	// Makefile treatment
+
+	args := os.Args[1:]
+	if len(args) != 1 {
+		log.Fatalf("Excepted 1 argument (name of repo containing the makefile)")
+	}
+
 	////////////// TEST PREMIER
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("Failed to get home directory: %v", err)
 	}
-	makefilePath := homeDir + "/maked/makefiles/premier/Makefile"
-	makefileDir := homeDir + "/maked/makefiles/premier/"
+	makefilePath := homeDir + "/maked/makefiles/" + args[0] + "/Makefile"
+	makefileDir := homeDir + "/maked/makefiles/" + args[0] + "/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
