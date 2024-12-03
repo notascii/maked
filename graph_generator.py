@@ -54,13 +54,16 @@ def main():
         nodes, efficiency_ratios = zip(*values)
 
         # Create the efficiency ratio plot
-        plt.figure()
-        plt.plot(nodes, efficiency_ratios, marker='o', linestyle='-', label=f'{prefix} Efficiency Ratio')
-        plt.title(f"Efficiency Ratio for {prefix} Files")
-        plt.xlabel("Number of Nodes")
-        plt.ylabel("Efficiency Ratio (Makefile / Nodes)")
-        plt.grid(True)
-        plt.legend()
+        plt.figure(figsize=(10, 6))
+        plt.plot(nodes, efficiency_ratios, marker='o', linestyle='-', color='blue', label=f'{prefix} Efficiency Ratio')
+        plt.title(f"Efficiency Ratio for {prefix} Files", fontsize=16)
+        plt.xlabel("Number of Nodes", fontsize=14)
+        plt.ylabel("Efficiency Ratio (Makefile / Nodes)", fontsize=14)
+        plt.xticks(nodes)  # Ensure x-axis shows integers only
+        plt.yticks(fontsize=12)
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.legend(fontsize=12)
+        plt.tight_layout()
         plt.savefig(f"{prefix}_efficiency_ratio.png")
         plt.show()
 
