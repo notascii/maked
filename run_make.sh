@@ -42,8 +42,7 @@ REMOTE_DIRECTORY="~/maked/"
 rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$TARGET_NODE:$REMOTE_DIRECTORY"
 
 # Install make
-apt install make
-
+taktuk -s -l root -f <(echo "$TARGET_NODE") broadcast exec [ "apt install make" ]
 
 # Execute the make command on the remote node using TakTuk and measure the execution time
 { time taktuk -s -l root -f <(echo "$TARGET_NODE") broadcast exec [ "cd ${REMOTE_DIRECTORY}makefiles/${MAKEFILE_DIRECTORY} && chmod +x * && make" ]; } 2> "$OUTPUT_FILE"

@@ -56,9 +56,9 @@ def main():
         # Create the efficiency ratio plot
         plt.figure(figsize=(10, 6))
         plt.plot(nodes, efficiency_ratios, marker='o', linestyle='-', color='blue', label=f'{prefix} Efficiency Ratio')
-        plt.title(f"Efficiency Ratio for {prefix} Files", fontsize=16)
+        plt.title(f"Efficiency Ratio for {prefix} makefile", fontsize=16)
         plt.xlabel("Number of Nodes", fontsize=14)
-        plt.ylabel("Efficiency Ratio (Makefile / Nodes)", fontsize=14)
+        plt.ylabel("Efficiency Ratio (Make / Maked)", fontsize=14)
         plt.xticks(nodes)  # Ensure x-axis shows integers only
         plt.yticks(fontsize=12)
         plt.grid(True, linestyle='--', alpha=0.7)

@@ -47,14 +47,25 @@ class Grid5000API:
                 exit(1)
 
 if __name__ == "__main__":
-    login = os.getenv("GRID5000_USER", "aabdelaz")
+    login = input("Enter login: ")
     password = input("Enter password: ")
     site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
-    directory_list = ["premier", "matrix"]
-    list_int = [2, 3, 4, 6, 8, 11, 16, 21]
+    script_init_path = "./maked/run_make.sh"    
+    directory_list = ["matrix", "premier"]
+    list_int = [2, 3, 4, 6, 8, 11, 16]
 
     for directory in directory_list:
+        print(f"Deployment for classic Make")
+        start = time.time()
+        g5k = Grid5000API(login, password, site)
+        job_id = g5k.submit_deployment_job(1, script_init_path, directory)
+        job_state = g5k.wait_for_job_completion(job_id)
+        end = time.time()
+        if job_state == 'terminated':
+            print(f"Deployment initial completed successfully in {end - start:.2f} seconds.")
+        else:
+            print("Job did not terminate successfully.")
         for number_of_nodes in list_int:
             start = time.time()
             print(f"Deployment with {number_of_nodes-1} clients")
