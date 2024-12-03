@@ -1,7 +1,7 @@
 #!/bin/bash
 # oarsub -I -l host=10,walltime=1:45 -t deploy
 
-kadeploy3 -e ubuntu2204-nfs
+kadeploy3 -e debian11-nfs
 
 # Check if the OAR_NODEFILE environment variable is set
 if [ -z "$OAR_NODEFILE" ]; then
