@@ -201,7 +201,7 @@ forLoop:
 			break forLoop
 		case 1:
 			log.Println("Server not ready")
-			time.Sleep(1 * time.Second)
+			time.Sleep(2 * time.Second)
 		case 2:
 			// log.Println("Ah shit, here we go again")
 			// download all files

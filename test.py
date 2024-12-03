@@ -62,14 +62,16 @@ if __name__ == "__main__":
     login = "aabdelaz"
     password = "SCLK6yDs!m74tQG"
     site = "rennes"
-    nodes = 4
     script_path = "./maked/run_maked.sh"
 
-    g5k = Grid5000API(login, password, site)
-    job_id = g5k.submit_deployment_job(nodes, script_path)
-    job_state = g5k.wait_for_job_completion(job_id)
-    if job_state == 'terminated':
-        print("Deployment completed successfully.")
-    else:
-        print("Job did not terminate successfully.")
+
+    for number_of_nodes in range(2,21):
+        print(f"Deployment with {number_of_nodes}")
+        g5k = Grid5000API(login, password, site)
+        job_id = g5k.submit_deployment_job(number_of_nodes, script_path)
+        job_state = g5k.wait_for_job_completion(job_id)
+        if job_state == 'terminated':
+            print("Deployment completed successfully.")
+        else:
+            print("Job did not terminate successfully.")
 
