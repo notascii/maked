@@ -19,34 +19,49 @@ def extract_real_time(file_path):
 def main():
     current_directory = os.getcwd()
     pattern = re.compile(r'(.+?)_(\d+)_nodes\.txt')
-    data = defaultdict(list)  # Structure: {MAKEFILE_DIRECTORY: [(NUM_CLIENT_NODES, real_time)]}
+    efficiency_data = defaultdict(list)  # Structure: {prefix: [(num_nodes, efficiency_ratio)]}
 
-    # Scan files in the current directory
+    # Identify unique prefixes and process files
+    prefixes = set()
     for file_name in os.listdir(current_directory):
         match = pattern.match(file_name)
         if match:
-            makefile_directory, num_nodes = match.groups()
-            num_nodes = int(num_nodes)
-            file_path = os.path.join(current_directory, file_name)
-            real_time = extract_real_time(file_path)
-            if real_time is not None:
-                data[makefile_directory].append((num_nodes, real_time))
+            prefixes.add(match.group(1))
 
-    # Generate plots for each MAKEFILE_DIRECTORY
-    for makefile_directory, values in data.items():
-        # Sort values by the number of nodes
+    for prefix in prefixes:
+        # Extract real time from the corresponding makefile
+        makefile_path = os.path.join(current_directory, f"{prefix}_make.txt")
+        makefile_time = extract_real_time(makefile_path)
+        if makefile_time is None:
+            print(f"Error: Could not find or parse '{prefix}_make.txt'. Skipping prefix.")
+            continue
+
+        # Process files matching the current prefix
+        for file_name in os.listdir(current_directory):
+            match = pattern.match(file_name)
+            if match and match.group(1) == prefix:
+                num_nodes = int(match.group(2))
+                file_path = os.path.join(current_directory, file_name)
+                real_time = extract_real_time(file_path)
+                if real_time is not None:
+                    efficiency_ratio = makefile_time / real_time
+                    efficiency_data[prefix].append((num_nodes, efficiency_ratio))
+
+    # Generate plots for each prefix
+    for prefix, values in efficiency_data.items():
+        # Sort data by number of nodes
         values.sort(key=lambda x: x[0])
-        nodes, real_times = zip(*values)
+        nodes, efficiency_ratios = zip(*values)
 
-        # Create the plot
+        # Create the efficiency ratio plot
         plt.figure()
-        plt.plot(nodes, real_times, marker='o', linestyle='-', label='Real Time')
-        plt.title(f"Execution Time for {makefile_directory}")
+        plt.plot(nodes, efficiency_ratios, marker='o', linestyle='-', label=f'{prefix} Efficiency Ratio')
+        plt.title(f"Efficiency Ratio for {prefix} Files")
         plt.xlabel("Number of Nodes")
-        plt.ylabel("Execution Time (seconds)")
+        plt.ylabel("Efficiency Ratio (Makefile / Nodes)")
         plt.grid(True)
         plt.legend()
-        plt.savefig(f"{makefile_directory}_execution_time.png")
+        plt.savefig(f"{prefix}_efficiency_ratio.png")
         plt.show()
 
 if __name__ == "__main__":
