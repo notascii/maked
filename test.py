@@ -10,24 +10,12 @@ class Grid5000API:
         self.site = site
         self.base_url = f"https://api.grid5000.fr/stable/sites/{site}"
 
-    def create_test_directory(self, directory_name="test"):
-        """
-        Creates a directory with the specified name.
-        If the directory already exists, no exception is raised.
-        """
-        try:
-            os.makedirs(directory_name, exist_ok=True)
-            print(f"Directory '{directory_name}' created successfully.")
-        except Exception as e:
-            print(f"An error occurred while creating the directory '{directory_name}': {e}")
-
-
-    def submit_deployment_job(self, nodes, script_path):
+    def submit_deployment_job(self, nodes, script_path, makefile_directory):
         jobs_url = f"{self.base_url}/jobs/"
         job_data = {
             "resources": f"nodes={nodes}",
             "types": ["deploy"],
-            "command": f"bash {script_path}",
+            "command": f"bash {script_path} {makefile_directory}",
             "name": "DeployUbuntuNFS"
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
@@ -59,21 +47,22 @@ class Grid5000API:
                 exit(1)
 
 if __name__ == "__main__":
-    login = "aabdelaz"
-    password = "SCLK6yDs!m74tQG"
-    site = "rennes"
+    login = os.getenv("GRID5000_USER", "aabdelaz")
+    password = input("Enter password: ")
+    site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
+    directory_list = ["premier", "matrix"]
+    list_int = [2, 3, 4, 6, 8, 11, 16, 21]
 
-
-    for number_of_nodes in range(2,21,2):
-        start = time.time()
-        print(f"Deployment with {number_of_nodes} nodes")
-        g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(number_of_nodes, script_path)
-        job_state = g5k.wait_for_job_completion(job_id)
-        end = time.time()
-        if job_state == 'terminated':
-            print(f"Deployment completed successfully in {end-start}.")
-        else:
-            print("Job did not terminate successfully.")
-
+    for directory in directory_list:
+        for number_of_nodes in list_int:
+            start = time.time()
+            print(f"Deployment with {number_of_nodes-1} clients")
+            g5k = Grid5000API(login, password, site)
+            job_id = g5k.submit_deployment_job(number_of_nodes, script_path, directory)
+            job_state = g5k.wait_for_job_completion(job_id)
+            end = time.time()
+            if job_state == 'terminated':
+                print(f"Deployment completed successfully in {end - start:.2f} seconds.")
+            else:
+                print("Job did not terminate successfully.")

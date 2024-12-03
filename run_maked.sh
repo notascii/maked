@@ -1,6 +1,11 @@
 #!/bin/bash
 # oarsub -I -l host=10,walltime=1:45 -t deploy
 
+if [ -z "$1" ]; then
+  echo "Usage: $0 <MAKEFILE_DIRECTORY>"
+  exit 1
+fi
+
 kadeploy3 -e ubuntu2204-nfs
 
 # Check if the OAR_NODEFILE environment variable is set
