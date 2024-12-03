@@ -36,6 +36,10 @@ done
 
 echo "All nodes are set up"
 
+# Set Go environment variables
+export GOROOT=./golang/go
+export PATH=$GOROOT/bin:$PATH
+
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
