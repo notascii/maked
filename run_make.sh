@@ -36,7 +36,7 @@ TARGET_NODE="${NODES[0]}"
 LOCAL_DIRECTORY="./maked/"
 
 # Define the remote destination directory
-REMOTE_DIRECTORY="~/maked/"
+REMOTE_DIRECTORY="/tmp/maked/"
 
 # Copy the local directory to the remote node, excluding the .git directory
 rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$TARGET_NODE:$REMOTE_DIRECTORY"

@@ -1,6 +1,7 @@
 import os
 import requests
 import time
+import getpass
 
 class Grid5000API:
     def __init__(self, user, password, site):
@@ -48,7 +49,7 @@ class Grid5000API:
 
 if __name__ == "__main__":
     login = input("Enter login: ")
-    password = input("Enter password: ")
+    password = getpass.getpass()
     site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
     script_init_path = "./maked/run_make.sh"    

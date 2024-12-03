@@ -1,12 +1,9 @@
 #!/bin/bash
-# oarsub -I -l host=1,walltime=1:45 -t deploy
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <MAKEFILE_DIRECTORY>"
   exit 1
 fi
-
-kadeploy3 -e ubuntu2204-nfs
 
 # Check if the OAR_NODEFILE environment variable is set
 if [ -z "$OAR_NODEFILE" ]; then
@@ -21,7 +18,7 @@ NODES=($(sort -u "$OAR_NODEFILE"))
 LOCAL_DIRECTORY="./maked/"
 
 # Remote destination directory
-REMOTE_DIRECTORY="~/maked/"
+REMOTE_DIRECTORY="/tmp/maked/"
 
 # Makefile directory
 MAKEFILE_DIRECTORY="$1"
