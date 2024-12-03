@@ -37,11 +37,11 @@ done
 echo "All nodes are set up"
 
 
-taktuk -s -f <(printf "%s\n" "${NODES[@]}") broadcast exec [ "export GOROOT=/path/to/go && export PATH=\$GOROOT/bin:\$PATH" ]
 
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
+taktuk -s -f <(printf "%s\n" "${NODES[0]}") broadcast exec [ "export GOROOT=/path/to/go && export PATH=\$GOROOT/bin:\$PATH" ]
 ssh $SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
 echo "Server started on $SERVER_NODE"
 
@@ -54,7 +54,7 @@ NUM_CLIENT_NODES=${#CLIENT_NODES[@]}
 
 # Name the output file based on the Makefile directory and the number of nodes
 OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
-
+taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=/path/to/go && export PATH=\$GOROOT/bin:\$PATH" ]
 rm -rf "${OUTPUT_FILE}"
 
 { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
