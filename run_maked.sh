@@ -21,27 +21,23 @@ LOCAL_DIRECTORY="./maked/"
 REMOTE_DIRECTORY="/tmp/maked/"
 
 # Makefile directory
-MAKEFILE_DIRECTORY="$1"
+MAKEFILE_DIRECTORY="premier"
 
-
-# Copy the directory and execute commands on each node
+# Ensure rsync is used for each node to copy the directory
+echo "Copying directory to all nodes..."
 for node in "${NODES[@]}"; do
-  echo "Processing node: $node"
-
-  # Copy the directory to the node using rsync and exclude the .git directory
+  echo "Copying to $node"
   rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$node:$REMOTE_DIRECTORY"
-
-  echo "Node $node setup complete"
 done
 
 echo "All nodes are set up"
 
-taktuk -s -f <(printf "%s\n" "${NODES[@]}") broadcast exec [ "export GOROOT=$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH" ]
 
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
-ssh $SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
+taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" ]
+
 echo "Server started on $SERVER_NODE"
 
 # Start clients on the remaining nodes
@@ -60,5 +56,5 @@ rm -rf "${OUTPUT_FILE}"
 
 echo "Ending clients"
 
-# Wait for all background SSH processes to complete
+# Ensure all background processes complete
 wait
