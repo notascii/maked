@@ -36,7 +36,7 @@ echo "All nodes are set up"
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
-taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" ]
+taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && go run . ${MAKEFILE_DIRECTORY}" ]
 
 echo "Server started on $SERVER_NODE"
 
