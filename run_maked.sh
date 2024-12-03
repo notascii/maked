@@ -54,7 +54,7 @@ OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
 
 rm -rf "${OUTPUT_FILE}"
 
-{ time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && ./client ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && ./client ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
 
 echo "Ending clients"
 
