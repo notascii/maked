@@ -23,6 +23,7 @@ REMOTE_DIRECTORY="/tmp/maked/"
 # Makefile directory
 MAKEFILE_DIRECTORY="$1"
 
+
 # Copy the directory and execute commands on each node
 for node in "${NODES[@]}"; do
   echo "Processing node: $node"
@@ -34,6 +35,7 @@ for node in "${NODES[@]}"; do
 done
 
 echo "All nodes are set up"
+
 
 taktuk -s -f <(printf "%s\n" "${NODES[@]}") broadcast exec [ "export GOROOT=/path/to/go && export PATH=\$GOROOT/bin:\$PATH" ]
 
@@ -55,7 +57,7 @@ OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
 
 rm -rf "${OUTPUT_FILE}"
 
-{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "$TAKTUK_ENV; cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
 
 echo "Ending clients"
 
