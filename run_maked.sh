@@ -35,12 +35,7 @@ done
 
 echo "All nodes are set up"
 
-# Set Go environment variables
-export GOROOT=./golang/go
-export PATH=$GOROOT/bin:$PATH
-
-# Pass the environment variables to taktuk
-export TAKTUK_ENV="export GOROOT=./golang/go; export PATH=./golang/go/bin:\$PATH"
+taktuk -s -f <(printf "%s\n" "${NODES[@]}") broadcast exec [ "export GOROOT=/path/to/go && export PATH=\$GOROOT/bin:\$PATH" ]
 
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
