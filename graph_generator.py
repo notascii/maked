@@ -17,31 +17,31 @@ def extract_real_time(file_path):
 
 # Main function
 def main():
-    current_directory = os.getcwd()
+    target_directory = os.path.abspath(os.path.join(os.getcwd(), "../"))  # Parent directory
     pattern = re.compile(r'(.+?)_(\d+)_nodes\.txt')
     efficiency_data = defaultdict(list)  # Structure: {prefix: [(num_nodes, efficiency_ratio)]}
 
     # Identify unique prefixes and process files
     prefixes = set()
-    for file_name in os.listdir(current_directory):
+    for file_name in os.listdir(target_directory):
         match = pattern.match(file_name)
         if match:
             prefixes.add(match.group(1))
 
     for prefix in prefixes:
         # Extract real time from the corresponding makefile
-        makefile_path = os.path.join(current_directory, f"{prefix}_make.txt")
+        makefile_path = os.path.join(target_directory, f"{prefix}_make.txt")
         makefile_time = extract_real_time(makefile_path)
         if makefile_time is None:
             print(f"Error: Could not find or parse '{prefix}_make.txt'. Skipping prefix.")
             continue
 
         # Process files matching the current prefix
-        for file_name in os.listdir(current_directory):
+        for file_name in os.listdir(target_directory):
             match = pattern.match(file_name)
             if match and match.group(1) == prefix:
                 num_nodes = int(match.group(2))
-                file_path = os.path.join(current_directory, file_name)
+                file_path = os.path.join(target_directory, file_name)
                 real_time = extract_real_time(file_path)
                 if real_time is not None:
                     efficiency_ratio = makefile_time / real_time
