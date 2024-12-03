@@ -36,6 +36,13 @@ LOCAL_DIRECTORY="./maked/"
 # Define the remote destination directory
 REMOTE_DIRECTORY="/tmp/maked/"
 
+# Install go
+export GOROOT=$HOME/golang/go
+export PATH=$GOROOT/bin:$PATH
+export GOPATH=$HOME/go  # Répertoire pour vos projets Go
+export PATH=$GOPATH/bin:$PATH
+
+
 # Copy the local directory to the remote node, excluding the .git directory
 rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$TARGET_NODE:$REMOTE_DIRECTORY"
 
