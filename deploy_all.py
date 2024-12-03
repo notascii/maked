@@ -15,9 +15,8 @@ class Grid5000API:
         jobs_url = f"{self.base_url}/jobs/"
         job_data = {
             "resources": f"nodes={nodes}",
-            "types": ["deploy"],
             "command": f"bash {script_path} {makefile_directory}",
-            "name": "DeployUbuntuNFS"
+            "name": "DeployNode"
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
         if response.status_code == 201:

@@ -171,7 +171,7 @@ func send_file(directory string, filename string, address string) {
 }
 
 func main() {
-	var storage string = "/maked/client/client_storage/"
+	var storage string = "/tmp/"
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("Failed to get home directory: %v", err)

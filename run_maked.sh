@@ -29,7 +29,7 @@ for node in "${NODES[@]}"; do
   echo "Processing node: $node"
 
   # Copy the directory to the node using rsync and exclude the .git directory
-  rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$node:$REMOTE_DIRECTORY"
+  rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$node:$REMOTE_DIRECTORY"
 
   echo "Node $node setup complete"
 done
@@ -39,7 +39,7 @@ echo "All nodes are set up"
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
-ssh root@$SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup ./main ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
+ssh $SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup ./main ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
 echo "Server started on $SERVER_NODE"
 
 # Start clients on the remaining nodes

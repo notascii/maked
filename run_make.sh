@@ -1,7 +1,5 @@
 #!/bin/bash
 
-kadeploy3 -e ubuntu2204-nfs
-
 # Ensure a MAKEFILE_DIRECTORY argument is provided
 if [ -z "$1" ]; then
   echo "Usage: $0 <MAKEFILE_DIRECTORY>"
@@ -39,7 +37,7 @@ LOCAL_DIRECTORY="./maked/"
 REMOTE_DIRECTORY="/tmp/maked/"
 
 # Copy the local directory to the remote node, excluding the .git directory
-rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$TARGET_NODE:$REMOTE_DIRECTORY"
+rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$TARGET_NODE:$REMOTE_DIRECTORY"
 
 # Install make
 taktuk -s -l root -f <(echo "$TARGET_NODE") broadcast exec [ "apt install make" ]
