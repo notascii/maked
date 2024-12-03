@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-var storageAbs string = "/tmp/"
+var storageAbs string = "/tmp/maked/server/server_storage/"
 
 type MakeService struct {
 	mu           sync.Mutex // handle concurrent access
@@ -111,7 +111,6 @@ func (p *MakeService) Initialization(args *FileStruct, reply *FileList) error {
 	}
 	var list []FileStruct
 	var tmp FileStruct
-	log.Println("DOWNLOADING ALL FILES")
 	for _, file := range files {
 		tmp.Data, err = os.ReadFile(p.Directory + file.Name())
 		if err != nil {
@@ -120,7 +119,6 @@ func (p *MakeService) Initialization(args *FileStruct, reply *FileList) error {
 		tmp.FileName = file.Name()
 		list = append(list, tmp)
 	}
-	log.Println("ENDING OF DOWNLOAD")
 	reply.List = list
 	return nil
 }
