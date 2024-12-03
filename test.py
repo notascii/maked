@@ -65,7 +65,7 @@ if __name__ == "__main__":
     script_path = "./maked/run_maked.sh"
 
 
-    for number_of_nodes in range(2,21):
+    for number_of_nodes in range(2,21,2):
         start = time.time()
         print(f"Deployment with {number_of_nodes}")
         g5k = Grid5000API(login, password, site)
