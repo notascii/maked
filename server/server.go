@@ -42,11 +42,7 @@ type PingDef struct {
 }
 
 func (p *MakeService) Ping(args *PingDef, reply *Order) error {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("Failed to get home directory: %v", err)
-	}
-	storage := homeDir + storageAbs
+	storage := storageAbs
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	if len(p.Instructions) > 0 {
@@ -86,15 +82,11 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 }
 
 func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("Failed to get home directory: %v", err)
-	}
-	storage := homeDir + storageAbs
+	storage := storageAbs
 	// Reply with an acknowledgment byte
 	log.Println("Name of the file received : ", args.FileName)
 
-	err = os.WriteFile(storage+args.FileName, args.Data, 0644)
+	err := os.WriteFile(storage+args.FileName, args.Data, 0644)
 	if err != nil {
 		return err
 	}

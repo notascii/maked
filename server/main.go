@@ -17,12 +17,8 @@ func main() {
 	}
 
 	////////////// TEST PREMIER
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("Failed to get home directory: %v", err)
-	}
-	makefilePath := homeDir + "/maked/makefiles/" + args[0] + "/Makefile"
-	makefileDir := homeDir + "/maked/makefiles/" + args[0] + "/"
+	makefilePath := "/maked/makefiles/" + args[0] + "/Makefile"
+	makefileDir := "/maked/makefiles/" + args[0] + "/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
