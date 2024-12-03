@@ -1,5 +1,5 @@
 #!/bin/bash
-# oarsub -I -l host=10,walltime=1:45 -t deploy
+# oarsub -I -l host=1,walltime=1:45 -t deploy
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <MAKEFILE_DIRECTORY>"
@@ -24,7 +24,7 @@ LOCAL_DIRECTORY="./maked/"
 REMOTE_DIRECTORY="~/maked/"
 
 # Makefile directory
-MAKEFILE_DIRECTORY="premier"
+MAKEFILE_DIRECTORY="$1"
 
 
 # Copy the directory and execute commands on each node
