@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     for number_of_nodes in range(2,21,2):
         start = time.time()
-        print(f"Deployment with {number_of_nodes}")
+        print(f"Deployment with {number_of_nodes} nodes")
         g5k = Grid5000API(login, password, site)
         job_id = g5k.submit_deployment_job(number_of_nodes, script_path)
         job_state = g5k.wait_for_job_completion(job_id)
