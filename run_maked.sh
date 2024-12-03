@@ -21,7 +21,7 @@ LOCAL_DIRECTORY="./maked/"
 REMOTE_DIRECTORY="/tmp/maked/"
 
 # Makefile directory
-MAKEFILE_DIRECTORY="premier"
+MAKEFILE_DIRECTORY="$1"
 
 # Ensure rsync is used for each node to copy the directory
 echo "Copying directory to all nodes..."
@@ -32,13 +32,17 @@ done
 
 echo "All nodes are set up"
 
-
 # Start server on the first node
 SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
-taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && go run . ${MAKEFILE_DIRECTORY}" ]
+
+# Run the server process in the background
+taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" ]
 
 echo "Server started on $SERVER_NODE"
+
+# Allow some time for the server to initialize
+sleep 5
 
 # Start clients on the remaining nodes
 CLIENT_NODES=("${NODES[@]:1}")
@@ -52,7 +56,8 @@ OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
 
 rm -rf "${OUTPUT_FILE}"
 
-{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+# Run client processes
+{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
 
 echo "Ending clients"
 
