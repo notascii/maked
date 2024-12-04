@@ -147,31 +147,8 @@ func send_ping(address string) Order {
 	return reply
 }
 
-func send_file(directory string, filename string, address string) {
-	// Connect to the server
-	client, err := rpc.Dial("tcp", address)
-	if err != nil {
-		panic(err)
-	}
-	defer client.Close()
-
-	// Read the file content
-	fileData, err := os.ReadFile(directory + filename)
-	if err != nil {
-		panic(err)
-	}
-
-	// Send the file content
-	args := &FileStruct{Data: fileData, FileName: filename} // N-byte message
-	var reply FileStruct
-	err = client.Call("MakeService.SendFile", args, &reply)
-	if err != nil {
-		panic(err)
-	}
-}
-
 func main() {
-	var storage string = "/tmp/maked/client/client_storage/"
+	var storage string = "~/maked/client/client_storage/"
 	args := os.Args[1:]
 	if len(args) != 1 {
 		log.Fatalf("Excepted 1 argument")
@@ -207,14 +184,11 @@ forLoop:
 			// execute the command
 			// log.Println("Launching command")
 			startTime := time.Now()
-			filesCreated := launchCommand(storage, o.Command)
+			launchCommand(storage, o.Command)
 			elapsedTime := time.Since(startTime)
 			log.Printf("Command done, execution time: %.2f seconds", elapsedTime.Seconds())
 			// Send the created files
 			// log.Println("Sending created files")
-			for _, fileName := range filesCreated {
-				send_file(storage, fileName, args[0])
-			}
 			// log.Println("Sended")
 		}
 	}

@@ -17,8 +17,8 @@ func main() {
 	}
 
 	////////////// TEST PREMIER
-	makefilePath := "/tmp/maked/makefiles/" + args[0] + "/Makefile"
-	makefileDir := "/tmp/maked/makefiles/" + args[0] + "/"
+	makefilePath := "~/maked/makefiles/" + args[0] + "/Makefile"
+	makefileDir := "~/maked/makefiles/" + args[0] + "/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 	// Now we execute all commands in the directory asked
