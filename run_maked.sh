@@ -18,7 +18,10 @@ NODES=($(sort -u "$OAR_NODEFILE"))
 LOCAL_DIRECTORY="./maked/"
 
 # Remote destination directory
-REMOTE_DIRECTORY="/tmp/maked/without_nfs/"
+REMOTE_DIRECTORY="/tmp/maked/"
+
+# Remote work file
+REMOTE_DIRECTORY_WORK_NO_NFS="/tmp/maked/without_nfs/" 
 
 # Makefile directory
 MAKEFILE_DIRECTORY="$1"
@@ -37,7 +40,7 @@ SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
 
 # Run the server process in the background
-taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" ]
+taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" ]
 
 echo "Server started on $SERVER_NODE"
 
@@ -57,7 +60,7 @@ OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
 rm -rf "${OUTPUT_FILE}"
 
 # Run client processes
-{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+{ time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
 
 echo "Ending clients"
 
