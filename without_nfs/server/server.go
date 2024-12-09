@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-var storageAbs string = "/tmp/maked/server/server_storage/"
+var storageAbs string = "./server_storage/"
 
 type MakeService struct {
 	mu           sync.Mutex // handle concurrent access
