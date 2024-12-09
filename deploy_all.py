@@ -52,7 +52,7 @@ if __name__ == "__main__":
     site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
     script_init_path = "./maked/run_make.sh"    
-    directory_list = ["premier", "matrix"]
+    directory_list = ["premier_tiny"]
     list_int = [2, 3, 4, 6, 8, 11, 16]
 
     for directory in directory_list:

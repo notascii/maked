@@ -18,7 +18,7 @@ NODES=($(sort -u "$OAR_NODEFILE"))
 LOCAL_DIRECTORY="./maked/"
 
 # Remote destination directory
-REMOTE_DIRECTORY="/tmp/maked/"
+REMOTE_DIRECTORY="/tmp/maked/without_nfs/"
 
 # Makefile directory
 MAKEFILE_DIRECTORY="$1"
