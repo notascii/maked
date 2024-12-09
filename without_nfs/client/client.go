@@ -171,7 +171,7 @@ func send_file(directory string, filename string, address string) {
 }
 
 func main() {
-	var storage string = "/tmp/maked/client/client_storage/"
+	var storage string = "./client_storage/"
 	args := os.Args[1:]
 	if len(args) != 1 {
 		log.Fatalf("Excepted 1 argument")
