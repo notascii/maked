@@ -52,8 +52,8 @@ if __name__ == "__main__":
     site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
     script_init_path = "./maked/run_make.sh"    
-    directory_list = ["premier_tiny"]
-    list_int = [2, 3, 4, 6, 8, 11, 16]
+    directory_list = ["matrix", "premier_tiny", "premier"]
+    list_int = [2, 3, 4, 6, 8, 11]
 
     for directory in directory_list:
         print(f"Deployment for classic Make")
