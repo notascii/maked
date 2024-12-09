@@ -45,6 +45,3 @@ rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$TARGET_NODE:$REMOTE_DIRECTORY"
 { time taktuk -s -f <(echo "$TARGET_NODE") broadcast exec [ "cd ${REMOTE_DIRECTORY}makefiles/${MAKEFILE_DIRECTORY} && make" ]; } 2> "$OUTPUT_FILE"
 
 echo "Make command executed on $TARGET_NODE. Execution time recorded in $OUTPUT_FILE."
-
-# Now we update plot
-python graph_generator.py
