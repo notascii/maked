@@ -64,7 +64,10 @@ def main():
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.legend(fontsize=12)
         plt.tight_layout()
-        plt.savefig(f"{prefix}_efficiency_ratio.png")
+        file_name = f"{prefix}_efficiency_ratio.png"
+        if os.path.exists(file_name):
+            os.remove(file_name)
+        plt.savefig(file_name)
         plt.show()
 
 if __name__ == "__main__":

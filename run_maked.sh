@@ -66,3 +66,7 @@ echo "Ending clients"
 
 # Ensure all background processes complete
 wait
+
+# Now we launch python script
+
+python graph_generator.py
