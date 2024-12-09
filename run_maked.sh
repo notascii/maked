@@ -68,5 +68,5 @@ echo "Ending clients"
 wait
 
 # Now we launch python script
-
+cd ./maked
 python graph_generator.py
