@@ -11,8 +11,14 @@ import (
 
 // fileSend holds the data sent from client to server.
 type FileStruct struct {
-	Data     []byte
-	FileName string
+	Data      []byte
+	FileName  string
+	ReturnVal JobReturn
+}
+
+type JobReturn struct {
+	CodeValue  int
+	TargetName string
 }
 
 type FileList struct {
@@ -30,6 +36,7 @@ type Order struct {
 	Value        byte
 	Command      string
 	Dependencies []FileStruct
+	Name         string
 }
 
 func removeAllFiles(directory string) {
@@ -147,22 +154,27 @@ func send_ping(address string) Order {
 	return reply
 }
 
-func send_file(directory string, filename string, address string) {
+func send_file(directory string, filename string, codeValue JobReturn, address string) {
 	// Connect to the server
 	client, err := rpc.Dial("tcp", address)
 	if err != nil {
 		panic(err)
 	}
 	defer client.Close()
+	var args *FileStruct
 
-	// Read the file content
-	fileData, err := os.ReadFile(directory + filename)
-	if err != nil {
-		panic(err)
+	if codeValue.CodeValue == 0 {
+		// Read the file content
+		fileData, err := os.ReadFile(directory + filename)
+		if err != nil {
+			panic(err)
+		}
+		// Send the file content
+		args = &FileStruct{Data: fileData, FileName: filename, ReturnVal: codeValue} // N-byte message
+	} else {
+		args = &FileStruct{Data: nil, FileName: "", ReturnVal: codeValue}
 	}
 
-	// Send the file content
-	args := &FileStruct{Data: fileData, FileName: filename} // N-byte message
 	var reply FileStruct
 	err = client.Call("MakeService.SendFile", args, &reply)
 	if err != nil {
@@ -195,8 +207,9 @@ forLoop:
 			break forLoop
 		case 1:
 			log.Println("Server not ready")
+			time.Sleep(1 * time.Second)
 		case 2:
-			// log.Println("Ah shit, here we go again")
+			log.Println("I work on : ", o.Command)
 			// download all files
 			// log.Println("Start of dependencies downloading")
 			for _, dep := range o.Dependencies {
@@ -204,17 +217,59 @@ forLoop:
 			}
 			// log.Println("End of dependencies downloading")
 			// execute the command
-			// log.Println("Launching command")
+			log.Println("Launching target: ", o.Name)
 			startTime := time.Now()
 			filesCreated := launchCommand(storage, o.Command)
 			elapsedTime := time.Since(startTime)
-			log.Printf("Command done, execution time: %.2f seconds", elapsedTime.Seconds())
-			// Send the created files
-			// log.Println("Sending created files")
-			for _, fileName := range filesCreated {
-				send_file(storage, fileName, args[0])
+			codeError := 0
+
+			// If there is no created files we verify that the file is not empty
+			if len(filesCreated) == 0 {
+				log.Println("NO FILE CREATED")
+				info, err := os.Stat(storage + o.Name)
+
+				if err != nil {
+					// Log an error if the file does not exist
+					log.Printf("##################################")
+
+					log.Printf("File doesn't exist  %s, %v\n", o.Name, err)
+					send_file("", "", JobReturn{CodeValue: 1, TargetName: o.Name}, args[0])
+					break
+				}
+				// Check if the file size is zero
+				if info.Size() == 0 {
+					log.Printf("##################################")
+
+					log.Printf("File is empty: %s. Retrying...\n", o.Name)
+					send_file("", "", JobReturn{CodeValue: 2, TargetName: o.Name}, args[0])
+					break
+				}
 			}
-			// log.Println("Sended")
+			// We verify that the content of created files are not empty. If yes, we retry or log an error
+			for _, file := range filesCreated {
+				// Check if the file exists and get its size
+				info, err := os.Stat(storage + file)
+				if err != nil {
+					// Log an error if the file does not exist
+					panic(" Can't access to the file")
+				}
+				// Check if the file size is zero
+				if info.Size() == 0 {
+					log.Printf("##################################")
+					send_file("", "", JobReturn{CodeValue: 3, TargetName: o.Name}, args[0])
+					break
+				}
+
+				// End of error management
+				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
+				log.Printf("Command done, execution time: %.2f seconds", elapsedTime.Seconds())
+				// Send the created files
+				// log.Println("Sending created files")
+				for _, fileName := range filesCreated {
+					send_file(storage, fileName, jobReturn, args[0])
+				}
+				// log.Println("Sended")
+			}
 		}
 	}
 	removeAllFiles(storage)

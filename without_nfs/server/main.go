@@ -17,18 +17,34 @@ func main() {
 	}
 
 	////////////// TEST PREMIER
-	makefilePath := "/tmp/maked/makefiles/" + args[0] + "/Makefile"
-	makefileDir := "/tmp/maked/makefiles/" + args[0] + "/"
+	makefilePath := "../../makefiles/" + args[0] + "/Makefile"
+	makefileDir := "../../makefiles/" + args[0] + "/"
 	// First we parse the makefile
 	var g *Graph = GraphParser(makefilePath)
+
 	// Now we execute all commands in the directory asked
 	commandListe := []MakeElement{}
 	launchMakefile(g, "", &commandListe)
 
+	var dependenciesThere []string
+	// Scan the makefile directory
+	files, err := os.ReadDir(makefileDir)
+	if err != nil {
+		log.Fatalf("Failed to read makefile directory: %v", err)
+	}
+
+	// Add all file names in the directory to the dependenciesThere slice
+	for _, file := range files {
+		// Ensure it's not a directory and add to dependencies list
+		if !file.IsDir() {
+			dependenciesThere = append(dependenciesThere, file.Name())
+		}
+	}
 	// Register the MakeService: This will allow the client to recognize it over the network
 	makeService := &MakeService{
-		Instructions: commandListe,
-		Directory:    makefileDir,
+		InstructionsToDo: commandListe,
+		InstructionsDone: dependenciesThere,
+		Directory:        makefileDir,
 	}
 	rpc.Register(makeService)
 
@@ -44,9 +60,9 @@ func main() {
 	// Goroutine to monitor `commandListe` and shut down the server
 	go func() {
 		for {
-			time.Sleep(5 * time.Second) // Check every second
+			time.Sleep(1 * time.Second) // Check every second
 			makeService.mu.Lock()
-			if len(makeService.Instructions) == 0 {
+			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
 				makeService.mu.Unlock()
 				log.Println("No more instructions. Shutting down the server...")
 				listener.Close()
