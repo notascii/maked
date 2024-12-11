@@ -6,9 +6,9 @@ def parse_latency_file(latency_file):
         for line in file:
             parts = line.split(":")
             if len(parts) == 2:
-                message_size = int(parts[0].strip())
+                message_size = float(parts[0].strip())
                 if message_size == 1:
-                    latency = float(parts[1].strip()) * 1e3  # Convert seconds to microseconds
+                    latency = float(parts[1].strip()) * 1000 # Convert millieseconds to microseconds 
                     return latency
     return None
 
@@ -20,7 +20,7 @@ def parse_throughput_file(throughput_file):
             last_line = lines[-1]
             parts = last_line.split(":")
             if len(parts) == 2:
-                throughput = float(parts[1].strip()) / 1e3  # Convert MB/s to GB/s
+                throughput = float(parts[1].strip()) / pow(2,10)  # Convert MB/s to GB/s
                 return throughput
     return None
 
@@ -32,7 +32,7 @@ def draw_table(data,outputfile):
     # Draw the table
     table = plt.table(
         cellText=data,
-        colLabels=["Time Measured", "Latency (µs)", "Throughput (GB/s)"],
+        colLabels=["Time Measured", "Latency (us)", "Throughput (GB/s)"],
         loc="center",
         cellLoc="center"
     )

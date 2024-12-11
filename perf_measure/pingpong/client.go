@@ -39,7 +39,7 @@ func measurePerfThroughput(client *rpc.Client, N int) (int, float64,float64,erro
 	}
 	elapsed := time.Since(start).Seconds()
 
-	// Calculate throughput in MB/s
+	// Calculate throughput in GB/s
 	throughput := (float64(N) / elapsed)
 	throughputMB := throughput / (1024 * 1024)
 
@@ -80,12 +80,12 @@ func main() {
 		}
 
 		// Log results to files
-		_, err = fmt.Fprintf(fileThroughput, "%d: %.2f\n", size, throughput)
+		_, err = fmt.Fprintf(fileThroughput, "%d: %.10f\n",size, throughput)
 		if err != nil {
 			fmt.Printf("Error writing to throughput log: %v\n", err)
 		}
 			println(latency)
-		_, err = fmt.Fprintf(fileLatency, "%d: %.10f\n", size, latency*1000)
+		_, err = fmt.Fprintf(fileLatency, "%d: %.10f\n",size, latency*1000) // Turn to milliseconds
 		if err != nil {
 			fmt.Printf("Error writing to latency log: %v\n", err)
 		}

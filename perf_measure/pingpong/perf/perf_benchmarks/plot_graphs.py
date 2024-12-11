@@ -8,12 +8,8 @@ def read_data(filename,metric=""):
         for line in file:
             parts = line.split(":")
             if len(parts) == 2:
-                x.append(float(parts[0].strip()) / pow(2,20))
-                if metric == "latency":
-                    y.append(float(parts[1].strip()) / 1000) # Turn latency to micro seconds
-                else:
-                    y.append(float(parts[1].strip()) / pow(2,10))
-
+                x.append(float(parts[0].strip()) / pow(2,20) ) # convert to MB
+                y.append(float(parts[1].strip())) # keep milliseconds
     return x, y
 
 # Function to plot data
@@ -41,7 +37,7 @@ if __name__ == "__main__":
         message_size, latency,
         title="Latency vs Message Size",
         xlabel="Message size (MB)",
-        ylabel="Latency (us)",
+        ylabel="Latency (ms)",
         output_file="./perf/perf_benchmarks/graphs/"+str(datetime.datetime.now())+"_latency%msg_size.png"
     )
 
@@ -50,6 +46,6 @@ if __name__ == "__main__":
         message_size, throughput,
         title="Throughput vs Message Size",
         xlabel="Message size (MB)",
-        ylabel="Throughput (GB/s)",
+        ylabel="Throughput (MB/s)",
         output_file="./perf/perf_benchmarks/graphs/"+str(datetime.datetime.now())+"_throughput%msg_size.png"
     )
