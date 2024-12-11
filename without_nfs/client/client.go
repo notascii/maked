@@ -262,7 +262,7 @@ forLoop:
 
 				// End of error management
 				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
-				log.Printf("Command done, execution time: %.2f seconds", elapsedTime.Seconds())
+				log.Printf("Command %s done, execution time: %.2f seconds", o.Name ,elapsedTime.Seconds())
 				// Send the created files
 				// log.Println("Sending created files")
 				for _, fileName := range filesCreated {
