@@ -90,7 +90,6 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 			for _, dep := range ins.Dependencies {
 				// We check that dependencies are in done list
 				if !contains(p.InstructionsDone, dep) {
-					log.Println("Error " + dep + " Missing for target " + ins.Name)
 					test = false
 					break
 				}

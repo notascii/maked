@@ -16,7 +16,7 @@ if [ ! -f "$RUN_MAKED_SCRIPT" ]; then
 fi
 
 # Array representing the number of nodes to reserve (1 to 10)
-NODE_COUNTS=(1 2 3 4 5 6 7 8 9 10)
+NODE_COUNTS=(4)
 
 OUTPUT_DIR="output_logs"
 mkdir -p "$OUTPUT_DIR"
@@ -26,7 +26,7 @@ for NODE_COUNT in "${NODE_COUNTS[@]}"; do
   echo "Reserving $NODE_COUNT node(s) and launching script..."
 
   # Reserve nodes and directly launch the script
-  oarsub -l nodes=$NODE_COUNT,walltime=01:00:00 -S "$RUN_MAKED_SCRIPT" > "$OUTPUT_DIR/reservation_${NODE_COUNT}.log" 2>&1
+  oarsub -l nodes=$NODE_COUNT,walltime=01:00:00 -S "./$RUN_MAKED_SCRIPT premier_tiny" > "$OUTPUT_DIR/reservation_${NODE_COUNT}.log" 2>&1
 
   if [ $? -ne 0 ]; then
     echo "Error reserving nodes or executing script for $NODE_COUNT nodes. Skipping."
