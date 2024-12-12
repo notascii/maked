@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/rpc"
@@ -42,9 +43,12 @@ func main() {
 	}
 	// Register the MakeService: This will allow the client to recognize it over the network
 	makeService := &MakeService{
-		InstructionsToDo: commandListe,
-		InstructionsDone: dependenciesThere,
-		Directory:        makefileDir,
+		InstructionsToDo:  commandListe,
+		InstructionsDone:  dependenciesThere,
+		Directory:         makefileDir,
+		ClientList:        make(map[int][]Job),
+		InstructionsStart: make(map[string]time.Time),
+		InstructionsEnd:   make(map[string]time.Time),
 	}
 	rpc.Register(makeService)
 
@@ -54,17 +58,18 @@ func main() {
 		panic(err)
 	}
 	defer listener.Close()
-	log.Println("Server listening on port 8090...")
+	fmt.Printf("Server listening on port 8090...")
 
 	// TODO CEST LE DERNIER CLIENT QUI DIT AU SERVEUR DE SHUT DOWN
 	// Goroutine to monitor `commandListe` and shut down the server
 	go func() {
 		for {
-			time.Sleep(1 * time.Second) // Check every second
 			makeService.mu.Lock()
 			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
 				makeService.mu.Unlock()
-				log.Println("No more instructions. Shutting down the server...")
+				totalDuration := time.Since(timeStart)
+				printClientList(makeService.ClientList, totalDuration)
+				fmt.Printf("No more instructions. Shutting down the server...\n")
 				listener.Close()
 				os.Exit(0) // Exit the program
 			}

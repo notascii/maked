@@ -16,6 +16,7 @@ type FileStruct struct {
 	Data      []byte
 	FileName  string
 	ReturnVal JobReturn
+	ClientId  int
 }
 
 type JobReturn struct {
@@ -24,7 +25,8 @@ type JobReturn struct {
 }
 
 type FileList struct {
-	List []FileStruct
+	List     []FileStruct
+	ClientId int
 }
 
 type Message struct {
@@ -40,7 +42,7 @@ type Order struct {
 	Command      string
 	Dependencies []FileStruct
 	Name         string
-	ClientId 	 int
+	ClientId     int
 }
 
 func removeAllFiles(directory string) {
@@ -128,11 +130,14 @@ func ask_init(storage string, address string) {
 	defer client.Close()
 
 	// Prepare the content
-	args := &PingDef{}
+	args := &PingDef{ClientId: id}
 	var reply FileList
 	err = client.Call("MakeService.Initialization", args, &reply)
 	if err != nil {
 		panic(err)
+	}
+	if id == -1 {
+		id = reply.ClientId
 	}
 	// log.Println("Downloading files")
 	for _, file := range reply.List {
@@ -155,9 +160,6 @@ func send_ping(address string) Order {
 	if err != nil {
 		panic(err)
 	}
-	if id == -1 {
-		id = reply.ClientId
-	}
 
 	return reply
 }
@@ -178,9 +180,9 @@ func send_file(directory string, filename string, codeValue JobReturn, address s
 			panic(err)
 		}
 		// Send the file content
-		args = &FileStruct{Data: fileData, FileName: filename, ReturnVal: codeValue} // N-byte message
+		args = &FileStruct{Data: fileData, FileName: filename, ReturnVal: codeValue, ClientId: id} // N-byte message
 	} else {
-		args = &FileStruct{Data: nil, FileName: "", ReturnVal: codeValue}
+		args = &FileStruct{Data: nil, FileName: "", ReturnVal: codeValue, ClientId: id}
 	}
 
 	var reply FileStruct
@@ -217,7 +219,7 @@ forLoop:
 			log.Println("Server not ready")
 			time.Sleep(1 * time.Second)
 		case 2:
-			log.Println("I work on : ", o.Command)
+			log.Printf("I'm the id %d and I work on : %s", id, o.Command)
 			// download all files
 			// log.Println("Start of dependencies downloading")
 			for _, dep := range o.Dependencies {
@@ -270,7 +272,7 @@ forLoop:
 
 				// End of error management
 				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
-				log.Printf("Command %s done, execution time: %.2f seconds", o.Name ,elapsedTime.Seconds())
+				log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
 				// Send the created files
 				// log.Println("Sending created files")
 				for _, fileName := range filesCreated {

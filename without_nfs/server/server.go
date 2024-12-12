@@ -4,23 +4,39 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
 var storageAbs string = "./server_storage/"
 var currentClientId int = 1
+var firstPing bool = true
+var timeStart time.Time
 
 type MakeService struct {
-	mu                     sync.Mutex // handle concurrent access
+	// handle concurrent access
+	mu sync.Mutex
+	// Work repartition
 	InstructionsToDo       []MakeElement
 	InstructionsInProgress []MakeElement
 	InstructionsDone       []string
-	Directory              string
+	// Work measure
+	InstructionsStart map[string]time.Time
+	InstructionsEnd   map[string]time.Time
+	ClientList        map[int][]Job
+	// Work space
+	Directory string
+}
+
+type Job struct {
+	Name     string
+	Duration time.Duration
 }
 
 type FileStruct struct {
 	Data      []byte
 	FileName  string
 	ReturnVal JobReturn
+	ClientId  int
 }
 
 type JobReturn struct {
@@ -29,7 +45,8 @@ type JobReturn struct {
 }
 
 type FileList struct {
-	List []FileStruct
+	List     []FileStruct
+	ClientId int
 }
 
 type Message struct {
@@ -41,7 +58,7 @@ type Order struct {
 	Command      string
 	Dependencies []FileStruct
 	Name         string
-	ClientId 	 int
+	ClientId     int
 }
 
 type MakeInstruction struct {
@@ -66,11 +83,6 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 	storage := storageAbs
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	if (args.ClientId == -1)
-	{
-		reply.ClientId = currentClientId
-		currentClientId ++
-	}
 	if len(p.InstructionsToDo) > 0 {
 		for i, ins := range p.InstructionsToDo {
 			test := true
@@ -101,6 +113,7 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 				reply.Command = ins.Command
 				reply.Name = ins.Name
 				reply.Dependencies = list
+				p.InstructionsStart[ins.Name] = time.Now()
 				p.InstructionsInProgress = append(p.InstructionsInProgress, p.InstructionsToDo[i])
 				p.InstructionsToDo = append(p.InstructionsToDo[:i], p.InstructionsToDo[i+1:]...)
 				return nil
@@ -116,6 +129,7 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 }
 
 func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
+	senderId := args.ClientId
 	// Check the code error
 	if args.ReturnVal.CodeValue != 0 {
 		// There is an error, so we put back the instruction in the beginning of todoList
@@ -141,25 +155,34 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 				p.InstructionsInProgress = append(p.InstructionsInProgress[:i], p.InstructionsInProgress[i+1:]...)
 				// Add the instruction name to InstructionsDone
 				p.InstructionsDone = append(p.InstructionsDone, ins.Name)
-				log.Printf("Instruction for target %s marked as done\n", ins.Name)
+				p.InstructionsEnd[ins.Name] = time.Now()
+				p.ClientList[senderId] = append(p.ClientList[senderId], Job{Name: ins.Name, Duration: time.Duration(p.InstructionsEnd[ins.Name].Sub(p.InstructionsStart[ins.Name]).Milliseconds())})
 			}
 		}
 	}
 
 	storage := storageAbs
 	// Reply with an acknowledgment byte
-	log.Println("Name of the file received : ", args.FileName)
-
+	// log.Println("Name of the file received : ", args.FileName)
 	err := os.WriteFile(storage+args.FileName, args.Data, 0644)
 	if err != nil {
 		return err
 	}
-	log.Println("File received and stored as " + args.FileName)
+	// log.Println("File received and stored as " + args.FileName)
 	return nil
 }
 
-func (p *MakeService) Initialization(args *FileStruct, reply *FileList) error {
+func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
+	if firstPing {
+		firstPing = false
+		timeStart = time.Now()
+	}
+
 	// Reply with an acknowledgment byte
+	if args.ClientId == -1 {
+		reply.ClientId = currentClientId
+		currentClientId++
+	}
 
 	files, err := os.ReadDir(p.Directory)
 	if err != nil {
