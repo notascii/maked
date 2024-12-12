@@ -7,6 +7,7 @@ import (
 )
 
 var storageAbs string = "./server_storage/"
+var currentClientId int = 1
 
 type MakeService struct {
 	mu                     sync.Mutex // handle concurrent access
@@ -40,6 +41,7 @@ type Order struct {
 	Command      string
 	Dependencies []FileStruct
 	Name         string
+	ClientId 	 int
 }
 
 type MakeInstruction struct {
@@ -48,6 +50,7 @@ type MakeInstruction struct {
 }
 
 type PingDef struct {
+	ClientId int
 }
 
 func contains(list []string, word string) bool {
@@ -63,6 +66,11 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 	storage := storageAbs
 	p.mu.Lock()
 	defer p.mu.Unlock()
+	if (args.ClientId == -1)
+	{
+		reply.ClientId = currentClientId
+		currentClientId ++
+	}
 	if len(p.InstructionsToDo) > 0 {
 		for i, ins := range p.InstructionsToDo {
 			test := true

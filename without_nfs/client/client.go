@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var id int = -1
+
 // fileSend holds the data sent from client to server.
 type FileStruct struct {
 	Data      []byte
@@ -30,6 +32,7 @@ type Message struct {
 }
 
 type PingDef struct {
+	ClientId int
 }
 
 type Order struct {
@@ -37,6 +40,7 @@ type Order struct {
 	Command      string
 	Dependencies []FileStruct
 	Name         string
+	ClientId 	 int
 }
 
 func removeAllFiles(directory string) {
@@ -145,12 +149,16 @@ func send_ping(address string) Order {
 	defer client.Close()
 
 	// Prepare the content
-	args := &PingDef{}
+	args := &PingDef{ClientId: id}
 	var reply Order
 	err = client.Call("MakeService.Ping", args, &reply)
 	if err != nil {
 		panic(err)
 	}
+	if id == -1 {
+		id = reply.ClientId
+	}
+
 	return reply
 }
 
