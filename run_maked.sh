@@ -40,7 +40,7 @@ SERVER_NODE="${NODES[0]}"
 echo "Starting server on $SERVER_NODE"
 
 # Run the server process in the background
-taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> server.log 2>&1 &" ]
+taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/without_nfs/server/server.log 2>&1 &" ]
 
 echo "Server started on $SERVER_NODE"
 
