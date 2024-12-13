@@ -6,8 +6,11 @@ import (
 	"net"
 	"net/rpc"
 	"os"
+	"strconv"
 	"time"
 )
+
+var nfsDirectory string = "~/maked/without_nfs"
 
 func main() {
 	// Makefile treatment
@@ -60,16 +63,15 @@ func main() {
 	defer listener.Close()
 	fmt.Printf("Server listening on port 8090...")
 
-	// TODO CEST LE DERNIER CLIENT QUI DIT AU SERVEUR DE SHUT DOWN
 	// Goroutine to monitor `commandListe` and shut down the server
 	go func() {
 		for {
 			makeService.mu.Lock()
 			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
+				fmt.Printf("No more instructions. Shutting down the server...\n")
 				makeService.mu.Unlock()
 				totalDuration := time.Since(timeStart)
-				printClientList(makeService.ClientList, totalDuration)
-				fmt.Printf("No more instructions. Shutting down the server...\n")
+				writeClientList(makeService.ClientList, totalDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
 				listener.Close()
 				os.Exit(0) // Exit the program
 			}

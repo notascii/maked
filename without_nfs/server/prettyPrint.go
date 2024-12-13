@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -24,47 +28,71 @@ func printVertices(g Graph) {
 	}
 }
 
-func printClientList(clientJobs map[int][]Job, totalDuration time.Duration) {
-	fmt.Println("{")
-
-	// Print the total duration
-	fmt.Printf("  \"totalDuration\": %d,\n", totalDuration.Milliseconds())
-
-	// Print durations per client
-	fmt.Println("  \"clients\": {")
-	clientCount := len(clientJobs)
-	currentIndex := 0
-
-	for clientID, jobs := range clientJobs {
-		currentIndex++
-		fmt.Printf("    \"%d\": {\n", clientID)
-
-		// Calculate total duration for the client
-		clientDuration := time.Duration(0)
-		for _, job := range jobs {
-			clientDuration += time.Duration(job.Duration) * time.Millisecond
+func writeClientList(clientJobs map[int][]Job, totalDuration time.Duration, nfsDirectory string, fileName string) {
+	// Expand the home directory if present
+	if strings.HasPrefix(nfsDirectory, "~") {
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Printf("Error fetching home directory: %v\n", err)
+			return
 		}
-
-		fmt.Printf("      \"totalDuration\": %d,\n", clientDuration.Milliseconds())
-		fmt.Println("      \"jobs\": [")
-
-		// Print each job for the client
-		for i, job := range jobs {
-			fmt.Printf("        {\"name\": \"%s\", \"duration\": %d}", job.Name, job.Duration)
-			if i < len(jobs)-1 {
-				fmt.Print(",") // Add a comma if not the last job
-			}
-			fmt.Println()
-		}
-
-		fmt.Print("      ]\n")
-		fmt.Print("    }")
-		if currentIndex < clientCount {
-			fmt.Print(",") // Add a comma if not the last client
-		}
-		fmt.Println()
+		nfsDirectory = filepath.Join(homeDir, nfsDirectory[1:], "server/json_storage/")
 	}
 
-	fmt.Println("  }")
-	fmt.Println("}")
+	// Create the output directory if it doesn't exist
+	if err := os.MkdirAll(nfsDirectory, os.ModePerm); err != nil {
+		fmt.Printf("Error creating directory %s: %v\n", nfsDirectory, err)
+		return
+	}
+
+	// Prepare the output file path
+	filePath := filepath.Join(nfsDirectory, fileName)
+
+	// Open the file for writing
+	file, err := os.Create(filePath)
+	if err != nil {
+		fmt.Printf("Error creating file %s: %v\n", filePath, err)
+		return
+	}
+	defer file.Close()
+
+	// Prepare the data structure for JSON encoding
+	output := map[string]interface{}{
+		"totalDuration": totalDuration.Milliseconds(),
+		"clients":       map[string]interface{}{},
+	}
+
+	clients := output["clients"].(map[string]interface{})
+
+	for clientID, jobs := range clientJobs {
+		clientData := map[string]interface{}{
+			"totalDuration": 0,
+			"jobs":          []map[string]interface{}{},
+		}
+
+		clientDuration := time.Duration(0)
+		jobList := clientData["jobs"].([]map[string]interface{})
+
+		for _, job := range jobs {
+			clientDuration += time.Duration(job.Duration) * time.Millisecond
+			jobList = append(jobList, map[string]interface{}{
+				"name":     job.Name,
+				"duration": job.Duration,
+			})
+		}
+
+		clientData["totalDuration"] = clientDuration.Milliseconds()
+		clientData["jobs"] = jobList
+		clients[fmt.Sprintf("%d", clientID)] = clientData
+	}
+
+	// Write the JSON data to the file
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ") // Pretty print with indentation
+	if err := encoder.Encode(output); err != nil {
+		fmt.Printf("Error encoding JSON to file %s: %v\n", filePath, err)
+		return
+	}
+
+	fmt.Printf("Client list written successfully to %s\n", filePath)
 }
