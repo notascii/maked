@@ -35,13 +35,10 @@ if __name__ == "__main__":
     script_path = "./maked/run_maked.sh"
     script_init_path = "./maked/run_make.sh"    
     directory_list = ["premier_tiny", "matrix", "premier"]
-    list_int = [2, 3,4, 5, 7, 11,16, 21]
-
     for directory in directory_list:
         print(f"Deployment for classic Make")
         g5k = Grid5000API(login, password, site)
         job_id = g5k.submit_deployment_job(1, script_init_path, directory)
-        for number_of_nodes in list_int:
-            print(f"Deployment with {number_of_nodes-1} clients")
-            g5k = Grid5000API(login, password, site)
-            job_id = g5k.submit_deployment_job(number_of_nodes, script_path, directory)
+        print(f"Deployment with clients")
+        g5k = Grid5000API(login, password, site)
+        job_id = g5k.submit_deployment_job(21, script_path, directory)
