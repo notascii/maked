@@ -1,6 +1,9 @@
 import os
-import requests
 import time
+from getpass import getpass
+
+import requests
+
 
 class Grid5000API:
     def __init__(self, user, password, site):
@@ -16,13 +19,13 @@ class Grid5000API:
             "resources": f"nodes={nodes}",
             "types": ["deploy"],
             "command": f"bash {script_path} {makefile_directory}",
-            "name": "DeployUbuntuNFS"
+            "name": "DeployUbuntuNFS",
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
         if response.status_code == 201:
             job = response.json()
             print(f"Job submitted: ID {job['uid']}")
-            return job['uid']
+            return job["uid"]
         else:
             print(f"Job submission failed: {response.status_code}")
             print("Error:", response.text)
@@ -35,35 +38,40 @@ class Grid5000API:
             response = requests.get(job_url, auth=self.auth)
             if response.status_code == 200:
                 job_info = response.json()
-                state = job_info['state']
+                state = job_info["state"]
                 if state != old_state:
                     print(f"Current job state: {state}")
                     old_state = state
-                if state in ['terminated', 'error', 'killed']:
+                if state in ["terminated", "error", "killed"]:
                     return state
             else:
                 print(f"Failed to retrieve job status: {response.status_code}")
                 print("Error:", response.text)
                 exit(1)
 
+
 if __name__ == "__main__":
     login = input("Enter login: ")
-    password = input("Enter password: ")
+    password = getpass(
+        "Enter password: ",
+    )
     site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
-    script_init_path = "./maked/run_make.sh"    
+    script_init_path = "./maked/run_make.sh"
     directory_list = ["premier", "matrix"]
     list_int = [2, 3, 4, 6, 8, 11, 16]
 
     for directory in directory_list:
-        print(f"Deployment for classic Make")
+        print("Deployment for classic Make")
         start = time.time()
         g5k = Grid5000API(login, password, site)
         job_id = g5k.submit_deployment_job(1, script_init_path, directory)
         job_state = g5k.wait_for_job_completion(job_id)
         end = time.time()
-        if job_state == 'terminated':
-            print(f"Deployment initial completed successfully in {end - start:.2f} seconds.")
+        if job_state == "terminated":
+            print(
+                f"Deployment initial completed successfully in {end - start:.2f} seconds."
+            )
         else:
             print("Job did not terminate successfully.")
         for number_of_nodes in list_int:
@@ -73,7 +81,9 @@ if __name__ == "__main__":
             job_id = g5k.submit_deployment_job(number_of_nodes, script_path, directory)
             job_state = g5k.wait_for_job_completion(job_id)
             end = time.time()
-            if job_state == 'terminated':
-                print(f"Deployment completed successfully in {end - start:.2f} seconds.")
+            if job_state == "terminated":
+                print(
+                    f"Deployment completed successfully in {end - start:.2f} seconds."
+                )
             else:
                 print("Job did not terminate successfully.")
