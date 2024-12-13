@@ -1,4 +1,7 @@
 import os
+import time
+from getpass import getpass
+
 import requests
 import time
 import getpass
@@ -22,11 +25,12 @@ class Grid5000API:
         if response.status_code == 201:
             job = response.json()
             print(f"Job submitted: ID {job['uid']}")
-            return job['uid']
+            return job["uid"]
         else:
             print(f"Job submission failed: {response.status_code}")
             print("Error:", response.text)
             exit(1)
+
 
 if __name__ == "__main__":
     login = input("Enter login: ")
