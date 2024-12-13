@@ -57,7 +57,7 @@ for COUNT in "${NODE_COUNTS[@]}"; do
   # Clean the storage directories on all selected nodes
   echo "Cleaning storage directories on all selected nodes..."
   for node in "${SELECTED_NODES[@]}"; do
-    taktuk -s -f <(printf "%s\n" "$node") broadcast exec [ "rm -rf ${REMOTE_DIRECTORY_WORK_NO_NFS}client_storage/* ${REMOTE_DIRECTORY_WORK_NO_NFS}server_storage/*" ]
+    taktuk -s -f <(printf "%s\n" "$node") broadcast exec [ "rm -rf ${REMOTE_DIRECTORY_WORK_NO_NFS}client/client_storage/* ${REMOTE_DIRECTORY_WORK_NO_NFS}server/server_storage/*" ]
   done
 
   echo "Storage directories cleaned."
