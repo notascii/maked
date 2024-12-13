@@ -27,7 +27,7 @@ REMOTE_DIRECTORY_WORK_NO_NFS="/tmp/maked/without_nfs/"
 MAKEFILE_DIRECTORY="$1"
 
 # Define the number of nodes to test on for each run
-NODE_COUNTS=(1 2 3 5 7 10 20)
+NODE_COUNTS=(2 3 4 5 6 7 8 9 10 11)
 
 # Before running each test, ensure that all nodes have the necessary files
 echo "Copying directory to all nodes..."

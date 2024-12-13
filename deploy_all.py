@@ -14,12 +14,12 @@ class Grid5000API:
         self.site = site
         self.base_url = f"https://api.grid5000.fr/stable/sites/{site}"
 
-    def submit_deployment_job(self, nodes, script_path, makefile_directory):
+    def submit_deployment_job(self, nodes, script_path, makefile_directory, name):
         jobs_url = f"{self.base_url}/jobs/"
         job_data = {
             "resources": f"nodes={nodes}",
             "command": f"bash {script_path} {makefile_directory}",
-            "name": "DeployNode"
+            "name": name
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
         if response.status_code == 201:
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         print(f"#################### {directory} #########################")
         print(f"Deployment of make")
         g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(1, script_init_path, directory)
+        job_id = g5k.submit_deployment_job(1, script_init_path, directory, f"make_{directory}")
         print(f"Deployment with clients")
         g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(21, script_path, directory)
+        job_id = g5k.submit_deployment_job(11, script_path, directory, f"make_{directory}")
