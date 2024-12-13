@@ -201,25 +201,27 @@ forLoop:
 			break forLoop
 		case 1:
 			log.Println("Server not ready")
-			time.Sleep(1 * time.Second)
+			time.Sleep(2 * time.Second)
 		case 2:
-			log.Println("Ah shit, here we go again")
+			// log.Println("Ah shit, here we go again")
 			// download all files
-			log.Println("Start of dependencies downloading")
+			// log.Println("Start of dependencies downloading")
 			for _, dep := range o.Dependencies {
 				createFile(storage, dep.FileName, dep.Data)
 			}
-			log.Println("End of dependencies downloading")
+			// log.Println("End of dependencies downloading")
 			// execute the command
-			log.Println("Launching command")
+			// log.Println("Launching command")
+			startTime := time.Now()
 			filesCreated := launchCommand(storage, o.Command)
-			log.Println("Command done")
+			elapsedTime := time.Since(startTime)
+			log.Printf("Command done, execution time: %.2f seconds", elapsedTime.Seconds())
 			// Send the created files
-			log.Println("Sending created files")
+			// log.Println("Sending created files")
 			for _, fileName := range filesCreated {
 				send_file(storage, fileName, args[0])
 			}
-			log.Println("Sended")
+			// log.Println("Sended")
 		}
 	}
 	removeAllFiles(storage)

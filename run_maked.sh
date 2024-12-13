@@ -1,5 +1,10 @@
 #!/bin/bash
-# oarsub -I -l host=10,walltime=1:45 -t deploy
+# oarsub -I -l host=1,walltime=1:45 -t deploy
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <MAKEFILE_DIRECTORY>"
+  exit 1
+fi
 
 kadeploy3 -e ubuntu2204-nfs
 
@@ -18,6 +23,10 @@ LOCAL_DIRECTORY="./maked/"
 # Remote destination directory
 REMOTE_DIRECTORY="~/maked/"
 
+# Makefile directory
+MAKEFILE_DIRECTORY="$1"
+
+
 # Copy the directory and execute commands on each node
 for node in "${NODES[@]}"; do
   echo "Processing node: $node"
@@ -25,29 +34,32 @@ for node in "${NODES[@]}"; do
   # Copy the directory to the node using rsync and exclude the .git directory
   rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$node:$REMOTE_DIRECTORY"
 
-  # Install Go on the node
-  ssh root@$node "snap install go --classic"
-
   echo "Node $node setup complete"
 done
 
 echo "All nodes are set up"
 
-# Start server on the first node and clients on the remaining nodes
-for i in "${!NODES[@]}"; do
-  node="${NODES[$i]}"
-  if [ "$i" -eq 0 ]; then
-    # First node: start the server
-    echo "Starting server on $node"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . > server.log 2>&1 &" &
-    echo "Server started on $node"
-  else
-    # Other nodes: start the client
-    echo "Trying to connect client on $node to server ${NODES[0]}:8090"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && nohup go run client.go ${NODES[0]}:8090 > client.log 2>&1&" &
-    echo "Client started on $node"
-  fi
-done
+# Start server on the first node
+SERVER_NODE="${NODES[0]}"
+echo "Starting server on $SERVER_NODE"
+ssh root@$SERVER_NODE "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && chmod +x main && nohup ./main ${MAKEFILE_DIRECTORY} > server.log 2>&1 &" &
+echo "Server started on $SERVER_NODE"
+
+# Start clients on the remaining nodes
+CLIENT_NODES=("${NODES[@]:1}")
+echo "Starting clients"
+
+# Calculate the number of client nodes
+NUM_CLIENT_NODES=${#CLIENT_NODES[@]}
+
+# Name the output file based on the Makefile directory and the number of nodes
+OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${NUM_CLIENT_NODES}_nodes.txt"
+
+rm -rf "${OUTPUT_FILE}"
+
+{ time taktuk -s -l root -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && chmod +x client && ./client ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+
+echo "Ending clients"
 
 # Wait for all background SSH processes to complete
 wait
