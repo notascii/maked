@@ -36,7 +36,8 @@ if __name__ == "__main__":
     script_init_path = "./maked/run_make.sh"    
     directory_list = ["premier_tiny", "matrix", "premier"]
     for directory in directory_list:
-        print(f"Deployment for classic Make")
+        print(f"#################### {directory} #########################")
+        print(f"Deployment of make")
         g5k = Grid5000API(login, password, site)
         job_id = g5k.submit_deployment_job(1, script_init_path, directory)
         print(f"Deployment with clients")
