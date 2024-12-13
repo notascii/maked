@@ -2,6 +2,9 @@ import contextlib
 import sys
 from pathlib import Path
 
+
+file_content = "##########################################################################################"
+
 if __name__ == "__main__":
     if len(sys.argv) != 7:
         raise ValueError(
@@ -38,19 +41,19 @@ if __name__ == "__main__":
     for n0 in range(commands[0]):
         makefile += f"""
 command-{n0}: {" ".join([f"command-{n0}-{nb}" for nb in range(commands[1])])}
-\tsleep {sleep} && echo "" > command-{n0}
+\tsleep {sleep} && echo {file_content} > command-{n0}
 """
         leaf_commands.append(f"command-{n0}")
         for n1 in range(commands[1]):
             makefile += f"""
 command-{n0}-{n1}: {" ".join([f"command-{n0}-{n1}-{nb}" for nb in range(commands[2])])}
-\tsleep {sleep} && echo "" > command-{n0}-{n1}
+\tsleep {sleep} && echo {file_content} > command-{n0}-{n1}
 """
             leaf_commands.append(f"command-{n0}-{n1}")
             for n2 in range(commands[2]):
                 makefile += f"""
 command-{n0}-{n1}-{n2}:
-\tsleep {sleep} && echo "" > command-{n0}-{n1}-{n2}
+\tsleep {sleep} && echo {file_content} > command-{n0}-{n1}-{n2}
 """
                 leaf_commands.append(f"command-{n0}-{n1}-{n2}")
 
