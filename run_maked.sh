@@ -47,6 +47,9 @@ for COUNT in "${NODE_COUNTS[@]}"; do
   # The first node is the server
   SERVER_NODE="${SELECTED_NODES[0]}"
 
+  # Adjust the number of client nodes (COUNT - 1 because the first is the server)
+  CLIENT_NODE_COUNT=$((COUNT - 1))
+
   # If we have more than 1 node, the rest are clients
   if [ $COUNT -gt 1 ]; then
     CLIENT_NODES=("${SELECTED_NODES[@]:1}")
@@ -64,25 +67,24 @@ for COUNT in "${NODE_COUNTS[@]}"; do
 
   # Start server on the first node
   echo "Starting server on $SERVER_NODE"
-  taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/without_nfs/server/server_${COUNT}_nodes.log 2>&1 &" ]
+  taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/without_nfs/server/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
   echo "Server started on $SERVER_NODE"
   
   # Allow some time for the server to initialize
   sleep 5
   
   # Start clients on the remaining nodes
-  NUM_CLIENT_NODES=${#CLIENT_NODES[@]}
-  echo "Starting $NUM_CLIENT_NODES clients"
+  echo "Starting $CLIENT_NODE_COUNT clients"
 
-  # Name the output file based on the Makefile directory and the number of nodes
-  OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${COUNT-1}_nodes.txt"
+  # Name the output file based on the Makefile directory and the number of client nodes
+  OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${CLIENT_NODE_COUNT}_clients.txt"
 
   rm -f "${OUTPUT_FILE}"
 
-  if [ $NUM_CLIENT_NODES -gt 0 ]; then
+  if [ $CLIENT_NODE_COUNT -gt 0 ]; then
     # Run client processes
     { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
-    echo "Clients finished for $COUNT nodes"
+    echo "Clients finished for $CLIENT_NODE_COUNT clients"
   else
     echo "No clients to run for single-node test."
   fi

@@ -18,7 +18,7 @@ def extract_real_time(file_path):
 # Main function
 def main():
     target_directory = os.path.abspath(os.path.join(os.getcwd(), "../"))  # Parent directory
-    pattern = re.compile(r'(.+?)_(\d+)_nodes\.txt')
+    pattern = re.compile(r'(.+?)_(\d+)_clients\.txt')
     efficiency_data = defaultdict(list)  # Structure: {prefix: [(num_nodes, efficiency_ratio)]}
 
     # Identify unique prefixes and process files
