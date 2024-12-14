@@ -26,8 +26,8 @@ REMOTE_DIRECTORY_WORK_NO_NFS="/tmp/maked/without_nfs/"
 # Makefile directory
 MAKEFILE_DIRECTORY="$1"
 
-# Define the number of nodes to test on for each run
-NODE_COUNTS=(2 3 4 5 6 7 8 9 10 11)
+# Dynamically define the number of nodes to test on for each run (2 to total number of nodes)
+NODE_COUNTS=($(seq 2 ${#NODES[@]}))
 
 # Before running each test, ensure that all nodes have the necessary files
 echo "Copying directory to all nodes..."

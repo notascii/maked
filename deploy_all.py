@@ -46,4 +46,4 @@ if __name__ == "__main__":
         job_id = g5k.submit_deployment_job(1, script_init_path, directory, f"make_{directory}")
         print(f"Deployment with clients")
         g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(11, script_path, directory, f"maked_{directory}")
+        job_id = g5k.submit_deployment_job(4, script_path, directory, f"maked_{directory}")

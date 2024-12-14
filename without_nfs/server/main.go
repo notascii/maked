@@ -16,20 +16,20 @@ var nfsDirectory string = "~/maked/without_nfs"
 func main() {
 	args := os.Args[1:]
 	if len(args) != 1 {
-		log.Fatalf("Excepted 1 argument (name of repo containing the makefile)")
+		log.Fatalf("Expected 1 argument (name of the repo containing the makefile)")
 	}
 
 	makefilePath := "../../makefiles/" + args[0] + "/Makefile"
 	makefileDir := "../../makefiles/" + args[0] + "/"
-	// First we parse the makefile
+	// Parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 
-	// Now we execute all commands in the directory asked
-	commandListe := []MakeElement{}
-	launchMakefile(g, "", &commandListe)
+	// Generate the instructions list
+	commandList := []MakeElement{}
+	launchMakefile(g, "", &commandList)
 
 	var dependenciesThere []string
-	// Scan the makefile directory
+	// Read the directory
 	files, err := os.ReadDir(makefileDir)
 	if err != nil {
 		log.Fatalf("Failed to read makefile directory: %v", err)
@@ -41,7 +41,7 @@ func main() {
 	}
 
 	makeService := &MakeService{
-		InstructionsToDo:  commandListe,
+		InstructionsToDo:  commandList,
 		InstructionsDone:  dependenciesThere,
 		Directory:         makefileDir,
 		ClientList:        make(map[int][]Job),
@@ -58,53 +58,72 @@ func main() {
 	defer listener.Close()
 	fmt.Printf("Server listening on port 8090...\n")
 
-	// Start the scheduler goroutine
-	go schedulerLoop(makeService)
+	// Channel to signal a clean server shutdown
+	done := make(chan struct{})
 
-	// Goroutine to monitor `commandListe` and shut down the server
+	// Start the scheduler goroutine
+	go schedulerLoop(makeService, done)
+
+	// Goroutine to monitor instruction completion
 	go func() {
 		for {
 			makeService.mu.Lock()
 			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
 				fmt.Printf("No more instructions. Shutting down the server...\n")
-				makeService.mu.Unlock()
 				totalDuration := time.Since(timeStart)
 				writeClientList(makeService.ClientList, totalDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
-				listener.Close()
-				os.Exit(0)
+				makeService.mu.Unlock()
+				// Signal the main loop to stop
+				close(done)
+				return
 			}
 			makeService.mu.Unlock()
 			time.Sleep(500 * time.Millisecond)
 		}
 	}()
 
+	// Main loop to accept connections
 	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			panic(err)
+		select {
+		case <-done:
+			// Stop accepting new connections gracefully
+			log.Println("Main loop received done signal. Stopping accept.")
+			return
+		default:
+			conn, err := listener.Accept()
+			if err != nil {
+				// If there's an error, check if we are stopping
+				select {
+				case <-done:
+					log.Println("Stopping due to done signal after accept error.")
+					return
+				default:
+					panic(err)
+				}
+			}
+			go rpc.ServeConn(conn)
 		}
-		go rpc.ServeConn(conn)
 	}
 }
 
-func schedulerLoop(makeService *MakeService) {
+func schedulerLoop(makeService *MakeService, done chan struct{}) {
 	h := &RequestHeap{}
 	heap.Init(h)
 
 	for {
 		select {
 		case req := <-makeService.clientRequests:
-			// Add the request to the heap
 			heap.Push(h, req)
+		case <-done:
+			// The server is shutting down, exit the scheduler loop gracefully
+			log.Println("Scheduler loop done signal received. Exiting schedulerLoop.")
+			return
 		default:
-			// If heap is not empty, process the lowest ID request
 			if h.Len() > 0 {
 				req := heap.Pop(h).(ClientRequest)
-				// Process the request
 				res := makeService.processRequest()
 				req.replyChan <- res
 			} else {
-				// No requests at the moment
 				time.Sleep(10 * time.Millisecond)
 			}
 		}
