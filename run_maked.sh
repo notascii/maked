@@ -75,7 +75,7 @@ for COUNT in "${NODE_COUNTS[@]}"; do
   echo "Starting $NUM_CLIENT_NODES clients"
 
   # Name the output file based on the Makefile directory and the number of nodes
-  OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${COUNT}_nodes.txt"
+  OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${COUNT-1}_nodes.txt"
 
   rm -f "${OUTPUT_FILE}"
 
