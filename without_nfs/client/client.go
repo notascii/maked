@@ -11,7 +11,6 @@ import (
 
 var id int = -1
 
-// fileSend holds the data sent from client to server.
 type FileStruct struct {
 	Data      []byte
 	FileName  string
@@ -51,7 +50,6 @@ func removeAllFiles(directory string) {
 		log.Fatalf("Impossible to read the directory : %e", err)
 	}
 	for _, file := range files {
-		// log.Println("Deleting file ", file.Name())
 		err = os.Remove(directory + file.Name())
 		if err != nil {
 			// log.Println("Impossible to delete the file ", err)
@@ -60,21 +58,17 @@ func removeAllFiles(directory string) {
 }
 
 func diffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
-	// Map on files2 name
 	fileMap := make(map[string]bool)
 	for _, file := range filesBefore {
 		fileMap[file.Name()] = true
 	}
 
-	// Now we check the differences
 	var diff []string
 	for _, file := range filesAfter {
 		if !fileMap[file.Name()] {
 			diff = append(diff, file.Name())
 		}
 	}
-	// Todo if the command delete a file (IMPORTANT)
-
 	return diff
 }
 
@@ -92,44 +86,34 @@ func createFile(storage string, fileName string, data []byte) {
 func launchCommand(storage string, command string) []string {
 	cmd := exec.Command("/bin/sh", "-c", command)
 	cmd.Dir = storage
-
-	// stdout and stderr directed to our terminal
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	// Check all files before the command
 	filesBefore, err := os.ReadDir(storage)
 	if err != nil {
 		log.Fatalf("Impossible to read the directory : %e", err)
 	}
-	// log.Println("Files before : ", filesBefore)
 
-	// Execute the command
 	err = cmd.Run()
 	if err != nil {
 		log.Println("Error:", err)
 	}
 
-	// We check all files after the command
 	filesAfter, err := os.ReadDir(storage)
 	if err != nil {
 		log.Fatalf("Impossible to read the directory : %e", err)
 	}
-	// log.Println("Files after : ", filesAfter)
 
 	return diffFiles(filesBefore, filesAfter)
-
 }
 
 func ask_init(storage string, address string) {
-	// Connect to the server
 	client, err := rpc.Dial("tcp", address)
 	if err != nil {
 		panic(err)
 	}
 	defer client.Close()
 
-	// Prepare the content
 	args := &PingDef{ClientId: id}
 	var reply FileList
 	err = client.Call("MakeService.Initialization", args, &reply)
@@ -139,21 +123,18 @@ func ask_init(storage string, address string) {
 	if id == -1 {
 		id = reply.ClientId
 	}
-	// log.Println("Downloading files")
 	for _, file := range reply.List {
 		createFile(storage, file.FileName, file.Data)
 	}
 }
 
 func send_ping(address string) Order {
-	// Connect to the server
 	client, err := rpc.Dial("tcp", address)
 	if err != nil {
 		panic(err)
 	}
 	defer client.Close()
 
-	// Prepare the content
 	args := &PingDef{ClientId: id}
 	var reply Order
 	err = client.Call("MakeService.Ping", args, &reply)
@@ -165,7 +146,6 @@ func send_ping(address string) Order {
 }
 
 func send_file(directory string, filename string, codeValue JobReturn, address string) {
-	// Connect to the server
 	client, err := rpc.Dial("tcp", address)
 	if err != nil {
 		panic(err)
@@ -174,15 +154,13 @@ func send_file(directory string, filename string, codeValue JobReturn, address s
 	var args *FileStruct
 
 	if codeValue.CodeValue == 0 {
-		// Read the file content
 		fileData, err := os.ReadFile(directory + filename)
 		if err != nil {
 			panic(err)
 		}
-		// Send the file content
-		args = &FileStruct{Data: fileData, FileName: filename, ReturnVal: codeValue, ClientId: id} // N-byte message
+		args = &FileStruct{Data: fileData, FileName: filename, ReturnVal: codeValue, ClientId: id}
 	} else {
-		args = &FileStruct{Data: nil, FileName: "", ReturnVal: codeValue, ClientId: id}
+		args = &FileStruct{Data: nil, FileName: codeValue.TargetName, ReturnVal: codeValue, ClientId: id}
 	}
 
 	var reply FileStruct
@@ -198,19 +176,13 @@ func main() {
 	if len(args) != 1 {
 		log.Fatalf("Excepted 1 argument")
 	}
-	// we ask for essential files
 	ask_init(storage, args[0])
 
 forLoop:
 	for {
-		// Say to the server "hello I'm available"
 		log.Println("Send ping")
 		o := send_ping(args[0])
 		log.Println("Pong received")
-		// Server respond with an order
-		// 0 -> no work available
-		// 1 -> work available but waiting some jobs to end
-		// 2 -> work available
 		switch o.Value {
 		case 0:
 			log.Println("Task done, take some rest soldier")
@@ -220,65 +192,45 @@ forLoop:
 			time.Sleep(1 * time.Second)
 		case 2:
 			log.Printf("I'm the id %d and I work on : %s", id, o.Command)
-			// download all files
-			// log.Println("Start of dependencies downloading")
 			for _, dep := range o.Dependencies {
 				createFile(storage, dep.FileName, dep.Data)
 			}
-			// log.Println("End of dependencies downloading")
-			// execute the command
 			log.Println("Launching target: ", o.Name)
 			startTime := time.Now()
 			filesCreated := launchCommand(storage, o.Command)
 			elapsedTime := time.Since(startTime)
 			codeError := 0
 
-			// If there is no created files we verify that the file is not empty
 			if len(filesCreated) == 0 {
 				log.Println("NO FILE CREATED")
 				info, err := os.Stat(storage + o.Name)
-
 				if err != nil {
-					// Log an error if the file does not exist
-					log.Printf("##################################")
-
 					log.Printf("File doesn't exist  %s, %v\n", o.Name, err)
 					send_file("", "", JobReturn{CodeValue: 1, TargetName: o.Name}, args[0])
 					break
 				}
-				// Check if the file size is zero
 				if info.Size() == 0 {
-					log.Printf("##################################")
-
 					log.Printf("File is empty: %s. Retrying...\n", o.Name)
 					send_file("", "", JobReturn{CodeValue: 2, TargetName: o.Name}, args[0])
 					break
 				}
 			}
-			// We verify that the content of created files are not empty. If yes, we retry or log an error
+
 			for _, file := range filesCreated {
-				// Check if the file exists and get its size
 				info, err := os.Stat(storage + file)
 				if err != nil {
-					// Log an error if the file does not exist
-					panic(" Can't access to the file")
+					panic("Can't access to the file")
 				}
-				// Check if the file size is zero
 				if info.Size() == 0 {
-					log.Printf("##################################")
 					send_file("", "", JobReturn{CodeValue: 3, TargetName: o.Name}, args[0])
 					break
 				}
 
-				// End of error management
 				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
 				log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
-				// Send the created files
-				// log.Println("Sending created files")
 				for _, fileName := range filesCreated {
 					send_file(storage, fileName, jobReturn, args[0])
 				}
-				// log.Println("Sended")
 			}
 		}
 	}

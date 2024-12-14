@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"log"
 	"net"
@@ -13,14 +14,11 @@ import (
 var nfsDirectory string = "~/maked/without_nfs"
 
 func main() {
-	// Makefile treatment
-
 	args := os.Args[1:]
 	if len(args) != 1 {
 		log.Fatalf("Excepted 1 argument (name of repo containing the makefile)")
 	}
 
-	////////////// TEST PREMIER
 	makefilePath := "../../makefiles/" + args[0] + "/Makefile"
 	makefileDir := "../../makefiles/" + args[0] + "/"
 	// First we parse the makefile
@@ -36,15 +34,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to read makefile directory: %v", err)
 	}
-
-	// Add all file names in the directory to the dependenciesThere slice
 	for _, file := range files {
-		// Ensure it's not a directory and add to dependencies list
 		if !file.IsDir() {
 			dependenciesThere = append(dependenciesThere, file.Name())
 		}
 	}
-	// Register the MakeService: This will allow the client to recognize it over the network
+
 	makeService := &MakeService{
 		InstructionsToDo:  commandListe,
 		InstructionsDone:  dependenciesThere,
@@ -52,16 +47,19 @@ func main() {
 		ClientList:        make(map[int][]Job),
 		InstructionsStart: make(map[string]time.Time),
 		InstructionsEnd:   make(map[string]time.Time),
+		clientRequests:    make(chan ClientRequest, 100), // buffered channel
 	}
 	rpc.Register(makeService)
 
-	// Listen on TCP port 8090
 	listener, err := net.Listen("tcp", ":8090")
 	if err != nil {
 		panic(err)
 	}
 	defer listener.Close()
-	fmt.Printf("Server listening on port 8090...")
+	fmt.Printf("Server listening on port 8090...\n")
+
+	// Start the scheduler goroutine
+	go schedulerLoop(makeService)
 
 	// Goroutine to monitor `commandListe` and shut down the server
 	go func() {
@@ -73,18 +71,42 @@ func main() {
 				totalDuration := time.Since(timeStart)
 				writeClientList(makeService.ClientList, totalDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
 				listener.Close()
-				os.Exit(0) // Exit the program
+				os.Exit(0)
 			}
 			makeService.mu.Unlock()
+			time.Sleep(500 * time.Millisecond)
 		}
 	}()
 
-	// Accept connections
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
 			panic(err)
 		}
 		go rpc.ServeConn(conn)
+	}
+}
+
+func schedulerLoop(makeService *MakeService) {
+	h := &RequestHeap{}
+	heap.Init(h)
+
+	for {
+		select {
+		case req := <-makeService.clientRequests:
+			// Add the request to the heap
+			heap.Push(h, req)
+		default:
+			// If heap is not empty, process the lowest ID request
+			if h.Len() > 0 {
+				req := heap.Pop(h).(ClientRequest)
+				// Process the request
+				res := makeService.processRequest()
+				req.replyChan <- res
+			} else {
+				// No requests at the moment
+				time.Sleep(10 * time.Millisecond)
+			}
+		}
 	}
 }

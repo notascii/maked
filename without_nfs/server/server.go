@@ -13,7 +13,6 @@ var firstPing bool = true
 var timeStart time.Time
 
 type MakeService struct {
-	// handle concurrent access
 	mu sync.Mutex
 	// Work repartition
 	InstructionsToDo       []MakeElement
@@ -25,6 +24,15 @@ type MakeService struct {
 	ClientList        map[int][]Job
 	// Work space
 	Directory string
+
+	// Channel to receive client requests
+	clientRequests chan ClientRequest
+}
+
+// A ClientRequest holds the client ID and a channel to send them back a response.
+type ClientRequest struct {
+	ClientId  int
+	replyChan chan Order
 }
 
 type Job struct {
@@ -70,6 +78,27 @@ type PingDef struct {
 	ClientId int
 }
 
+// For priority queue (min-heap) based on client ID
+type RequestHeap []ClientRequest
+
+func (h RequestHeap) Len() int { return len(h) }
+func (h RequestHeap) Less(i, j int) bool {
+	return h[i].ClientId < h[j].ClientId
+}
+func (h RequestHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+func (h *RequestHeap) Push(x interface{}) {
+	*h = append(*h, x.(ClientRequest))
+}
+
+func (h *RequestHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
 func contains(list []string, word string) bool {
 	for _, w := range list {
 		if w == word {
@@ -79,10 +108,29 @@ func contains(list []string, word string) bool {
 	return false
 }
 
+// The Ping method now just enqueues a request and waits for a response.
 func (p *MakeService) Ping(args *PingDef, reply *Order) error {
-	storage := storageAbs
+	req := ClientRequest{
+		ClientId:  args.ClientId,
+		replyChan: make(chan Order),
+	}
+	// Send request to scheduler
+	p.clientRequests <- req
+
+	// Wait for the scheduler's response
+	res := <-req.replyChan
+	*reply = res
+	return nil
+}
+
+// The scheduler will call this method to process the next request in priority order.
+func (p *MakeService) processRequest() Order {
 	p.mu.Lock()
 	defer p.mu.Unlock()
+
+	storage := storageAbs
+
+	var reply Order
 	if len(p.InstructionsToDo) > 0 {
 		for i, ins := range p.InstructionsToDo {
 			test := true
@@ -94,15 +142,13 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 					break
 				}
 				file, err := os.ReadFile(storage + dep)
-				// We check is there is a file corresponding to this dependency to add it
+				// We check if there is a file corresponding to this dependency to add it
 				if err != nil {
-					// We check the repo
 					file, err = os.ReadFile(p.Directory + dep)
 					if err != nil {
 						test = false
 						log.Println("dependency file missing : ", dep)
 					}
-
 				}
 				tmp := FileStruct{Data: file, FileName: dep}
 				list = append(list, tmp)
@@ -115,16 +161,16 @@ func (p *MakeService) Ping(args *PingDef, reply *Order) error {
 				p.InstructionsStart[ins.Name] = time.Now()
 				p.InstructionsInProgress = append(p.InstructionsInProgress, p.InstructionsToDo[i])
 				p.InstructionsToDo = append(p.InstructionsToDo[:i], p.InstructionsToDo[i+1:]...)
-				return nil
+				return reply
 			}
 		}
 		// No dependencies available found...
 		reply.Value = 1
-		return nil
+		return reply
 	} else {
 		reply.Value = 0
 	}
-	return nil
+	return reply
 }
 
 func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
@@ -155,19 +201,19 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 				// Add the instruction name to InstructionsDone
 				p.InstructionsDone = append(p.InstructionsDone, ins.Name)
 				p.InstructionsEnd[ins.Name] = time.Now()
-				p.ClientList[senderId] = append(p.ClientList[senderId], Job{Name: ins.Name, Duration: time.Duration(p.InstructionsEnd[ins.Name].Sub(p.InstructionsStart[ins.Name]).Milliseconds())})
+				p.ClientList[senderId] = append(p.ClientList[senderId], Job{
+					Name:     ins.Name,
+					Duration: time.Duration(p.InstructionsEnd[ins.Name].Sub(p.InstructionsStart[ins.Name]).Milliseconds()),
+				})
 			}
 		}
 	}
 
 	storage := storageAbs
-	// Reply with an acknowledgment byte
-	// log.Println("Name of the file received : ", args.FileName)
 	err := os.WriteFile(storage+args.FileName, args.Data, 0644)
 	if err != nil {
 		return err
 	}
-	// log.Println("File received and stored as " + args.FileName)
 	return nil
 }
 
@@ -181,6 +227,8 @@ func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
 	if args.ClientId == -1 {
 		reply.ClientId = currentClientId
 		currentClientId++
+	} else {
+		reply.ClientId = args.ClientId
 	}
 
 	files, err := os.ReadDir(p.Directory)
