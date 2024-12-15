@@ -25,7 +25,6 @@ func main() {
 	// First we execute the classic makefile
 	makeDuration := launchClassicMake(makefileDir)
 
-
 	// Parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 
@@ -33,9 +32,15 @@ func main() {
 	commandList := []MakeElement{}
 	launchMakefile(g, "", &commandList)
 
+	// We clear the common directory
+	clearDirectory(storageAbs)
+
+	// Import dependencies
+	importDependencies(makefileDir, storageAbs)
+
+	// Checking which files are already there
 	var dependenciesThere []string
-	// Read the directory
-	files, err := os.ReadDir(makefileDir)
+	files, err := os.ReadDir(storageAbs)
 	if err != nil {
 		log.Fatalf("Failed to read makefile directory: %v", err)
 	}
@@ -45,6 +50,7 @@ func main() {
 		}
 	}
 
+	// Initializing the server struct
 	makeService := &MakeService{
 		InstructionsToDo:  commandList,
 		InstructionsDone:  dependenciesThere,

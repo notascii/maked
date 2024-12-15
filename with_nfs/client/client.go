@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/fs"
 	"log"
 	"net/rpc"
@@ -71,17 +72,6 @@ func diffFiles(filesBefore []fs.DirEntry, filesAfter []fs.DirEntry) []string {
 	return diff
 }
 
-func createFile(storage string, fileName string, data []byte) {
-	err := os.WriteFile(storage+fileName, data, 0644)
-	if err != nil {
-		panic(err)
-	}
-	err = os.Chmod(storage+fileName, 0755)
-	if err != nil {
-		log.Fatalf("Impossible to add permission")
-	}
-}
-
 func launchCommand(storage string, command string) []string {
 	cmd := exec.Command("/bin/sh", "-c", command)
 	cmd.Dir = storage
@@ -108,8 +98,19 @@ func launchCommand(storage string, command string) []string {
 
 func ask_init(address string) {
 	client, err := rpc.Dial("tcp", address)
-	if err != nil {
-		panic(err)
+	// Retry loop to wait for the server to be available
+	cpt := 0
+	for {
+		client, err = rpc.Dial("tcp", address)
+		if cpt == 600000 && err != nil {
+			panic(err)
+		}
+		if err == nil {
+			break // Exit the loop if connection is successful
+		}
+		fmt.Printf("Failed to connect to server at %s. Retrying...\n", address)
+		time.Sleep(1 * time.Millisecond) // Wait before retrying
+		cpt++
 	}
 	defer client.Close()
 
@@ -200,7 +201,7 @@ forLoop:
 				}
 				if info.Size() == 0 {
 					log.Printf("File is empty: %s. Retrying...\n", o.Name)
-					send_update( "", JobReturn{CodeValue: 2, TargetName: o.Name}, args[0])
+					send_update("", JobReturn{CodeValue: 2, TargetName: o.Name}, args[0])
 					break
 				}
 			}

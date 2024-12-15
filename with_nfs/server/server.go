@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-
 var storageAbs string = "../commun_storage"
 var currentClientId int = 1
 var firstPing bool = true
@@ -78,6 +77,44 @@ type MakeInstruction struct {
 
 type PingDef struct {
 	ClientId int
+}
+
+func importDependencies(sourceDirectory string, targetDirectory string) error {
+	// Check if the source directory exists
+	if _, err := os.Stat(sourceDirectory); os.IsNotExist(err) {
+		return fmt.Errorf("source directory does not exist: %s", sourceDirectory)
+	}
+
+	// Create the target directory if it doesn't exist
+	if _, err := os.Stat(targetDirectory); os.IsNotExist(err) {
+		if err := os.MkdirAll(targetDirectory, os.ModePerm); err != nil {
+			return fmt.Errorf("failed to create target directory: %s, error: %v", targetDirectory, err)
+		}
+	}
+
+	// Walk through the source directory
+	err := filepath.Walk(sourceDirectory, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Calculate target path
+		relPath, err := filepath.Rel(sourceDirectory, path)
+		if err != nil {
+			return err
+		}
+		targetPath := filepath.Join(targetDirectory, relPath)
+
+		// If it's a directory, create it in the target
+		if info.IsDir() {
+			return os.MkdirAll(targetPath, os.ModePerm)
+		}
+
+		// If it's a file, copy it to the target
+		return copyFile(path, targetPath, info.Mode())
+	})
+
+	return err
 }
 
 // clearDirectory removes all files and subdirectories inside the given directory,
@@ -219,34 +256,13 @@ func (p *MakeService) SendUpdate(args *FileStruct, reply *FileStruct) error {
 	return nil
 }
 
+// Id distribution
 func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
 	if firstPing {
 		firstPing = false
 		timeStart = time.Now()
 	}
 
-	files, err := os.ReadDir(p.Directory)
-	if err != nil {
-		log.Println("Impossible to read the directory: ", err)
-		return nil
-	}
-
-	for _, file := range files {
-		filePath := filepath.Join(p.Directory, file.Name())
-		fileData, err := os.ReadFile(filePath)
-		if err != nil {
-			log.Println("Failed to read file: ", file.Name(), "Error: ", err)
-			continue
-		}
-
-		// Save file in the target directory
-		targetFilePath := filepath.Join(storageAbs, file.Name())
-		err = os.WriteFile(targetFilePath, fileData, 0644)
-		if err != nil {
-			log.Println("Failed to save file to target directory: ", targetFilePath, "Error: ", err)
-			continue
-		}
-	}
 	// Reply with an acknowledgment byte
 	if args.ClientId == -1 {
 		reply.ClientId = currentClientId
@@ -256,4 +272,3 @@ func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
 	}
 	return nil
 }
-
