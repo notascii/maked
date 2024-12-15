@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from getpass import getpass
 
@@ -33,6 +34,19 @@ class Grid5000API:
 
 
 if __name__ == "__main__":
+    # Ensure the script is run with the required argument
+    if len(sys.argv) != 2:
+        print("Usage: python launch.py <number_of_nodes>")
+        sys.exit(1)
+
+    # Get the number of nodes from the argument
+    try:
+        node_count = int(sys.argv[1])
+        if node_count < 1:
+            raise ValueError
+    except ValueError:
+        print("Error: <number_of_nodes> must be a positive integer.")
+        sys.exit(1)
     login = input("Enter login: ")
     password = getpass.getpass()
     site = os.getenv("GRID5000_SITE", "rennes")
@@ -46,4 +60,4 @@ if __name__ == "__main__":
         job_id = g5k.submit_deployment_job(1, script_init_path, directory, f"make_{directory}")
         print(f"Deployment with clients")
         g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(4, script_path, directory, f"maked_{directory}")
+        job_id = g5k.submit_deployment_job(node_count, script_path, directory, f"maked_{directory}")

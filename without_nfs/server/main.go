@@ -21,6 +21,13 @@ func main() {
 
 	makefilePath := "../../makefiles/" + args[0] + "/Makefile"
 	makefileDir := "../../makefiles/" + args[0] + "/"
+
+	// First we execute the classic makefile
+	makeDuration := launchClassicMake(makefileDir)
+
+	// We clear ./server_storage
+	clearDirectory(storageAbs)
+
 	// Parse the makefile
 	var g *Graph = GraphParser(makefilePath)
 
@@ -70,8 +77,8 @@ func main() {
 			makeService.mu.Lock()
 			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
 				fmt.Printf("No more instructions. Shutting down the server...\n")
-				totalDuration := time.Since(timeStart)
-				writeClientList(makeService.ClientList, totalDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
+				makedDuration := time.Since(timeStart)
+				writeResults(makeDuration, makeService.ClientList, makedDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
 				makeService.mu.Unlock()
 				// Signal the main loop to stop
 				close(done)
@@ -117,7 +124,7 @@ func schedulerLoop(makeService *MakeService, done chan struct{}) {
 		case <-done:
 			// The server is shutting down, exit the scheduler loop gracefully
 			log.Println("Scheduler loop done signal received. Exiting schedulerLoop.")
-			return
+			os.Exit(0)
 		default:
 			if h.Len() > 0 {
 				req := heap.Pop(h).(ClientRequest)

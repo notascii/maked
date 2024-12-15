@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -76,6 +78,23 @@ type MakeInstruction struct {
 
 type PingDef struct {
 	ClientId int
+}
+
+// clearDirectory removes all files and subdirectories inside the given directory,
+// leaving the directory itself intact.
+func clearDirectory(directoryName string) {
+	entries, err := os.ReadDir(directoryName)
+	if err != nil {
+		fmt.Printf("Failed to read directory %s: %v\n", directoryName, err)
+		return
+	}
+
+	for _, entry := range entries {
+		path := filepath.Join(directoryName, entry.Name())
+		if err := os.RemoveAll(path); err != nil {
+			fmt.Printf("Failed to remove %s: %v\n", path, err)
+		}
+	}
 }
 
 // For priority queue (min-heap) based on client ID
@@ -203,7 +222,7 @@ func (p *MakeService) SendFile(args *FileStruct, reply *FileStruct) error {
 				p.InstructionsEnd[ins.Name] = time.Now()
 				p.ClientList[senderId] = append(p.ClientList[senderId], Job{
 					Name:     ins.Name,
-					Duration: time.Duration(p.InstructionsEnd[ins.Name].Sub(p.InstructionsStart[ins.Name]).Milliseconds()),
+					Duration: time.Duration(p.InstructionsEnd[ins.Name].Sub(p.InstructionsStart[ins.Name]).Microseconds()),
 				})
 			}
 		}

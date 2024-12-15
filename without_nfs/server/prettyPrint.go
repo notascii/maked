@@ -28,7 +28,7 @@ func printVertices(g Graph) {
 	}
 }
 
-func writeClientList(clientJobs map[int][]Job, totalDuration time.Duration, nfsDirectory string, fileName string) {
+func writeResults(makeDuration time.Duration, clientJobs map[int][]Job, makedDuration time.Duration, nfsDirectory string, fileName string) {
 	// Expand the home directory if present
 	if strings.HasPrefix(nfsDirectory, "~") {
 		homeDir, err := os.UserHomeDir()
@@ -57,10 +57,10 @@ func writeClientList(clientJobs map[int][]Job, totalDuration time.Duration, nfsD
 	defer file.Close()
 
 	// Prepare the data structure for JSON encoding
-	output := map[string]interface{}{
-		"totalDuration": totalDuration.Milliseconds(),
-		"clients":       map[string]interface{}{},
-	}
+	output := make(map[string]interface{})
+	output["makeDuration"] = makeDuration.Microseconds()
+	output["makedDuration"] = makedDuration.Microseconds()
+	output["clients"] = map[string]interface{}{}
 
 	clients := output["clients"].(map[string]interface{})
 
@@ -74,14 +74,14 @@ func writeClientList(clientJobs map[int][]Job, totalDuration time.Duration, nfsD
 		jobList := clientData["jobs"].([]map[string]interface{})
 
 		for _, job := range jobs {
-			clientDuration += time.Duration(job.Duration) * time.Millisecond
+			clientDuration += time.Duration(job.Duration) * time.Microsecond
 			jobList = append(jobList, map[string]interface{}{
 				"name":     job.Name,
 				"duration": job.Duration,
 			})
 		}
 
-		clientData["totalDuration"] = clientDuration.Milliseconds()
+		clientData["totalDuration"] = clientDuration.Microseconds()
 		clientData["jobs"] = jobList
 		clients[fmt.Sprintf("%d", clientID)] = clientData
 	}
