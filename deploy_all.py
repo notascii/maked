@@ -49,15 +49,11 @@ if __name__ == "__main__":
         sys.exit(1)
     login = input("Enter login: ")
     password = getpass.getpass()
-    site = os.getenv("GRID5000_SITE", "rennes")
+    site = os.getenv("GRID5000_SITE", "grenoble")
     script_path = "./maked/run_maked.sh"
-    script_init_path = "./maked/run_make.sh"    
     directory_list = ["premier_tiny", "matrix", "premier"]
     for directory in directory_list:
         print(f"#################### {directory} #########################")
-        print(f"Deployment of make")
-        g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(1, script_init_path, directory, f"make_{directory}")
-        print(f"Deployment with clients")
+        print(f"Deployment of maked")
         g5k = Grid5000API(login, password, site)
         job_id = g5k.submit_deployment_job(node_count, script_path, directory, f"maked_{directory}")
