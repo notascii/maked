@@ -10,7 +10,7 @@ def read_data(filename,metric=""):
             if len(parts) == 2:
                 x.append(float(parts[0].strip()) / pow(2,20)) # Turn message size to MB
                 if metric == "latency":
-                    y.append(float(parts[1].strip()) * 1000) # Turn latency to micro seconds
+                    y.append(float(parts[1].strip())) # keep millieseconds
                 else:
                     y.append(float(parts[1].strip())) # Keep throughput MB/s
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         message_size, latency,
         title="Latency vs Message Size",
         xlabel="Message size (MB)",
-        ylabel="Latency (us)",
+        ylabel="Latency (ms)",
         output_file="./perf/perf_benchmarks/graphs/"+str(datetime.datetime.now())+"_latency%msg_size.png"
     )
 
