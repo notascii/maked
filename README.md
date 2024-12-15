@@ -143,4 +143,22 @@ Gob est spécifiquement conçu pour Go, garantissant une parfaite compatibilité
 </p>
 
 
-## Partie 4: Resultat final, avec et sans NFS
+## Partie 4: Résultats final, avec et sans NFS
+
+La première approche de notre projet consiste à utiliser kdeploy dans l’environnement Grid5000 sans dépendre d’un système de fichiers partagé tel que NFS. Cette stratégie a été choisie principalement pour des raisons organisationnelles, notamment afin de mieux isoler les fichiers de sortie générés sur chaque nœud.
+
+Cependant, en consultant la documentation, nous avons découvert qu’il est également possible d’utiliser NFS tout en conservant des répertoires locaux propres à chaque nœud, notamment en exploitant les répertoires temporaires comme /tmp.
+
+Ainsi, nous avons identifié et testé deux approches distinctes :
+
+    Sans NFS : où les fichiers sont gérés indépendamment sur chaque nœud.
+    Avec NFS : tout en utilisant des répertoires locaux spécifiques à chaque nœud pour isoler les données.
+
+Ces deux configurations seront comparées en termes de performances et d’efficacité organisationnelle.
+
+### Résultats sans NFS
+
+![image](https://github.com/user-attachments/assets/86c029c3-edea-4837-8623-325e6aaaa621)
+
+Ratio entre le Make distribué et notre Make classique en fonction de la taille des nœuds sur le premier Makefile.
+
