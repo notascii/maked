@@ -8,11 +8,11 @@ def read_data(filename,metric=""):
         for line in file:
             parts = line.split(":")
             if len(parts) == 2:
-                x.append(float(parts[0].strip()) / pow(2,20))
+                x.append(float(parts[0].strip()) / pow(2,20)) # Turn message size to MB
                 if metric == "latency":
-                    y.append(float(parts[1].strip()) / 1000) # Turn latency to micro seconds
+                    y.append(float(parts[1].strip())) # keep millieseconds
                 else:
-                    y.append(float(parts[1].strip()) / pow(2,10))
+                    y.append(float(parts[1].strip())) # Keep throughput MB/s
 
     sorted_x,sorted_y=zip(*sorted(zip(x,y)))
     return list(sorted_x),list(sorted_y)
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         message_size, latency,
         title="Latency vs Message Size",
         xlabel="Message size (MB)",
-        ylabel="Latency (us)",
+        ylabel="Latency (ms)",
         output_file="./perf/perf_benchmarks/graphs/"+str(datetime.datetime.now())+"_latency%msg_size.png"
     )
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
         message_size, throughput,
         title="Throughput vs Message Size",
         xlabel="Message size (MB)",
-        ylabel="Throughput (GB/s)",
+        ylabel="Throughput (MB/s)",
         output_file="./perf/perf_benchmarks/graphs/"+str(datetime.datetime.now())+"_throughput%msg_size.png"
     )

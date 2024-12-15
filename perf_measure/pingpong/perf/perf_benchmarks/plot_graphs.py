@@ -9,7 +9,7 @@ def read_data(filename,metric=""):
             parts = line.split(":")
             if len(parts) == 2:
                 x.append(float(parts[0].strip()) / pow(2,20) ) # convert to MB
-                y.append(float(parts[1].strip())) # keep milliseconds
+                y.append(float(parts[1].strip()))
     return x, y
 
 # Function to plot data

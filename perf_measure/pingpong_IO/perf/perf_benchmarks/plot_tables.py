@@ -11,7 +11,7 @@ def parse_latency_file(latency_file):
             parts = line.split(":")
             if len(parts) == 2:
                 message_size = int(parts[0].strip())
-                latency = float(parts[1].strip()) * 1e3  # Convert seconds to microseconds
+                latency = float(parts[1].strip()) * 1e3  # Convert milliseconds to microseconds
                 if message_size < min_message_size:
                     min_latency = latency
                     min_message_size = message_size

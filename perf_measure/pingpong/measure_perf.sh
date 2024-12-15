@@ -9,7 +9,7 @@ main() {
     HOST1=${NODE_LIST[0]}
     HOST2=${NODE_LIST[1]}
     ssh $HOST1 "cd ~/pingpong && ./run_server.sh &"
-    ssh $HOST2  "cd ~/pingpong && ./run_client.sh $HOST1 15 &"
+    ssh $HOST2  "cd ~/pingpong && ./run_client.sh $HOST1 25 &"
 
     scp $HOST2:~/pingpong/perf/logs/*.log ~/perf/local_perf/
     scp $HOST2:~/pingpong/perf/perf_benchmarks/graphs/*.png ~/perf/perf_plots/
