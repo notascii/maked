@@ -25,8 +25,6 @@ func main() {
 	// First we execute the classic makefile
 	makeDuration := launchClassicMake(makefileDir)
 
-	// We clear ./server_storage
-	clearDirectory(storageAbs)
 
 	// Parse the makefile
 	var g *Graph = GraphParser(makefilePath)

@@ -225,6 +225,28 @@ func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
 		timeStart = time.Now()
 	}
 
+	files, err := os.ReadDir(p.Directory)
+	if err != nil {
+		log.Println("Impossible to read the directory: ", err)
+		return nil
+	}
+
+	for _, file := range files {
+		filePath := filepath.Join(p.Directory, file.Name())
+		fileData, err := os.ReadFile(filePath)
+		if err != nil {
+			log.Println("Failed to read file: ", file.Name(), "Error: ", err)
+			continue
+		}
+
+		// Save file in the target directory
+		targetFilePath := filepath.Join(storageAbs, file.Name())
+		err = os.WriteFile(targetFilePath, fileData, 0644)
+		if err != nil {
+			log.Println("Failed to save file to target directory: ", targetFilePath, "Error: ", err)
+			continue
+		}
+	}
 	// Reply with an acknowledgment byte
 	if args.ClientId == -1 {
 		reply.ClientId = currentClientId
@@ -234,3 +256,4 @@ func (p *MakeService) Initialization(args *PingDef, reply *FileList) error {
 	}
 	return nil
 }
+
