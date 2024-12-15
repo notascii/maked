@@ -163,7 +163,7 @@ func send_update(filename string, codeValue JobReturn, address string) {
 }
 
 func main() {
-	var storage string = "~/maked/client/client_storage/"
+	var storage string = "../commun_storage/"
 	args := os.Args[1:]
 	if len(args) != 1 {
 		log.Fatalf("Excepted 1 argument")

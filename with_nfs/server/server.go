@@ -10,7 +10,7 @@ import (
 )
 
 
-var storageAbs string = "~/maked/with_nfs/server/server_storage/"
+var storageAbs string = "../commun_storage"
 var currentClientId int = 1
 var firstPing bool = true
 var timeStart time.Time
