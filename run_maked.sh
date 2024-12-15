@@ -1,7 +1,9 @@
 #!/bin/bash
-# oarsub -I -l host=10,walltime=1:45 -t deploy
 
-kadeploy3 -e ubuntu2204-nfs
+if [ -z "$1" ]; then
+  echo "Usage: $0 <MAKEFILE_DIRECTORY>"
+  exit 1
+fi
 
 # Check if the OAR_NODEFILE environment variable is set
 if [ -z "$OAR_NODEFILE" ]; then
@@ -16,38 +18,82 @@ NODES=($(sort -u "$OAR_NODEFILE"))
 LOCAL_DIRECTORY="./maked/"
 
 # Remote destination directory
-REMOTE_DIRECTORY="~/maked/"
+REMOTE_DIRECTORY="/tmp/maked/"
 
-# Copy the directory and execute commands on each node
+# Remote work file
+REMOTE_DIRECTORY_WORK_NO_NFS="/tmp/maked/without_nfs/" 
+
+# Makefile directory
+MAKEFILE_DIRECTORY="$1"
+
+# Dynamically define the number of nodes to test on for each run (2 to total number of nodes)
+NODE_COUNTS=($(seq 2 ${#NODES[@]}))
+
+# Before running each test, ensure that all nodes have the necessary files
+echo "Copying directory to all nodes..."
 for node in "${NODES[@]}"; do
-  echo "Processing node: $node"
-
-  # Copy the directory to the node using rsync and exclude the .git directory
-  rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "root@$node:$REMOTE_DIRECTORY"
-
-  # Install Go on the node
-  ssh root@$node "snap install go --classic"
-
-  echo "Node $node setup complete"
+  echo "Copying to $node"
+  rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$node:$REMOTE_DIRECTORY"
 done
-
 echo "All nodes are set up"
 
-# Start server on the first node and clients on the remaining nodes
-for i in "${!NODES[@]}"; do
-  node="${NODES[$i]}"
-  if [ "$i" -eq 0 ]; then
-    # First node: start the server
-    echo "Starting server on $node"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}server && mkdir -p server_storage && nohup go run . > server.log 2>&1 &" &
-    echo "Server started on $node"
+# Iterate over each node count you want to test
+for COUNT in "${NODE_COUNTS[@]}"; do
+  echo "==== Running test with $COUNT nodes ===="
+  
+  # Select the first $COUNT nodes from NODES
+  SELECTED_NODES=("${NODES[@]:0:$COUNT}")
+
+  # The first node is the server
+  SERVER_NODE="${SELECTED_NODES[0]}"
+
+  # Adjust the number of client nodes (COUNT - 1 because the first is the server)
+  CLIENT_NODE_COUNT=$((COUNT - 1))
+
+  # If we have more than 1 node, the rest are clients
+  if [ $COUNT -gt 1 ]; then
+    CLIENT_NODES=("${SELECTED_NODES[@]:1}")
   else
-    # Other nodes: start the client
-    echo "Trying to connect client on $node to server ${NODES[0]}:8090"
-    ssh root@$node "cd ${REMOTE_DIRECTORY}client && mkdir -p client_storage && nohup go run client.go ${NODES[0]}:8090 > client.log 2>&1&" &
-    echo "Client started on $node"
+    CLIENT_NODES=()  # If we have only one node, no clients
   fi
+
+  # Clean the storage directories on all selected nodes
+  echo "Cleaning storage directories on all selected nodes..."
+  for node in "${SELECTED_NODES[@]}"; do
+    taktuk -s -f <(printf "%s\n" "$node") broadcast exec [ "rm -rf ${REMOTE_DIRECTORY_WORK_NO_NFS}client/client_storage/* ${REMOTE_DIRECTORY_WORK_NO_NFS}server/server_storage/*" ]
+  done
+
+  echo "Storage directories cleaned."
+
+  # Start server on the first node
+  echo "Starting server on $SERVER_NODE"
+  taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/without_nfs/server/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
+  echo "Server started on $SERVER_NODE"
+  
+  # Allow some time for the server to initialize
+  sleep 5
+  
+  # Start clients on the remaining nodes
+  echo "Starting $CLIENT_NODE_COUNT clients"
+
+  # Name the output file based on the Makefile directory and the number of client nodes
+  OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${CLIENT_NODE_COUNT}_clients.txt"
+
+  rm -f "${OUTPUT_FILE}"
+
+  if [ $CLIENT_NODE_COUNT -gt 0 ]; then
+    # Run client processes
+    { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${REMOTE_DIRECTORY_WORK_NO_NFS}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+    echo "Clients finished for $CLIENT_NODE_COUNT clients"
+  else
+    echo "No clients to run for single-node test."
+  fi
+
+  # Ensure all background processes complete
+  wait
+
 done
 
-# Wait for all background SSH processes to complete
-wait
+# After all tests are done, we run the Python script once at the end
+cd ./maked
+python graph_generator.py
