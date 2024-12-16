@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"net/rpc"
@@ -108,8 +107,7 @@ func ask_init(address string) {
 		if err == nil {
 			break // Exit the loop if connection is successful
 		}
-		fmt.Printf("Failed to connect to server at %s. Retrying...\n", address)
-		time.Sleep(1 * time.Millisecond) // Wait before retrying
+		time.Sleep(100 * time.Millisecond) // Wait before retrying
 		cpt++
 	}
 	defer client.Close()
