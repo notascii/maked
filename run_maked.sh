@@ -13,12 +13,6 @@ fi
 
 echo "" >~/.ssh/known_hosts
 
-# Delete files in specified directories
-echo "Cleaning up specified directories..."
-rm -rf ./maked/without_nfs/server/json_storage/* ./maked/without_nfs/server/*.log
-rm -rf ./maked/with_nfs/server/json_storage/* ./maked/with_nfs/server/*.log
-rm -rf ./make/with_nfs/commun_storage/*
-echo "Directories cleaned."
 
 # Read the list of unique nodes from OAR_NODEFILE
 NODES=($(sort -u "$OAR_NODEFILE"))
@@ -27,6 +21,14 @@ NODES=($(sort -u "$OAR_NODEFILE"))
 LOCAL_DIRECTORY="./maked/"
 REMOTE_DIRECTORY="/tmp/maked/" # Used for the without_nfs scenario
 MAKEFILE_DIRECTORY="$1"
+
+# Delete files in specified directories
+echo "Cleaning up specified directories..."
+rm -rf ./maked/without_nfs/server/json_storage/$MAKEFILE_DIRECTORY/* ./maked/without_nfs/server/*.log
+rm -rf ./maked/with_nfs/server/json_storage/$MAKEFILE_DIRECTORY/* ./maked/with_nfs/server/*.log
+rm -rf ./make/with_nfs/commun_storage/*
+echo "Directories cleaned."
+
 
 # Dynamically define the number of nodes to test on for each run (2 to total number of nodes)
 NODE_COUNTS=($(seq 2 ${#NODES[@]}))
