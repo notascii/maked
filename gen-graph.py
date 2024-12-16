@@ -115,7 +115,8 @@ if __name__ == "__main__":
             )
         )
     )
-    plt.savefig(f"{data_path}/speed-relative.png")
+    plt.savefig(f"without_nfs/server/json_storage/{name}/speed-relative.png")
+    plt.savefig(f"with_nfs/server/json_storage/{name}/speed-relative.png")
 
     # print(sns.load_dataset("tips"))
     # dataset = pd.DataFrame(
