@@ -107,7 +107,7 @@ func ask_init(address string) {
 		if err == nil {
 			break // Exit the loop if connection is successful
 		}
-		time.Sleep(100 * time.Millisecond) // Wait before retrying
+		time.Sleep(1 * time.Millisecond) // Wait before retrying
 		cpt++
 	}
 	defer client.Close()
