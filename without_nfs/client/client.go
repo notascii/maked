@@ -234,12 +234,13 @@ forLoop:
 					send_file("", "", JobReturn{CodeValue: 3, TargetName: o.Name}, args[0])
 					break
 				}
+			}
 
-				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
-				log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
-				for _, fileName := range filesCreated {
-					send_file(storage, fileName, jobReturn, args[0])
-				}
+			jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
+			log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
+			for _, fileName := range filesCreated {
+				send_file(storage, fileName, jobReturn, args[0])
+
 			}
 		}
 	}
