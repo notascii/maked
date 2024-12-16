@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     data_path = f"without_nfs/server/json_storage/{name}"
     with contextlib.suppress(FileExistsError):
-        path = Path(data_path).glob("**/*")
+        path = Path(data_path).glob("**/*.json")
         files = [x for x in path if x.is_file()]
     without_nfs = []
     for file in files:
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     data_path = f"with_nfs/server/json_storage/{name}"
     with contextlib.suppress(FileExistsError):
-        path = Path(data_path).glob("**/*")
+        path = Path(data_path).glob("**/*.json")
         files = [x for x in path if x.is_file()]
     with_nfs = []
     for file in files:
