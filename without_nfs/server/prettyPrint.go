@@ -27,6 +27,7 @@ func printVertices(g Graph) {
 		printVertex(value)
 	}
 }
+
 func writeResults(
 	makeDuration time.Duration,
 	clientJobs map[int][]Job,
@@ -42,20 +43,23 @@ func writeResults(
 			fmt.Printf("Error fetching home directory: %v\n", err)
 			return
 		}
-		// Replace '~' with the home directory and append the fixed path
-		// This ensures a path like "~" or "~/some/path" is expanded correctly.
+		// Remove the '~' and join with homeDir
 		relPath := strings.TrimPrefix(nfsDirectory, "~")
-		nfsDirectory = filepath.Join(homeDir, relPath, "server", "json_storage")
+		nfsDirectory = filepath.Join(homeDir, relPath)
 	}
 
-	// Create the base directory if it doesn't exist
+	// Always append "server/json_storage" to ensure a consistent directory structure
+	nfsDirectory = filepath.Join(nfsDirectory, "server", "json_storage")
+
+	// Print out the directory we are about to create
+	fmt.Printf("Creating base directory: %s\n", nfsDirectory)
 	if err := os.MkdirAll(nfsDirectory, os.ModePerm); err != nil {
 		fmt.Printf("Error creating directory %s: %v\n", nfsDirectory, err)
 		return
 	}
 
-	// Create a directory named after makefileName inside nfsDirectory
 	makefileDir := filepath.Join(nfsDirectory, makefileName)
+	fmt.Printf("Creating makefile directory: %s\n", makefileDir)
 	if err := os.MkdirAll(makefileDir, os.ModePerm); err != nil {
 		fmt.Printf("Error creating directory %s: %v\n", makefileDir, err)
 		return
@@ -63,8 +67,8 @@ func writeResults(
 
 	// Define the file path as numberOfNodes.json inside the makefileDir
 	filePath := filepath.Join(makefileDir, numberOfNodes+".json")
+	fmt.Printf("Creating file: %s\n", filePath)
 
-	// Open the file for writing
 	file, err := os.Create(filePath)
 	if err != nil {
 		fmt.Printf("Error creating file %s: %v\n", filePath, err)
@@ -102,9 +106,8 @@ func writeResults(
 		clients[fmt.Sprintf("%d", clientID)] = clientData
 	}
 
-	// Write the JSON data to the file
 	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", " ") // Pretty print with indentation
+	encoder.SetIndent("", " ")
 	if err := encoder.Encode(output); err != nil {
 		fmt.Printf("Error encoding JSON to file %s: %v\n", filePath, err)
 		return
