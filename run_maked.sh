@@ -110,3 +110,4 @@ run_tests_for_directory "with_nfs"
 # After all tests are done, run the Python script once at the end
 cd ./maked
 python graph_generator.py
+python gen-graph.py -n $MAKEFILE_DIRECTORY

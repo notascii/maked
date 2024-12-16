@@ -80,33 +80,20 @@ if __name__ == "__main__":
             )
         )
     )
-    plt.savefig(f"{data_path}/speed-compare.png")
+    plt.savefig(f"without_nfs/server/json_storage/{name}/speed-compare.png")
+    plt.savefig(f"with_nfs/server/json_storage/{name}/speed-compare.png")
     plt.close()
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
 
     ax.plot(
-        list(
-            set(
-                [
-                    *[int(elem[0]) for elem in with_nfs],
-                    *[int(elem[0]) for elem in without_nfs],
-                ]
-            )
-        ),
+        [int(elem[0]) for elem in with_nfs],
         [elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100 for elem in with_nfs],
         color="tab:blue",
         label="Maked NFS",
     )
     ax.plot(
-        list(
-            set(
-                [
-                    *[int(elem[0]) for elem in with_nfs],
-                    *[int(elem[0]) for elem in without_nfs],
-                ]
-            )
-        ),
+        [int(elem[0]) for elem in without_nfs],
         [
             elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100
             for elem in without_nfs
