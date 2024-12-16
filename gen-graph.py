@@ -2,16 +2,12 @@ import contextlib
 import json
 import sys
 from pathlib import Path
-
 import matplotlib.pyplot as plt
-
-# import pandas as pd
-# import seaborn as sns
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         raise ValueError(
-            "Wrong use of this file. Please use `python gen-graph.py -n <name>"
+            "Wrong use of this file. Please use `python gen-graph.py -n <name>`"
         )
     name = None
     for index, arg in enumerate(sys.argv):
@@ -19,7 +15,7 @@ if __name__ == "__main__":
             name = sys.argv[index + 1]
     if name is None:
         raise ValueError(
-            "Wrong use of this file. Please use `python gen-makefile.py -n <name>"
+            "Wrong use of this file. Please use `python gen-makefile.py -n <name>`"
         )
 
     data_path = f"maked/without_nfs/server/json_storage/{name}"
@@ -42,95 +38,83 @@ if __name__ == "__main__":
             data = json.load(f)
             with_nfs.append((str(file).split("/")[-1].split(".")[0], data))
 
-    with_nfs = sorted(with_nfs, key=lambda x: x[0])
-    without_nfs = sorted(without_nfs, key=lambda x: x[0])
+    with_nfs = sorted(with_nfs, key=lambda x: int(x[0]))
+    without_nfs = sorted(without_nfs, key=lambda x: int(x[0]))
 
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
+    # Extract x-values and ensure they are sorted
+    x_values = sorted(set([int(elem[0]) for elem in with_nfs] + [int(elem[0]) for elem in without_nfs]))
+
+    # Apply a nicer style
+    plt.style.use("seaborn-darkgrid")
+
+    # First figure: Execution times
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
         [elem[1]["makeDuration"] / 1_000_000 for elem in without_nfs],
         color="tab:red",
         label="Make",
+        marker='o'
     )
     ax.plot(
         [int(elem[0]) for elem in with_nfs],
         [elem[1]["makedDuration"] / 1_000_000 for elem in with_nfs],
         color="tab:blue",
-        label="Maked NFS",
+        label="Maked (with NFS)",
+        marker='o'
     )
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
         [elem[1]["makedDuration"] / 1_000_000 for elem in without_nfs],
         color="tab:orange",
-        label="Maked without NFS",
+        label="Maked (without NFS)",
+        marker='o'
     )
-    plt.xlabel("Number of nodes")
-    plt.ylabel("Execution time (s)")
-    plt.legend(loc="upper right")
-    plt.title(f"Makefile execution times: {name}")
-    plt.xticks(
-        list(
-            set(
-                [
-                    *[int(elem[0]) for elem in with_nfs],
-                    *[int(elem[0]) for elem in without_nfs],
-                ]
-            )
-        )
-    )
+
+    ax.set_xlabel("Number of nodes", fontsize=12)
+    ax.set_ylabel("Execution time (s)", fontsize=12)
+    ax.set_title(f"Makefile Execution Times: {name}", fontsize=14)
+    ax.set_xticks(x_values)
+    ax.legend(fontsize=12)
+    ax.grid(True)
+
+    fig.tight_layout()
     plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-compare.png")
-    plt.close()
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
+    plt.close(fig)
+
+    # Second figure: Relative speed increase
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Note: Ensure division by zero does not occur. If makedDuration = 0, handle gracefully.
+    def relative_speed(data):
+        return [
+            (d["makeDuration"] / d["makedDuration"] * 100) if d["makedDuration"] != 0 else None
+            for d in data
+        ]
 
     ax.plot(
         [int(elem[0]) for elem in with_nfs],
-        [elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100 for elem in with_nfs],
+        relative_speed([elem[1] for elem in with_nfs]),
         color="tab:blue",
-        label="Maked NFS",
+        label="Maked (with NFS)",
+        marker='o'
     )
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
-        [
-            elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100
-            for elem in without_nfs
-        ],
+        relative_speed([elem[1] for elem in without_nfs]),
         color="tab:orange",
-        label="Maked without NFS",
+        label="Maked (without NFS)",
+        marker='o'
     )
-    plt.xlabel("Number of nodes")
-    plt.ylabel("Relative speed increase (%)")
-    plt.legend(loc="upper right")
-    plt.title(f"Makefile execution relative speed increase: {name}")
-    plt.xticks(
-        list(
-            set(
-                [
-                    *[int(elem[0]) for elem in with_nfs],
-                    *[int(elem[0]) for elem in without_nfs],
-                ]
-            )
-        )
-    )
-    plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-relative.png")
 
-    # print(sns.load_dataset("tips"))
-    # dataset = pd.DataFrame(
-    #     [
-    #         {
-    #             "nodes": str(key),
-    #         }
-    #         for key in list(
-    #             set(
-    #                 [
-    #                     *[int(key) for key in with_nfs],
-    #                     *[int(key) for key in without_nfs],
-    #                 ]
-    #             )
-    #         )
-    #     ]
-    # )
-    # sns.violinplot(data={
-    # })
+    ax.set_xlabel("Number of nodes", fontsize=12)
+    ax.set_ylabel("Relative speed increase (%)", fontsize=12)
+    ax.set_title(f"Makefile Execution Relative Speed Increase: {name}", fontsize=14)
+    ax.set_xticks(x_values)
+    ax.legend(fontsize=12)
+    ax.grid(True)
+
+    fig.tight_layout()
+    plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-relative.png")
+    plt.close(fig)
