@@ -54,6 +54,9 @@ if __name__ == "__main__":
 
     script_path = "./maked/run_maked.sh"
     directory_list = [
+        "premier_tiny",
+        "premier",
+        "matrix",
         "custom-c-[10,0,0]-s-0.0-z-0",
         "custom-c-[10,0,0]-s-8.0-z-0",
         "custom-c-[10,0,0]-s-0.0-z-10000",

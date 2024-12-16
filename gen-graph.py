@@ -81,7 +81,6 @@ if __name__ == "__main__":
         )
     )
     plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-compare.png")
-    plt.savefig(f"maked/with_nfs/server/json_storage/{name}/speed-compare.png")
     plt.close()
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -116,7 +115,6 @@ if __name__ == "__main__":
         )
     )
     plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-relative.png")
-    plt.savefig(f"maked/with_nfs/server/json_storage/{name}/speed-relative.png")
 
     # print(sns.load_dataset("tips"))
     # dataset = pd.DataFrame(
