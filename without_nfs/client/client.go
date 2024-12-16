@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"net/rpc"
@@ -113,14 +112,13 @@ func ask_init(storage string, address string) {
 	cpt := 0
 	for {
 		client, err = rpc.Dial("tcp", address)
-		if cpt == 31 && err != nil {
+		if cpt == 600000 && err != nil {
 			panic(err)
 		}
 		if err == nil {
 			break // Exit the loop if connection is successful
 		}
-		fmt.Printf("Failed to connect to server at %s. Retrying...\n", address)
-		time.Sleep(2 * time.Second) // Wait before retrying
+		time.Sleep(1 * time.Millisecond) // Wait before retrying
 		cpt++
 	}
 	defer client.Close()

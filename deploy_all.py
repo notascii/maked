@@ -34,11 +34,12 @@ class Grid5000API:
 
 
 if __name__ == "__main__":
-    # Ensure the script is run with the required argument
-    if len(sys.argv) != 2:
-        print("Usage: python launch.py <number_of_nodes>")
+    # Check the number of arguments
+    # Usage: python launch.py <number_of_nodes> [<site>]
+    if len(sys.argv) < 2:
+        print("Usage: python launch.py <number_of_nodes> [<site>]")
         sys.exit(1)
-
+    
     # Get the number of nodes from the argument
     try:
         node_count = int(sys.argv[1])
@@ -47,11 +48,16 @@ if __name__ == "__main__":
     except ValueError:
         print("Error: <number_of_nodes> must be a positive integer.")
         sys.exit(1)
+    
+    # If a site argument is given, use it; otherwise default to "rennes".
+    site = sys.argv[2] if len(sys.argv) > 2 else "rennes"
+    
     login = input("Enter login: ")
     password = getpass.getpass()
-    site = os.getenv("GRID5000_SITE", "rennes")
+    
     script_path = "./maked/run_maked.sh"
     directory_list = ["premier_tiny"]
+    
     for directory in directory_list:
         print(f"#################### {directory} #########################")
         print(f"Deployment of maked")
