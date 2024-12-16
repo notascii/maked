@@ -76,22 +76,7 @@ func main() {
 	go schedulerLoop(makeService, done)
 
 	// Goroutine to monitor instruction completion
-	go func() {
-		for {
-			makeService.mu.Lock()
-			if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
-				fmt.Printf("No more instructions. Shutting down the server...\n")
-				makedDuration := time.Since(timeStart)
-				writeResults(makeDuration, makeService.ClientList, makedDuration, nfsDirectory, args[0]+"_"+strconv.Itoa(currentClientId-1))
-				makeService.mu.Unlock()
-				// Signal the main loop to stop
-				close(done)
-				return
-			}
-			makeService.mu.Unlock()
-			time.Sleep(500 * time.Millisecond)
-		}
-	}()
+	go stopSignal(makeService, done, makeDuration, args[0])
 
 	// Main loop to accept connections
 	for {
@@ -138,5 +123,22 @@ func schedulerLoop(makeService *MakeService, done chan struct{}) {
 				time.Sleep(10 * time.Millisecond)
 			}
 		}
+	}
+}
+
+func stopSignal(makeService *MakeService, done chan struct{}, makeDuration time.Duration, makefileName string) {
+	for {
+		makeService.mu.Lock()
+		if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
+			fmt.Printf("No more instructions. Shutting down the server...\n")
+			makedDuration := time.Since(timeStart)
+			writeResults(makeDuration, makeService.ClientList, makedDuration, nfsDirectory, makefileName, strconv.Itoa(currentClientId-1))
+			makeService.mu.Unlock()
+			// Signal the main loop to stop
+			close(done)
+			return
+		}
+		makeService.mu.Unlock()
+		time.Sleep(500 * time.Millisecond)
 	}
 }
