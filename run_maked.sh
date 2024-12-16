@@ -13,6 +13,14 @@ fi
 
 echo "" >~/.ssh/known_hosts
 
+# Delete files in specified directories
+echo "Cleaning up specified directories..."
+rm -rf ./maked/without_nfs/server/json_storage/* ./maked/without_nfs/server/*.log
+rm -rf ./maked/with_nfs/server/json_storage/* ./maked/with_nfs/server/*.log
+rm -rf ./make/with_nfs/commun_storage/*
+echo "Directories cleaned."
+
+
 # Read the list of unique nodes from OAR_NODEFILE
 NODES=($(sort -u "$OAR_NODEFILE"))
 
@@ -75,7 +83,7 @@ run_tests_for_directory() {
 
     # Start server on the first node
     echo "Starting server on $SERVER_NODE in $LOCAL_TEST_DIRECTORY"
-    taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/${LOCAL_TEST_DIRECTORY}/server/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
+    taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > ~/maked/${LOCAL_TEST_DIRECTORY}/server/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
     echo "Server started on $SERVER_NODE"
 
     # Allow some time for the server to initialize
@@ -87,7 +95,7 @@ run_tests_for_directory() {
     rm -f "${OUTPUT_FILE}"
 
     if [ $CLIENT_NODE_COUNT -gt 0 ]; then
-      { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2>"$OUTPUT_FILE"
+      { taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; }
       echo "Clients finished for $CLIENT_NODE_COUNT clients in $LOCAL_TEST_DIRECTORY"
     else
       echo "No clients to run for single-node test in $LOCAL_TEST_DIRECTORY."
