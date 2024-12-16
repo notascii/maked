@@ -1,0 +1,95 @@
+{
+    "clients": {
+        "1": {
+            "jobs": [
+                {
+                    "duration": 100483,
+                    "name": "list1.txt"
+                },
+                {
+                    "duration": 146473,
+                    "name": "list2.txt"
+                },
+                {
+                    "duration": 180626,
+                    "name": "list3.txt"
+                },
+                {
+                    "duration": 214799,
+                    "name": "list4.txt"
+                },
+                {
+                    "duration": 239297,
+                    "name": "list5.txt"
+                },
+                {
+                    "duration": 253747,
+                    "name": "list6.txt"
+                },
+                {
+                    "duration": 259230,
+                    "name": "list7.txt"
+                },
+                {
+                    "duration": 294570,
+                    "name": "list8.txt"
+                },
+                {
+                    "duration": 294415,
+                    "name": "list9.txt"
+                },
+                {
+                    "duration": 326331,
+                    "name": "list10.txt"
+                },
+                {
+                    "duration": 319455,
+                    "name": "list11.txt"
+                },
+                {
+                    "duration": 345882,
+                    "name": "list12.txt"
+                },
+                {
+                    "duration": 349885,
+                    "name": "list13.txt"
+                },
+                {
+                    "duration": 359348,
+                    "name": "list14.txt"
+                },
+                {
+                    "duration": 385113,
+                    "name": "list15.txt"
+                },
+                {
+                    "duration": 372416,
+                    "name": "list16.txt"
+                },
+                {
+                    "duration": 400377,
+                    "name": "list17.txt"
+                },
+                {
+                    "duration": 394351,
+                    "name": "list18.txt"
+                },
+                {
+                    "duration": 409090,
+                    "name": "list19.txt"
+                },
+                {
+                    "duration": 447693,
+                    "name": "list20.txt"
+                },
+                {
+                    "duration": 114069,
+                    "name": "list.txt"
+                }
+            ],
+            "totalDuration": 6207650
+        }
+    },
+    "makeDuration": 6092548,
+    "makedDuration": 5398876
+}
