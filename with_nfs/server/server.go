@@ -231,7 +231,9 @@ func (p *MakeService) SendUpdate(args *FileStruct, reply *FileStruct) error {
 			if ins.Name == args.FileName {
 				p.InstructionsInProgress = append(p.InstructionsInProgress[:i], p.InstructionsInProgress[i+1:]...)
 				p.InstructionsToDo = append([]MakeElement{ins}, p.InstructionsToDo...)
+				log.Println("Received code error ", args.ReturnVal.CodeValue)
 				log.Printf("Instruction for %s moved back to the TODO list due to error\n", args.FileName)
+				panic(1)
 			}
 		}
 	} else { // No problem, so the task can be removed from progress list and put in Done
