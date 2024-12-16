@@ -80,7 +80,56 @@ if __name__ == "__main__":
             )
         )
     )
-    plt.savefig("tmp.png")
+    plt.savefig(f"{data_path}/speed-compare.png")
+    plt.close()
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+
+    ax.plot(
+        list(
+            set(
+                [
+                    *[int(elem[0]) for elem in with_nfs],
+                    *[int(elem[0]) for elem in without_nfs],
+                ]
+            )
+        ),
+        [elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100 for elem in with_nfs],
+        color="tab:blue",
+        label="Maked NFS",
+    )
+    ax.plot(
+        list(
+            set(
+                [
+                    *[int(elem[0]) for elem in with_nfs],
+                    *[int(elem[0]) for elem in without_nfs],
+                ]
+            )
+        ),
+        [
+            elem[1]["makeDuration"] / elem[1]["makedDuration"] * 100
+            for elem in without_nfs
+        ],
+        color="tab:orange",
+        label="Maked without NFS",
+    )
+    plt.xlabel("Number of nodes")
+    plt.ylabel("Relative speed increase (%)")
+    plt.legend(loc="upper right")
+    plt.title(f"Makefile execution relative speed increase: {name}")
+    plt.xticks(
+        list(
+            set(
+                [
+                    *[int(elem[0]) for elem in with_nfs],
+                    *[int(elem[0]) for elem in without_nfs],
+                ]
+            )
+        )
+    )
+    plt.savefig(f"{data_path}/speed-relative.png")
+
     # print(sns.load_dataset("tips"))
     # dataset = pd.DataFrame(
     #     [
