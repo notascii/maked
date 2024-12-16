@@ -24,8 +24,8 @@ MAKEFILE_DIRECTORY="$1"
 
 # Delete files in specified directories
 echo "Cleaning up specified directories..."
-rm -rf ./maked/without_nfs/server/json_storage/$MAKEFILE_DIRECTORY/* ./maked/without_nfs/server/*.log
-rm -rf ./maked/with_nfs/server/json_storage/$MAKEFILE_DIRECTORY/* ./maked/with_nfs/server/*.log
+rm -rf ./maked/without_nfs/server/json_storage/"$MAKEFILE_DIRECTORY"/* ./maked/without_nfs/server/*.log
+rm -rf ./maked/with_nfs/server/json_storage/"$MAKEFILE_DIRECTORY"/* ./maked/with_nfs/server/*.log
 rm -rf ./make/with_nfs/commun_storage/*
 echo "Directories cleaned."
 
