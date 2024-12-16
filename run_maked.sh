@@ -11,12 +11,14 @@ if [ -z "$OAR_NODEFILE" ]; then
   exit 1
 fi
 
+echo "" >~/.ssh/known_hosts
+
 # Read the list of unique nodes from OAR_NODEFILE
 NODES=($(sort -u "$OAR_NODEFILE"))
 
 # Directories and variables
 LOCAL_DIRECTORY="./maked/"
-REMOTE_DIRECTORY="/tmp/maked/"  # Used for the without_nfs scenario
+REMOTE_DIRECTORY="/tmp/maked/" # Used for the without_nfs scenario
 MAKEFILE_DIRECTORY="$1"
 
 # Dynamically define the number of nodes to test on for each run (2 to total number of nodes)
@@ -33,7 +35,7 @@ echo "All nodes are set up for the without_nfs scenario."
 
 # Function to run tests for a given scenario (without_nfs or with_nfs)
 run_tests_for_directory() {
-  LOCAL_TEST_DIRECTORY="$1"  # "without_nfs" or "with_nfs"
+  LOCAL_TEST_DIRECTORY="$1" # "without_nfs" or "with_nfs"
 
   # Set the test work directory depending on the scenario
   # without_nfs: use /tmp/maked/without_nfs on the nodes
@@ -61,7 +63,7 @@ run_tests_for_directory() {
     if [ $COUNT -gt 1 ]; then
       CLIENT_NODES=("${SELECTED_NODES[@]:1}")
     else
-      CLIENT_NODES=()  # If we have only one node, no clients
+      CLIENT_NODES=() # If we have only one node, no clients
     fi
 
     # Clean the storage directories on all selected nodes
@@ -85,7 +87,7 @@ run_tests_for_directory() {
     rm -f "${OUTPUT_FILE}"
 
     if [ $CLIENT_NODE_COUNT -gt 0 ]; then
-      { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2> "$OUTPUT_FILE"
+      { time taktuk -s -f <(printf "%s\n" "${CLIENT_NODES[@]}") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}client && mkdir -p client_storage && go run client.go ${SERVER_NODE}:8090" ]; } 2>"$OUTPUT_FILE"
       echo "Clients finished for $CLIENT_NODE_COUNT clients in $LOCAL_TEST_DIRECTORY"
     else
       echo "No clients to run for single-node test in $LOCAL_TEST_DIRECTORY."
