@@ -86,62 +86,45 @@ Gob est spécifiquement conçu pour Go, garantissant une parfaite compatibilité
 
 * Appelée par un client pour renvoyer le résultat de l'exécution d'une tâche.
 
-
 ### **Mesure de performance sur grid5000 Pingpong normal**
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/171b22dd-835f-493e-a1b1-9d94dd5bc688" width="70%" alt="Image description">
 
-  
   **Evolution de la Latence relativement à la taille du message sur Grid5000 Grenoble**
 </p>
-
-
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b86a8ee4-ad75-4507-87be-5888ecb90a7f" width="70%" alt="Image description">
 
-  
   **Evolution du débit relativement à la taille du message sur Grid5000 Grenoble**
 </p>
-
-
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e439fee1-5852-4fad-a770-2a8ffbcd1cf4" width="70%" alt="Image description">
 
-  
   **Tableau représentant la Latence pour un message de taille minimal et le débit pour un message de taille 4 GB sur grid5000**
 </p>
-
 
 ### **Mesure de performance sur grid5000 Pingpong avec I/O**
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/4b079446-2fa6-43a2-a6a4-1a947d2004b8" width="70%" alt="Image description">
 
-  
   **Evolution de la Latence relativement à la taille du fichier lit et envoyé sur Grid5000 Grenoble**
 </p>
-
-
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/4c6e887b-05e6-491a-b0cf-2506d97a9ab8" width="70%" alt="Image description">
 
-  
   **Evolution du débit relativement à la taille du fichier lit et envoyé sur Grid5000 Grenoble**
 </p>
-
-
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/880a464e-89ef-414e-8078-5ebdea80fad2" width="70%" alt="Image description">
 
-  
 **Tableau représentant la Latence pour un message de taille minimal et le débit pour un message de taille 4 GB sur grid5000**
 </p>
-
 
 ## Partie 4: Résultats final, avec et sans NFS
 
@@ -161,4 +144,3 @@ Ces deux configurations seront comparées en termes de performances et d’effic
 ![image](https://github.com/user-attachments/assets/86c029c3-edea-4837-8623-325e6aaaa621)
 
 Ratio entre le Make distribué et notre Make classique en fonction de la taille des nœuds sur le premier Makefile.
-
