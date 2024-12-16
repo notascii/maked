@@ -2,6 +2,7 @@ import contextlib
 import json
 import sys
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
@@ -42,34 +43,38 @@ if __name__ == "__main__":
     without_nfs = sorted(without_nfs, key=lambda x: int(x[0]))
 
     # Extract x-values and ensure they are sorted
-    x_values = sorted(set([int(elem[0]) for elem in with_nfs] + [int(elem[0]) for elem in without_nfs]))
+    x_values = sorted(
+        set(
+            [int(elem[0]) for elem in with_nfs] + [int(elem[0]) for elem in without_nfs]
+        )
+    )
 
     # Apply a nicer style
     plt.style.use("seaborn-darkgrid")
 
     # First figure: Execution times
     fig, ax = plt.subplots(figsize=(10, 6))
-
+    make_duration = without_nfs[0][1]["makeDuration"]
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
-        [elem[1]["makeDuration"] / 1_000_000 for elem in without_nfs],
+        [make_duration / 1_000_000 for _ in without_nfs],
         color="tab:red",
         label="Make",
-        marker='o'
+        marker="o",
     )
     ax.plot(
         [int(elem[0]) for elem in with_nfs],
         [elem[1]["makedDuration"] / 1_000_000 for elem in with_nfs],
         color="tab:blue",
         label="Maked (with NFS)",
-        marker='o'
+        marker="o",
     )
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
         [elem[1]["makedDuration"] / 1_000_000 for elem in without_nfs],
         color="tab:orange",
         label="Maked (without NFS)",
-        marker='o'
+        marker="o",
     )
 
     ax.set_xlabel("Number of nodes", fontsize=12)
@@ -89,7 +94,9 @@ if __name__ == "__main__":
     # Note: Ensure division by zero does not occur. If makedDuration = 0, handle gracefully.
     def relative_speed(data):
         return [
-            (d["makeDuration"] / d["makedDuration"] * 100) if d["makedDuration"] != 0 else None
+            (make_duration / d["makedDuration"] * 100)
+            if d["makedDuration"] != 0
+            else None
             for d in data
         ]
 
@@ -98,14 +105,14 @@ if __name__ == "__main__":
         relative_speed([elem[1] for elem in with_nfs]),
         color="tab:blue",
         label="Maked (with NFS)",
-        marker='o'
+        marker="o",
     )
     ax.plot(
         [int(elem[0]) for elem in without_nfs],
         relative_speed([elem[1] for elem in without_nfs]),
         color="tab:orange",
         label="Maked (without NFS)",
-        marker='o'
+        marker="o",
     )
 
     ax.set_xlabel("Number of nodes", fontsize=12)
