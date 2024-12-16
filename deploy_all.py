@@ -1,11 +1,8 @@
-import os
 import sys
-import time
 from getpass import getpass
 
 import requests
-import time
-import getpass
+
 
 class Grid5000API:
     def __init__(self, user, password, site):
@@ -20,7 +17,7 @@ class Grid5000API:
         job_data = {
             "resources": f"nodes={nodes}",
             "command": f"bash {script_path} {makefile_directory}",
-            "name": name
+            "name": name,
         }
         response = requests.post(jobs_url, json=job_data, auth=self.auth)
         if response.status_code == 201:
@@ -39,7 +36,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python launch.py <number_of_nodes> [<site>]")
         sys.exit(1)
-    
+
     # Get the number of nodes from the argument
     try:
         node_count = int(sys.argv[1])
@@ -48,18 +45,20 @@ if __name__ == "__main__":
     except ValueError:
         print("Error: <number_of_nodes> must be a positive integer.")
         sys.exit(1)
-    
+
     # If a site argument is given, use it; otherwise default to "rennes".
     site = sys.argv[2] if len(sys.argv) > 2 else "rennes"
-    
+
     login = input("Enter login: ")
-    password = getpass.getpass()
-    
+    password = getpass()
+
     script_path = "./maked/run_maked.sh"
-    directory_list = ["premier_tiny"]
-    
+    directory_list = ["custom-c-[10,10,10]-s-0.0-z-0"]
+
     for directory in directory_list:
         print(f"#################### {directory} #########################")
-        print(f"Deployment of maked")
+        print("Deployment of maked")
         g5k = Grid5000API(login, password, site)
-        job_id = g5k.submit_deployment_job(node_count, script_path, directory, f"maked_{directory}")
+        job_id = g5k.submit_deployment_job(
+            node_count, script_path, directory, f"maked_{directory}"
+        )
