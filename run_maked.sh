@@ -39,9 +39,9 @@ run_tests_for_directory() {
   # without_nfs: use /tmp/maked/without_nfs on the nodes
   # with_nfs: use the NFS-mounted directory directly (./maked/with_nfs)
   if [ "$LOCAL_TEST_DIRECTORY" = "without_nfs" ]; then
-    TEST_WORK_DIR="${REMOTE_DIRECTORY}without_nfs"
+    TEST_WORK_DIR="${REMOTE_DIRECTORY}without_nfs/"
   else
-    TEST_WORK_DIR="./maked/with_nfs"
+    TEST_WORK_DIR="./maked/with_nfs/"
   fi
 
   echo "=== Running tests for ${LOCAL_TEST_DIRECTORY} ==="
