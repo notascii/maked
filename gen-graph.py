@@ -4,8 +4,9 @@ import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
+
+# import pandas as pd
+# import seaborn as sns
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
