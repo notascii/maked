@@ -1,6 +1,4 @@
-import os
 import sys
-import time
 from getpass import getpass
 
 import requests
@@ -52,7 +50,7 @@ if __name__ == "__main__":
     site = sys.argv[2] if len(sys.argv) > 2 else "rennes"
 
     login = input("Enter login: ")
-    password = getpass.getpass()
+    password = getpass()
 
     script_path = "./maked/run_maked.sh"
     directory_list = ["custom-c-[10,10,10]-s-0.0-z-0"]
