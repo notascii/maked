@@ -22,7 +22,7 @@ if __name__ == "__main__":
             "Wrong use of this file. Please use `python gen-makefile.py -n <name>"
         )
 
-    data_path = f"without_nfs/server/json_storage/{name}"
+    data_path = f"maked/without_nfs/server/json_storage/{name}"
     with contextlib.suppress(FileExistsError):
         path = Path(data_path).glob("**/*.json")
         files = [x for x in path if x.is_file()]
@@ -32,7 +32,7 @@ if __name__ == "__main__":
             data = json.load(f)
             without_nfs.append((str(file).split("/")[-1].split(".")[0], data))
 
-    data_path = f"with_nfs/server/json_storage/{name}"
+    data_path = f"maked/with_nfs/server/json_storage/{name}"
     with contextlib.suppress(FileExistsError):
         path = Path(data_path).glob("**/*.json")
         files = [x for x in path if x.is_file()]
@@ -80,8 +80,8 @@ if __name__ == "__main__":
             )
         )
     )
-    plt.savefig(f"without_nfs/server/json_storage/{name}/speed-compare.png")
-    plt.savefig(f"with_nfs/server/json_storage/{name}/speed-compare.png")
+    plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-compare.png")
+    plt.savefig(f"maked/with_nfs/server/json_storage/{name}/speed-compare.png")
     plt.close()
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -115,8 +115,8 @@ if __name__ == "__main__":
             )
         )
     )
-    plt.savefig(f"without_nfs/server/json_storage/{name}/speed-relative.png")
-    plt.savefig(f"with_nfs/server/json_storage/{name}/speed-relative.png")
+    plt.savefig(f"maked/without_nfs/server/json_storage/{name}/speed-relative.png")
+    plt.savefig(f"maked/with_nfs/server/json_storage/{name}/speed-relative.png")
 
     # print(sns.load_dataset("tips"))
     # dataset = pd.DataFrame(
