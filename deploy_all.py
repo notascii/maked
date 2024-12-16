@@ -49,9 +49,9 @@ if __name__ == "__main__":
         sys.exit(1)
     login = input("Enter login: ")
     password = getpass.getpass()
-    site = os.getenv("GRID5000_SITE", "grenoble")
+    site = os.getenv("GRID5000_SITE", "rennes")
     script_path = "./maked/run_maked.sh"
-    directory_list = ["premier_tiny", "matrix", "premier"]
+    directory_list = ["premier_tiny"]
     for directory in directory_list:
         print(f"#################### {directory} #########################")
         print(f"Deployment of maked")

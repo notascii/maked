@@ -14,40 +14,41 @@ fi
 # Read the list of unique nodes from OAR_NODEFILE
 NODES=($(sort -u "$OAR_NODEFILE"))
 
-# Local directory to copy
+# Directories and variables
 LOCAL_DIRECTORY="./maked/"
-
-# Remote destination directory
-REMOTE_DIRECTORY="/tmp/maked/"
-
-# Directories for testing:
-REMOTE_DIRECTORY_WORK_NO_NFS="/tmp/maked/without_nfs/"
-REMOTE_DIRECTORY_WORK_WITH_NFS="/tmp/maked/with_nfs/"
-
-# Makefile directory
+REMOTE_DIRECTORY="/tmp/maked/"  # Used for the without_nfs scenario
 MAKEFILE_DIRECTORY="$1"
 
 # Dynamically define the number of nodes to test on for each run (2 to total number of nodes)
 NODE_COUNTS=($(seq 2 ${#NODES[@]}))
 
-# Sync the local directory to all nodes
-echo "Copying directory to all nodes..."
+# Sync the local directory to all nodes for the without_nfs scenario
+# (This ensures we have a copy of maked in /tmp for the scenario without_nfs)
+echo "Copying directory to all nodes for without_nfs scenario..."
 for node in "${NODES[@]}"; do
   echo "Copying to $node"
   rsync -av --exclude='.git' "$LOCAL_DIRECTORY" "$node:$REMOTE_DIRECTORY"
 done
-echo "All nodes are set up"
+echo "All nodes are set up for the without_nfs scenario."
 
 # Function to run tests for a given scenario (without_nfs or with_nfs)
 run_tests_for_directory() {
-  LOCAL_TEST_DIRECTORY="$1"  # e.g., "without_nfs" or "with_nfs"
-  TEST_WORK_DIR="${REMOTE_DIRECTORY}/${LOCAL_TEST_DIRECTORY}"
+  LOCAL_TEST_DIRECTORY="$1"  # "without_nfs" or "with_nfs"
+
+  # Set the test work directory depending on the scenario
+  # without_nfs: use /tmp/maked/without_nfs on the nodes
+  # with_nfs: use the NFS-mounted directory directly (./maked/with_nfs)
+  if [ "$LOCAL_TEST_DIRECTORY" = "without_nfs" ]; then
+    TEST_WORK_DIR="${REMOTE_DIRECTORY}without_nfs"
+  else
+    TEST_WORK_DIR="./maked/with_nfs"
+  fi
 
   echo "=== Running tests for ${LOCAL_TEST_DIRECTORY} ==="
-  
+
   for COUNT in "${NODE_COUNTS[@]}"; do
     echo "==== Running test with $COUNT nodes for ${LOCAL_TEST_DIRECTORY} ===="
-  
+
     # Select the first $COUNT nodes from NODES
     SELECTED_NODES=("${NODES[@]:0:$COUNT}")
 
@@ -74,10 +75,10 @@ run_tests_for_directory() {
     echo "Starting server on $SERVER_NODE in $LOCAL_TEST_DIRECTORY"
     taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} >> ~/maked/${LOCAL_TEST_DIRECTORY}/server/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
     echo "Server started on $SERVER_NODE"
-  
+
     # Allow some time for the server to initialize
     sleep 5
-  
+
     # Start clients on the remaining nodes
     echo "Starting $CLIENT_NODE_COUNT clients"
     OUTPUT_FILE="${MAKEFILE_DIRECTORY}_${CLIENT_NODE_COUNT}_clients_${LOCAL_TEST_DIRECTORY}.txt"
@@ -101,7 +102,7 @@ run_tests_for_directory() {
 # Run tests for without_nfs
 run_tests_for_directory "without_nfs"
 
-# Run tests for with_nfs
+# Run tests for with_nfs (no copying to /tmp needed)
 run_tests_for_directory "with_nfs"
 
 # After all tests are done, run the Python script once at the end
