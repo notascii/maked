@@ -25,7 +25,7 @@ if __name__ == "__main__":
         raise ValueError(
             "Wrong use of this file. Please use `python gen-makefile.py -n <name> -b <nb_branches> -s <sleep_time> -z <file_size>"
         )
-    makefile_path = f"makefiles/{name}-c-{commands}-s-{sleep}-z-{size}"
+    makefile_path = f"makefiles/{name}-c-{commands}-s-{sleep}-z-{size}".replace(" ", "")
     with contextlib.suppress(FileExistsError):
         Path.mkdir(makefile_path)
 
