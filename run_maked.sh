@@ -20,7 +20,6 @@ rm -rf ./maked/with_nfs/server/json_storage/* ./maked/with_nfs/server/*.log
 rm -rf ./make/with_nfs/commun_storage/*
 echo "Directories cleaned."
 
-
 # Read the list of unique nodes from OAR_NODEFILE
 NODES=($(sort -u "$OAR_NODEFILE"))
 
@@ -103,6 +102,7 @@ run_tests_for_directory() {
 
     # Ensure all background processes complete
     wait
+    python gen-graph.py -n $MAKEFILE_DIRECTORY
 
   done
 
@@ -118,4 +118,3 @@ run_tests_for_directory "with_nfs"
 # After all tests are done, run the Python script once at the end
 cd ./maked
 python graph_generator.py
-python gen-graph.py -n $MAKEFILE_DIRECTORY
