@@ -102,7 +102,7 @@ run_tests_for_directory() {
 
     # Ensure all background processes complete
     wait
-    python gen-graph.py -n $MAKEFILE_DIRECTORY
+    python maked/gen-graph.py -n $MAKEFILE_DIRECTORY
 
   done
 
