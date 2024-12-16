@@ -23,7 +23,14 @@ func main() {
 	makefileDir := "../../makefiles/" + args[0] + "/"
 
 	// First we execute the classic makefile
-	makeDuration := launchClassicMake(makefileDir)
+	var makeDuration time.Duration
+	var makeLaunched bool
+	if args[1] == "1" {
+		makeDuration = launchClassicMake(makefileDir)
+		makeLaunched = true
+	} else {
+		makeLaunched = false
+	}
 
 	// Parse the makefile
 	var g *Graph = GraphParser(makefilePath)
@@ -76,7 +83,7 @@ func main() {
 	go schedulerLoop(makeService, done)
 
 	// Goroutine to monitor instruction completion
-	go stopSignal(makeService, done, makeDuration, args[0])
+	go stopSignal(makeService, done, makeDuration, args[0], makeLaunched)
 
 	// Main loop to accept connections
 	for {
@@ -126,16 +133,20 @@ func schedulerLoop(makeService *MakeService, done chan struct{}) {
 	}
 }
 
-func stopSignal(makeService *MakeService, done chan struct{}, makeDuration time.Duration, makefileName string) {
+func stopSignal(makeService *MakeService, done chan struct{}, makeDuration time.Duration, makefileName string, makeLaunched bool) {
 	for {
 		makeService.mu.Lock()
 		if len(makeService.InstructionsToDo) == 0 && len(makeService.InstructionsInProgress) == 0 {
 			fmt.Printf("No more instructions. Shutting down the server...\n")
 			makedDuration := time.Since(timeStart)
-			writeResults(makeDuration, makeService.ClientList, makedDuration, nfsDirectory, makefileName, strconv.Itoa(currentClientId-1))
+			writeResults(makeDuration, makeService.ClientList, makedDuration, nfsDirectory, makefileName, strconv.Itoa(currentClientId-1), makeLaunched)
+
 			makeService.mu.Unlock()
 			// Signal the main loop to stop
 			close(done)
+
+			// Let some time so the client stop
+			time.Sleep(4 * time.Second)
 			return
 		}
 		makeService.mu.Unlock()

@@ -35,6 +35,7 @@ func writeResults(
 	nfsDirectory string,
 	makefileName string,
 	numberOfNodes string,
+	makeLaunched bool,
 ) {
 	// Expand the home directory if present
 	if strings.HasPrefix(nfsDirectory, "~") {
@@ -78,7 +79,9 @@ func writeResults(
 
 	// Prepare the data structure for JSON encoding
 	output := make(map[string]interface{})
-	output["makeDuration"] = makeDuration.Microseconds()
+	if makeLaunched {
+		output["makeDuration"] = makeDuration.Microseconds()
+	}
 	output["makedDuration"] = makedDuration.Microseconds()
 	output["clients"] = map[string]interface{}{}
 
