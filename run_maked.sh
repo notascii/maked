@@ -84,7 +84,7 @@ run_tests_for_directory() {
 
     # Start server on the first node
     echo "Starting server on $SERVER_NODE in $LOCAL_TEST_DIRECTORY"
-    taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}server && mkdir -p server_storage && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > ~/maked/${LOCAL_TEST_DIRECTORY}/server/json_storage/${MAKEFILE_DIRECTORY}/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
+    taktuk -s -f <(printf "%s\n" "$SERVER_NODE") broadcast exec [ "export GOROOT=\$HOME/golang/go && export PATH=\$GOROOT/bin:\$PATH && cd ${TEST_WORK_DIR}server && mkdir -p server_storage ~/maked/${LOCAL_TEST_DIRECTORY}/server/json_storage/${MAKEFILE_DIRECTORY} && chmod +x main && nohup go run . ${MAKEFILE_DIRECTORY} > ~/maked/${LOCAL_TEST_DIRECTORY}/server/json_storage/${MAKEFILE_DIRECTORY}/server_${CLIENT_NODE_COUNT}_clients.log 2>&1 &" ]
     echo "Server started on $SERVER_NODE"
 
     # Allow some time for the server to initialize
