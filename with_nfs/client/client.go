@@ -204,21 +204,21 @@ forLoop:
 				}
 			}
 
-			for _, file := range filesCreated {
-				info, err := os.Stat(storage + file)
-				if err != nil {
-					panic("Can't access to the file")
-				}
-				if info.Size() == 0 {
-					send_update("", JobReturn{CodeValue: 3, TargetName: o.Name}, args[0])
-					break
-				}
+			// for _, file := range filesCreated {
+			// 	info, err := os.Stat(storage + file)
+			// 	if err != nil {
+			// 		panic("Can't access to the file")
+			// 	}
+			// 	if info.Size() == 0 {
+			// 		send_update("", JobReturn{CodeValue: 3, TargetName: o.Name}, args[0])
+			// 		break
+			// 	}
+			// }
 
-				jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
-				log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
-				for _, fileName := range filesCreated {
-					send_update(fileName, jobReturn, args[0])
-				}
+			jobReturn := JobReturn{CodeValue: codeError, TargetName: o.Name}
+			log.Printf("Command %s done, execution time: %.2f seconds", o.Name, elapsedTime.Seconds())
+			for _, fileName := range filesCreated {
+				send_update(fileName, jobReturn, args[0])
 			}
 		}
 	}
