@@ -15,8 +15,9 @@ var nfsDirectory string = "~/maked/with_nfs"
 
 func main() {
 	args := os.Args[1:]
-	if len(args) != 1 {
-		log.Fatalf("Expected 1 argument (name of the repo containing the makefile)")
+	if len(args) != 2 {
+		log.Printf("Error exepted two arguments")
+		log.Fatalf("Usage: go run . <MakefileDIrectory> <O or 1>")
 	}
 
 	makefilePath := "../../makefiles/" + args[0] + "/Makefile"
