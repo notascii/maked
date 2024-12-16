@@ -59,7 +59,7 @@ command-{n0}-{n1}-{n2}:
 
     makefile += f"""
 clean: 
-\t{" && ".join([f"rm {c}.txt" for c in leaf_commands])}
+\t{" && ".join([f"rm {c}" for c in leaf_commands])}
 """
 
     with open(Path(makefile_path) / "Makefile", "w") as f:
