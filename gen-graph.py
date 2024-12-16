@@ -49,8 +49,8 @@ if __name__ == "__main__":
     ax = fig.add_subplot(1, 1, 1)
 
     ax.plot(
-        [int(key) for key in with_nfs],
-        [value["makeDuration"] / 1_000_000 for value in with_nfs.values()],
+        [int(elem[0]) for elem in with_nfs],
+        [elem[1]["makeDuration"] / 1_000_000 for elem in with_nfs],
         color="tab:red",
         label="Make",
     )
