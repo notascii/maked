@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -23,30 +25,28 @@ if __name__ == "__main__":
     with contextlib.suppress(FileExistsError):
         path = Path(data_path).glob("**/*")
         files = [x for x in path if x.is_file()]
-    without_nfs = {}
+    without_nfs = []
     for file in files:
         with open(file) as f:
             data = json.load(f)
-            without_nfs[str(file).split("/")[-1].split(".")[0]] = data
+            without_nfs.append((str(file).split("/")[-1].split(".")[0], data))
 
     data_path = f"with_nfs/server/json_storage/{name}"
     with contextlib.suppress(FileExistsError):
         path = Path(data_path).glob("**/*")
         files = [x for x in path if x.is_file()]
-    with_nfs = {}
+    with_nfs = []
     for file in files:
         with open(file) as f:
             data = json.load(f)
-            with_nfs[str(file).split("/")[-1].split(".")[0]] = data
+            with_nfs.append((str(file).split("/")[-1].split(".")[0], data))
+
+    with_nfs = sorted(with_nfs, key=lambda x: x[0])
+    without_nfs = sorted(without_nfs, key=lambda x: x[0])
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
-    ax.plot(
-        [int(key) for key in with_nfs],
-        [value["makedDuration"] / 1_000_000 for value in with_nfs.values()],
-        color="tab:blue",
-        label="Maked NFS",
-    )
+
     ax.plot(
         [int(key) for key in with_nfs],
         [value["makeDuration"] / 1_000_000 for value in with_nfs.values()],
@@ -54,8 +54,14 @@ if __name__ == "__main__":
         label="Make",
     )
     ax.plot(
-        [int(key) for key in without_nfs],
-        [value["makedDuration"] / 1_000_000 for value in without_nfs.values()],
+        [int(elem[0]) for elem in with_nfs],
+        [elem[1]["makedDuration"] / 1_000_000 for elem in with_nfs],
+        color="tab:blue",
+        label="Maked NFS",
+    )
+    ax.plot(
+        [int(elem[0]) for elem in without_nfs],
+        [elem[1]["makedDuration"] / 1_000_000 for elem in without_nfs],
         color="tab:orange",
         label="Maked without NFS",
     )
@@ -63,4 +69,32 @@ if __name__ == "__main__":
     plt.ylabel("Execution time (s)")
     plt.legend(loc="upper right")
     plt.title(f"Makefile execution times: {name}")
+    plt.xticks(
+        list(
+            set(
+                [
+                    *[int(elem[0]) for elem in with_nfs],
+                    *[int(elem[0]) for elem in without_nfs],
+                ]
+            )
+        )
+    )
     plt.savefig("tmp.png")
+    # print(sns.load_dataset("tips"))
+    # dataset = pd.DataFrame(
+    #     [
+    #         {
+    #             "nodes": str(key),
+    #         }
+    #         for key in list(
+    #             set(
+    #                 [
+    #                     *[int(key) for key in with_nfs],
+    #                     *[int(key) for key in without_nfs],
+    #                 ]
+    #             )
+    #         )
+    #     ]
+    # )
+    # sns.violinplot(data={
+    # })
