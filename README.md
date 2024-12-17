@@ -150,6 +150,13 @@ Ces deux configurations seront comparées en termes de performances et d’effic
 
 Nous remarquons que la version avec NFS est nettement plus efficace que celle sans NFS. Ceci s'explique car premier_tiny génère peu de fichiers.
 
+### Résultats premier
+
+![image](final_data/premier/compare.png)
+![image](final_data/premier/relative.png)
+
+Même cas de figure que pour premier_tiny.
+
 ### Résultats matrix
 
 ![image](final_data/matrix/compare.png)
