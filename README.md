@@ -65,9 +65,8 @@ Gob est spécifiquement conçu pour Go, garantissant une parfaite compatibilité
 ---
 
 ### 4. Comment ca marches?
+
  <img src="https://github.com/user-attachments/assets/ac975f59-35f6-4c73-9211-cd2f4163d505" width="70%" alt="Image description">
-
-
 
 ### **5. Les fonctions RPC implémentées**
 
@@ -144,8 +143,30 @@ Ainsi, nous avons identifié et testé deux approches distinctes :
 
 Ces deux configurations seront comparées en termes de performances et d’efficacité organisationnelle.
 
-### Résultats sans NFS
+### Résultats premier_tiny
 
-![image](https://github.com/user-attachments/assets/86c029c3-edea-4837-8623-325e6aaaa621)
+![image](final_data/premier_tiny/compare.png)
+![image](final_data/premier_tiny/relative.png)
 
-Ratio entre le Make distribué et notre Make classique en fonction de la taille des nœuds sur le premier Makefile.
+Nous remarquons que la version avec NFS est nettement plus efficace que celle sans NFS. Ceci s'explique car premier_tiny génère peu de fichiers.
+
+### Résultats matrix
+
+![image](final_data/matrix/compare.png)
+![image](final_data/matrix/relative.png)
+
+Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus rapide, même si l'avantage par rapport au make est faible. Ceci s'explique par le nombre d'appels réseau qui ont lieu dans ce genre de makefile (avec de nombreuses petites commandes).
+
+### Résultats custom-c-[10,0,0]-s-8.0-z-0
+
+![image](final_data/custom-c-[10,0,0]-s-8.0-z-0/compare.png)
+![image](final_data/custom-c-[10,0,0]-s-8.0-z-0/relative.png)
+
+Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus rapide, même si l'avantage par rapport au make est faible. Ceci s'explique par le nombre d'appels réseau qui ont lieu dans ce genre de makefile (avec de nombreuses petites commandes).
+
+### Résultats custom-c-[10,10,10]-s-0.0-z-10000
+
+![image](final_data/custom-c-[10,10,10]-s-0.0-z-10000/compare.png)
+![image](final_data/custom-c-[10,10,10]-s-0.0-z-10000/relative.png)
+
+Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus rapide, même si l'avantage par rapport au make est faible. Ceci s'explique par le nombre d'appels réseau qui ont lieu dans ce genre de makefile (avec de nombreuses petites commandes).
