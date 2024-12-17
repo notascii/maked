@@ -64,7 +64,12 @@ Gob est spécifiquement conçu pour Go, garantissant une parfaite compatibilité
 
 ---
 
-### **4. Les fonctions RPC implémentées**
+### 4. Comment ca marches?
+ <img src="https://github.com/user-attachments/assets/ac975f59-35f6-4c73-9211-cd2f4163d505" width="70%" alt="Image description">
+
+
+
+### **5. Les fonctions RPC implémentées**
 
 #### **a. `Initialization`**
 
