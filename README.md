@@ -162,11 +162,11 @@ Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus 
 ![image](final_data/custom-c-[10,0,0]-s-8.0-z-0/compare.png)
 ![image](final_data/custom-c-[10,0,0]-s-8.0-z-0/relative.png)
 
-Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus rapide, même si l'avantage par rapport au make est faible. Ceci s'explique par le nombre d'appels réseau qui ont lieu dans ce genre de makefile (avec de nombreuses petites commandes).
+Ici, on remarque que la situation est idéale pour distribuer les commandes (commandes longues, petits fichiers).
 
 ### Résultats custom-c-[10,10,10]-s-0.0-z-10000
 
 ![image](final_data/custom-c-[10,10,10]-s-0.0-z-10000/compare.png)
 ![image](final_data/custom-c-[10,10,10]-s-0.0-z-10000/relative.png)
 
-Ici, l'ordre s'inverse, et c'est maintenant la version sans NFS qui est la plus rapide, même si l'avantage par rapport au make est faible. Ceci s'explique par le nombre d'appels réseau qui ont lieu dans ce genre de makefile (avec de nombreuses petites commandes).
+Même cas de figure que pour matrix.
